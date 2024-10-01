@@ -3,25 +3,39 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --yellow: #f2cdac;
+  --cyan: #82c9d7;
+  --navy: #626070;
+  --red: #c94736;
+  --purple: #826cb0;
+  --turquoise: #597c7c;
+  --brown: #93674f;
+  --magenta: #934f6f;
+  --blue: #3f82b2;
+  --navy-grey: #97a0ac;
+  --army-green: #7f9161;
+  --pink: #af81ba;
+  --gold: #cab361;
+  --orange: #be6c49;
+  --green: #277c78;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.light {
+  --background: 248, 244, 240;
+  --primary-text: 32, 31, 36;
+  --secondary-text: 105, 104, 104;
+  --card-back-ground: 0, 0, 0;
+  --navbar: 32, 31, 36;
+  --highlighted-card: 32, 31, 36;
+  --seperator: 242, 242, 242;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.dark {
+  --background: 18, 18, 18;
+  --primary-text: 224, 224, 224;
+  --secondary-text: 176, 176, 176;
+  --card-back-ground: 35, 35, 35;
+  --navbar: 26, 26, 26;
+  --highlighted-card: 38, 128, 119;
+  --seperator: 68, 68, 68;
 }
