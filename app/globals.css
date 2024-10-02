@@ -18,6 +18,10 @@
   --gold: #cab361;
   --orange: #be6c49;
   --green: #277c78;
+  --icon: #b3b3b3;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .light {
