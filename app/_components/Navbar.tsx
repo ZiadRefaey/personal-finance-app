@@ -61,7 +61,7 @@ export default function Navbar() {
           ))}
         </ul>
       </div>
-      <div className="w-full px-8  text-preset-3 text-icon">
+      <div className="hidden xl:block w-full px-8  text-preset-3 text-icon">
         <div
           onClick={() => {
             setTheme(theme === "dark" ? "light" : "dark");

@@ -35,7 +35,7 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
             <Navbar />
-            <main className="w-full h-full bg-background xl:order-2 ">
+            <main className="w-full h-full overflow-y-scroll bg-background xl:order-2 px-4 md:px-10 py-6 md:py-8">
               {children}
             </main>
           </Body>
