@@ -43,3 +43,9 @@
   --highlighted-card: 38, 128, 119;
   --seperator: 68, 68, 68;
 }
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
