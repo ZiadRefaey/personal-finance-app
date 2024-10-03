@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "./_components/ThemeProvider";
 import Body from "./_components/Body";
 import Navbar from "./_components/Navbar";
+import RetractableProvider from "./_components/RetractableProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,14 +30,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThemeProvider>
-        <Body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <Navbar />
-          <main className="w-full h-full bg-background xl:order-2 ">
-            {children}
-          </main>
-        </Body>
+        <RetractableProvider>
+          <Body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            <Navbar />
+            <main className="w-full h-full bg-background xl:order-2 ">
+              {children}
+            </main>
+          </Body>
+        </RetractableProvider>
       </ThemeProvider>
     </html>
   );

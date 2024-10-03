@@ -2,17 +2,21 @@
 import NavItem from "./NavItem";
 import { GoHomeFill } from "react-icons/go";
 import { LuArrowUpDown } from "react-icons/lu";
-import { BiSolidPieChartAlt2 } from "react-icons/bi";
+import { BiSolidPieChartAlt2, BiArrowFromRight } from "react-icons/bi";
 import { FaSackDollar } from "react-icons/fa6";
 import { PiReceiptFill } from "react-icons/pi";
-import { BiArrowFromRight } from "react-icons/bi";
 import { usePathname } from "next/navigation";
+import { MdLightMode, MdDarkMode } from "react-icons/md";
 
+import { motion } from "framer-motion";
 import Logo from "./Logo";
+import { useRetractable } from "./RetractableProvider";
+import { useTheme } from "./ThemeProvider";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const NavIconStyling = `w-6 h-6`;
+  const NavIconStyling = `size-6`;
+  const { theme, setTheme } = useTheme();
   const NavLinks = [
     {
       icon: <GoHomeFill className={NavIconStyling} />,
@@ -35,11 +39,15 @@ export default function Navbar() {
       label: "Recurring bills",
     },
   ];
+  const { isRetracted, setIsRetracted } = useRetractable();
   return (
-    <nav className="bg-navbar order-2 xl:order-1 w-full h-full rounded-t-lg xl:rounded-tl-none xl:rounded-r-2xl px-4 pt-2 pb-0 xl:pl-0 xl:pr-6 xl:py-10 xl:flex xl:flex-col xl:items-start xl:justify-between ">
+    <motion.nav
+      className="bg-navbar order-2 xl:order-1 w-full h-full rounded-t-lg xl:rounded-tl-none xl:rounded-r-2xl px-4 pt-2 pb-0 xl:pl-0 xl:pr-6 xl:py-10 xl:flex xl:flex-col xl:items-start xl:justify-between "
+      layout
+    >
       <div className="w-full">
-        <div className="hidden xl:block pl-8 mb-[64px] ">
-          <Logo />
+        <div className="hidden xl:block pl-8 mb-[64px] self-start">
+          <Logo isLogoLarge={!isRetracted} />
         </div>
         <ul className="flex items-center justify-between pb-0 h-full p-0 xl:flex-col xl:justify-center xl:gap-1">
           {NavLinks.map((link) => (
@@ -48,14 +56,62 @@ export default function Navbar() {
               icon={link.icon}
               label={link.label}
               pathname={pathname}
+              isRetracted={isRetracted}
             />
           ))}
         </ul>
       </div>
-      <button className="hidden xl:flex  gap-4 px-8 cursor-pointer py-4 text-preset-3 text-icon hover:text-seperator transition-all duration-150">
-        <BiArrowFromRight className="w-6 h-6" />
-        <p>Minimize Menu</p>
-      </button>
-    </nav>
+      <div className="w-full px-8  text-preset-3 text-icon">
+        <div
+          onClick={() => {
+            setTheme(theme === "dark" ? "light" : "dark");
+          }}
+          className="cursor-pointer transition-all duration-150 hover:text-seperator flex gap-4"
+        >
+          <motion.div layout>
+            {theme === "light" ? (
+              <MdDarkMode className="size-6" />
+            ) : (
+              <MdLightMode className="size-6 " />
+            )}
+          </motion.div>
+          {!isRetracted && (
+            <motion.span
+              layout
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+            >
+              Switch to {theme === "light" ? "dark" : "light"}
+            </motion.span>
+          )}
+        </div>
+        <motion.button
+          layout
+          onClick={() => {
+            setIsRetracted(!isRetracted);
+          }}
+          className="hidden xl:flex  gap-4  cursor-pointer py-4  transition-colors duration-150 hover:text-seperator"
+        >
+          <motion.div layout>
+            <BiArrowFromRight
+              className={`transition-transform duration-300 w-6 h-6 ${
+                isRetracted ? "rotate-180" : ""
+              }`}
+            />
+          </motion.div>
+          {!isRetracted && (
+            <motion.span
+              layout
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+            >
+              Minimize Menu
+            </motion.span>
+          )}
+        </motion.button>
+      </div>
+    </motion.nav>
   );
 }
