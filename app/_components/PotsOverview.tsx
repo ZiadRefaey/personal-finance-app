@@ -1,13 +1,9 @@
 import React from "react";
 import Card from "./Card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import Image from "next/image";
 import Pot from "@/public/icon-pot.svg";
-import CaretRight from "@/public/icon-caret-right.svg";
+import PopoverComponent from "./PopoverComponent";
 
 type PotDetailsType = {
   title: string;
@@ -25,27 +21,16 @@ export default function PotsOverview() {
     <Card>
       <div className="flex items-center justify-between w-full mb-5">
         <p className="text-preset-2 text-primary">Pots</p>
-        <Popover>
-          <PopoverTrigger className="text-preset-4 text-secondary">
-            See Details
-            <span className="ml-3 inline-flex ">
-              <Image src={CaretRight} alt="Caret right icon" />
-            </span>
-          </PopoverTrigger>
-          <PopoverContent className="">
+        <PopoverComponent
+          trigger={"See Details"}
+          content={
             <div className="flex flex-col items-center justify-center gap-1">
               <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
                 Click me
               </button>
-              <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-                Click me
-              </button>
-              <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-                Click me
-              </button>
             </div>
-          </PopoverContent>
-        </Popover>
+          }
+        />
       </div>
       <div className=" gap-5 grid grid-cols-1 md:grid-cols-[247px,1fr]">
         <div className="rounded-xl bg-background flex items-center justify-start p-4 gap-4">
