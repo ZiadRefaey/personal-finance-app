@@ -21,22 +21,27 @@ export default function Navbar() {
     {
       icon: <GoHomeFill className={NavIconStyling} />,
       label: "Overview",
+      href: "/",
     },
     {
       icon: <LuArrowUpDown className={NavIconStyling} />,
       label: "Transactions",
+      href: "/transactions",
     },
     {
       icon: <BiSolidPieChartAlt2 className={NavIconStyling} />,
       label: "Budgets",
+      href: "/budgets",
     },
     {
       icon: <FaSackDollar className={NavIconStyling} />,
       label: "Pots",
+      href: "/pots",
     },
     {
       icon: <PiReceiptFill className={NavIconStyling} />,
       label: "Recurring bills",
+      href: "/recurring-bills",
     },
   ];
   const { isRetracted, setIsRetracted } = useRetractable();
@@ -57,6 +62,7 @@ export default function Navbar() {
               label={link.label}
               pathname={pathname}
               isRetracted={isRetracted}
+              href={link.href}
             />
           ))}
         </ul>
