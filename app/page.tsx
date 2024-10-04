@@ -1,7 +1,6 @@
-import Card from "./_components/Card";
 import OverviewStatsCardsList from "./_components/OverviewStatsCardsList";
 import PotsOverview from "./_components/PotsOverview";
-
+import TransactionsOverview from "./_components/TransactionsOverview";
 export default function Home() {
   return (
     <div className="w-full h-full">
@@ -10,9 +9,7 @@ export default function Home() {
       <div className="w-full h-[561px] grid grid-cols-[0.587fr,0.413fr] gap-6">
         <div className="w-full h-full flex flex-col gap-4 md:gap-6">
           <PotsOverview />
-          <Card className="w-full h-full bg-red">
-            <div>anything</div>
-          </Card>
+          <TransactionsOverview />
         </div>
         <div className="w-full h-full bg-cyan"></div>
       </div>
