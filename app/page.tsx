@@ -1,5 +1,7 @@
+import Card from "./_components/Card";
 import OverviewStatsCardsList from "./_components/OverviewStatsCardsList";
 import PotsOverview from "./_components/PotsOverview";
+import RecurringBillsOverview from "./_components/RecurringBillsOverview";
 import TransactionsOverview from "./_components/TransactionsOverview";
 export default function Home() {
   return (
@@ -11,7 +13,12 @@ export default function Home() {
           <PotsOverview />
           <TransactionsOverview />
         </div>
-        <div className="w-full h-full bg-cyan"></div>
+        <div className="w-full h-full flex flex-col gap-4 md:gap-6">
+          <Card className="h-[410px] bg-red">
+            <div></div>
+          </Card>
+          <RecurringBillsOverview />
+        </div>
       </div>
     </div>
   );

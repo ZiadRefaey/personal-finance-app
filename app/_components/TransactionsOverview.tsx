@@ -68,7 +68,7 @@ export default function TransactionsOverview() {
           }
         />
       </div>
-      <div className="flex flex-col divide-y-[1px]  divide-seperator">
+      <div className="flex flex-col divide-y-[1px] -my-6 divide-seperator">
         {TransactionsData.map((row) => (
           <TransactionRow
             amount={row.amount}
