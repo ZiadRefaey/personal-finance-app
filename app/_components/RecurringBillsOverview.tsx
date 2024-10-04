@@ -1,6 +1,5 @@
-import React from "react";
 import Card from "./Card";
-import PopoverComponent from "./PopoverComponent";
+import OverviewSectionHeader from "./OverviewSectionHeader";
 type BillType = {
   billTitle: string;
   billAmount: string;
@@ -27,19 +26,18 @@ const BillsData: BillDataType = [
 export default function RecurringBillsOverview() {
   return (
     <Card className="mb-6 md:mb-8">
-      <div className="flex items-center justify-between w-full mb-5">
-        <p className="text-preset-2 text-primary">Recurring Bills</p>
-        <PopoverComponent
-          trigger={"See Details"}
-          content={
-            <div className="flex flex-col items-center justify-center gap-1">
-              <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-                Click me
-              </button>
-            </div>
-          }
-        />
-      </div>
+      <OverviewSectionHeader
+        title="Recurring Bills"
+        popoverTitle="See Details"
+        popoverContent={
+          <div className="flex flex-col items-center justify-center gap-1">
+            <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
+              Click me
+            </button>
+          </div>
+        }
+      />
+
       <div className="flex flex-col gap-3 mt-8">
         {BillsData.map((bill) => (
           <BillCard

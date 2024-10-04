@@ -1,12 +1,12 @@
 import React from "react";
 import Card from "./Card";
-import PopoverComponent from "./PopoverComponent";
 import Image from "next/image";
 import Emma from "@/public/avatars/emma-richardson.jpg";
 import Savory from "@/public/avatars/savory-bites-bistro.jpg";
 import Daniel from "@/public/avatars/daniel-carter.jpg";
 import Sun from "@/public/avatars/sun-park.jpg";
 import Urban from "@/public/avatars/urban-services-hub.jpg";
+import OverviewSectionHeader from "./OverviewSectionHeader";
 type TransactionType = {
   name: string;
   image: any;
@@ -55,19 +55,18 @@ const TransactionsData: TransactionsDataType = [
 export default function TransactionsOverview() {
   return (
     <Card>
-      <div className="flex items-center justify-between w-full mb-5">
-        <p className="text-preset-2 text-primary">Transactions</p>
-        <PopoverComponent
-          trigger={"See Details"}
-          content={
-            <div className="flex flex-col items-center justify-center gap-1">
-              <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-                Click me
-              </button>
-            </div>
-          }
-        />
-      </div>
+      <OverviewSectionHeader
+        title="Transactions"
+        popoverTitle="View All"
+        popoverContent={
+          <div className="flex flex-col items-center justify-center gap-1">
+            <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
+              Click me
+            </button>
+          </div>
+        }
+      />
+
       <div className="flex flex-col divide-y-[1px] -my-6 divide-seperator">
         {TransactionsData.map((row) => (
           <TransactionRow

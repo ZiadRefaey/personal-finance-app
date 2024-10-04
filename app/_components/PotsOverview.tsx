@@ -1,9 +1,8 @@
-import React from "react";
 import Card from "./Card";
 
-import Image from "next/image";
 import Pot from "@/public/icon-pot.svg";
-import PopoverComponent from "./PopoverComponent";
+import Image from "next/image";
+import OverviewSectionHeader from "./OverviewSectionHeader";
 
 type PotDetailsType = {
   title: string;
@@ -19,19 +18,18 @@ const PotDetailsArray: PotDetailsType[] = [
 export default function PotsOverview() {
   return (
     <Card>
-      <div className="flex items-center justify-between w-full mb-5">
-        <p className="text-preset-2 text-primary">Pots</p>
-        <PopoverComponent
-          trigger={"See Details"}
-          content={
-            <div className="flex flex-col items-center justify-center gap-1">
-              <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-                Click me
-              </button>
-            </div>
-          }
-        />
-      </div>
+      <OverviewSectionHeader
+        title="Pots"
+        popoverTitle="See Details"
+        popoverContent={
+          <div className="flex flex-col items-center justify-center gap-1">
+            <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
+              Click me
+            </button>
+          </div>
+        }
+      />
+
       <div className=" gap-5 grid grid-cols-1 md:grid-cols-[247px,1fr]">
         <div className="rounded-xl bg-background flex items-center justify-start p-4 gap-4">
           <Image src={Pot} alt="Pot Icon" />
