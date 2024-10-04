@@ -32,6 +32,7 @@
   --navbar: 32, 31, 36;
   --highlighted-card: 32, 31, 36;
   --seperator: 242, 242, 242;
+  --border: 152, 144, 139;
 }
 
 .dark {
@@ -42,6 +43,7 @@
   --navbar: 26, 26, 26;
   --highlighted-card: 38, 128, 119;
   --seperator: 68, 68, 68;
+  --border: 120, 120, 120;
 }
 
 @layer base {

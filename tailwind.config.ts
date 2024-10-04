@@ -87,6 +87,7 @@ const config: Config = {
         pink: "var(--pink)",
         orange: "var(--orange)",
         icon: "var(--icon)",
+        border: "var(--border)",
         "navy-grey": "var(--navy-grey)",
         "army-green": "var(--army-green)",
       },
