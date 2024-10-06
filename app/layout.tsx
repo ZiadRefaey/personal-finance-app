@@ -6,15 +6,14 @@ import Body from "./_components/Body";
 import Navbar from "./_components/Navbar";
 import RetractableProvider from "./_components/RetractableProvider";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const publicSans = localFont({
+  src: "./fonts/PublicSans-Regular.ttf",
+  weight: "400",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const publicSansBold = localFont({
+  src: "./fonts/PublicSans-Bold.ttf",
+  variable: "--font-public-sans-bold",
+  weight: "700",
 });
 
 export const metadata: Metadata = {
@@ -32,7 +31,7 @@ export default function RootLayout({
       <ThemeProvider>
         <RetractableProvider>
           <Body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            className={`${publicSans.className} ${publicSansBold.variable} antialiased`}
           >
             <Navbar />
             <main className="w-full h-full overflow-y-scroll bg-background xl:order-2 px-4 md:px-10 py-6 md:py-8">

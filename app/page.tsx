@@ -3,6 +3,7 @@ import OverviewStatsCardsList from "./_components/OverviewStatsCardsList";
 import PotsOverview from "./_components/PotsOverview";
 import RecurringBillsOverview from "./_components/RecurringBillsOverview";
 import TransactionsOverview from "./_components/TransactionsOverview";
+
 export default function Home() {
   return (
     <div className="w-full h-full">
