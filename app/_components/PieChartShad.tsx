@@ -50,10 +50,10 @@ export function PieChartShad({ data }: any) {
 
   const totalSpending = React.useMemo(() => {
     return chartData.reduce((acc: number, curr: any) => acc + curr.spent, 0);
-  }, []);
+  }, [chartData]);
   const totalBudget = React.useMemo(() => {
     return chartData.reduce((acc: number, curr: any) => acc + curr.total, 0);
-  }, []);
+  }, [chartData]);
 
   return (
     <div className="size-[340px] md:size-[340px] xl:size-[340px] flex items-center justify-center  p-0 ">
