@@ -1,7 +1,8 @@
 import React from "react";
-import Button from "../_components/Button";
-import BudgetCardsList from "../_components/BudgetCardsList";
-import BudgetsSpendingSummary from "../_components/BudgetsSpendingSummary";
+import Card from "./Card";
+import OverviewSectionHeader from "./OverviewSectionHeader";
+import BudgetSpendingSummaryDetails from "./BudgetSpendingSummaryDetails";
+import { PieChartShad } from "./PieChartShad";
 
 import Papa from "@/public/avatars/bytewise.jpg";
 import Quebec from "@/public/avatars/urban-services-hub.jpg";
@@ -149,17 +150,24 @@ const BudgetsListData: BudgetData = [
     ],
   },
 ];
-export default function page() {
+export default function BudgetsOverview() {
   return (
-    <div className="w-full h-full">
-      <div className="w-full flex items-center justify-between mb-[42px]">
-        <h1 className="text-preset-1 text-primary">Budgets</h1>
-        <Button>+Add New Budget</Button>
+    <Card>
+      <OverviewSectionHeader
+        title="Budgets"
+        popoverTitle="See Details"
+        popoverContent={
+          <div className="flex flex-col items-center justify-center gap-1">
+            <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
+              Click me
+            </button>
+          </div>
+        }
+      />
+      <div className="flex items-center justify-center flex-col">
+        <PieChartShad data={BudgetsListData} />
+        <BudgetSpendingSummaryDetails data={BudgetsListData} />
       </div>
-      <div className="flex items-start justify-center flex-col xl:flex-row gap-6">
-        <BudgetsSpendingSummary data={BudgetsListData} />
-        <BudgetCardsList data={BudgetsListData} />
-      </div>
-    </div>
+    </Card>
   );
 }

@@ -48,7 +48,7 @@ export default function BudgetCard({
           value={(spent / total) * 100}
           className="h-6 rounded-sm rounde "
           secondarycolor={color}
-          progressClassName=" rounded-r-sm"
+          progressclassname=" rounded-r-sm"
         />
       </div>
       <div className="flex items-center justify-center h-[43px] mb-5">

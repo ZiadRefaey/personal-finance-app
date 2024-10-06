@@ -1,4 +1,4 @@
-import Card from "./_components/Card";
+import BudgetsOverview from "./_components/BudgetsOverview";
 import OverviewStatsCardsList from "./_components/OverviewStatsCardsList";
 import PotsOverview from "./_components/PotsOverview";
 import RecurringBillsOverview from "./_components/RecurringBillsOverview";
@@ -15,9 +15,7 @@ export default function Home() {
           <TransactionsOverview />
         </div>
         <div className="w-full h-full flex flex-col gap-4 md:gap-6">
-          <Card className="h-[410px] bg-red">
-            <div></div>
-          </Card>
+          <BudgetsOverview />
           <RecurringBillsOverview />
         </div>
       </div>
