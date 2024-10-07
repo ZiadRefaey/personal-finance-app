@@ -46,7 +46,7 @@ function SpendingRow({
   return (
     <div className="py-4 flex items-center justify-between w-full">
       <div className="flex items-center justify-center">
-        <div className={`h-[21px] w-1 bg-${color} mr-4`}></div>
+        <div className={`h-[21px] w-1 ${color} mr-4`}></div>
         <p className="text-preset-4 text-secondary">{title}</p>
       </div>
       <div className="flex items-center justify-center">

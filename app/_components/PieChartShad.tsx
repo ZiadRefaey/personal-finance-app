@@ -14,12 +14,13 @@ import {
 export const description = "A donut chart with text";
 
 export function PieChartShad({ data }: any) {
+  console.log(data[0].color.slice(3));
   const chartData = data.map(
     (obj: { title: string; spent: number; total: number; color: string }) => ({
       budget: obj.title,
       spent: obj.spent,
       total: obj.total,
-      fill: `var(--${obj.color})`,
+      fill: `var(--${obj.color.slice(3)})`,
     })
   );
   const chartConfig = {

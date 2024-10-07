@@ -14,7 +14,7 @@ const Pots = [
     saved: "159.00",
     percentage: 7.95,
     target: 2000,
-    color: "green",
+    color: "bg-green",
     PopoverContent: dummyPopoverContent,
   },
   {
@@ -22,7 +22,7 @@ const Pots = [
     saved: "110.00",
     percentage: 73.3,
     target: 150,
-    color: "navy",
+    color: "bg-navy",
     PopoverContent: dummyPopoverContent,
   },
   {
@@ -30,7 +30,7 @@ const Pots = [
     saved: "40.00",
     percentage: 66.6,
     target: 60,
-    color: "cyan",
+    color: "bg-cyan",
     PopoverContent: dummyPopoverContent,
   },
   {
@@ -38,21 +38,13 @@ const Pots = [
     saved: "10.00",
     percentage: 7.95,
     target: 1000,
-    color: "yellow",
-    PopoverContent: dummyPopoverContent,
-  },
-  {
-    title: "Holiday",
-    saved: "531.00",
-    percentage: 36.8,
-    target: 1440,
-    color: "red",
+    color: "bg-yellow",
     PopoverContent: dummyPopoverContent,
   },
 ];
 export default function page() {
   return (
-    <div className="w-full h-full">
+    <>
       <div className="w-full flex items-center justify-between mb-[42px]">
         <h1 className="text-preset-1 text-primary">Pots</h1>
         <Button>+Add New Pot</Button>
@@ -70,6 +62,6 @@ export default function page() {
           />
         ))}
       </div>
-    </div>
+    </>
   );
 }

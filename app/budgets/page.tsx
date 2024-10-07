@@ -36,7 +36,7 @@ const BudgetsListData: BudgetData = [
     title: "Entertainment",
     total: 50,
     spent: 15,
-    color: "green",
+    color: "bg-green",
     spendingSummary: [
       {
         name: "Papa Software",
@@ -65,7 +65,7 @@ const BudgetsListData: BudgetData = [
     title: "Bills",
     total: 750,
     spent: 250,
-    color: "cyan",
+    color: "bg-cyan",
     spendingSummary: [
       {
         name: "Spark Electric Solutions",
@@ -94,7 +94,7 @@ const BudgetsListData: BudgetData = [
     title: "Dining Out",
     total: 75,
     spent: 133.75,
-    color: "yellow",
+    color: "bg-yellow",
     spendingSummary: [
       {
         name: "Savory Bites Bistro",
@@ -123,7 +123,7 @@ const BudgetsListData: BudgetData = [
     title: "Personal Care",
     total: 100,
     spent: 40,
-    color: "navy",
+    color: "bg-gold",
     spendingSummary: [
       {
         name: "William Harris",
