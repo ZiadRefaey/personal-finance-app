@@ -151,7 +151,7 @@ const BudgetsListData: BudgetData = [
 ];
 export default function page() {
   return (
-    <div className="w-full h-full">
+    <>
       <div className="w-full flex items-center justify-between mb-[42px]">
         <h1 className="text-preset-1 text-primary">Budgets</h1>
         <Button>+Add New Budget</Button>
@@ -160,6 +160,6 @@ export default function page() {
         <BudgetsSpendingSummary data={BudgetsListData} />
         <BudgetCardsList data={BudgetsListData} />
       </div>
-    </div>
+    </>
   );
 }
