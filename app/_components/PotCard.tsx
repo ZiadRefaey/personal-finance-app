@@ -32,7 +32,6 @@ export default function PotCard({
         <p className="text-preset-4 text-secondary">Total Saved</p>
         <p className="text-preset-1 text-secondary self-start">${saved}</p>
       </div>
-      {/* <Progress value={percentage} secondarycolor={color} className="h-2" /> */}
       <Progress
         value={percentage}
         className="h-2"
