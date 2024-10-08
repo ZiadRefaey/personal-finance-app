@@ -6,7 +6,9 @@ export default function page() {
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
-        <h1 className="text-preset-1 text-primary">Transactions</h1>
+        <h1 className="text-preset-2 md:text-preset-1 text-primary">
+          Transactions
+        </h1>
         <Button>New Transaction</Button>
       </div>
       <DataTable />
