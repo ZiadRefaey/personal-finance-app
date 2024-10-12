@@ -45,6 +45,7 @@ export default function Navbar() {
     },
   ];
   const { isRetracted, setIsRetracted } = useRetractable();
+  if (pathname === "/login") return;
   return (
     <motion.nav
       className="bg-navbar order-2 xl:order-1 w-full h-full rounded-t-lg xl:rounded-tl-none xl:rounded-r-2xl px-4 pt-2 pb-0 xl:pl-0 xl:pr-6 xl:py-10 xl:flex xl:flex-col xl:items-start xl:justify-between "

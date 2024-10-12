@@ -5,4 +5,12 @@ import Spotify from "next-auth/providers/spotify";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google, GitHub, Spotify],
+  // pages: {
+  //   signIn: "/login",
+  // },
+  callbacks: {
+    authorized({ auth }) {
+      return !!auth?.user;
+    },
+  },
 });

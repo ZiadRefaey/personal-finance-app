@@ -1,4 +1,4 @@
-import BudgetCard from "../_components/BudgetCard";
+import BudgetCard from "./BudgetCard";
 
 type SpendingType = {
   name: string;
