@@ -5,7 +5,6 @@ import { ThemeProvider } from "./_components/ThemeProvider";
 import Body from "./_components/Body";
 import Navbar from "./_components/Navbar";
 import RetractableProvider from "./_components/RetractableProvider";
-import UserAvatar from "./_components/UserAvatar";
 import { auth } from "@/auth";
 
 const publicSans = localFont({

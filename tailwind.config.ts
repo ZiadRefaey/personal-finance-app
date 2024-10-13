@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        "login-illustration": "url('/illustration-authentication.svg')",
+      },
       fontSize: {
         "preset-1": [
           "2rem",
