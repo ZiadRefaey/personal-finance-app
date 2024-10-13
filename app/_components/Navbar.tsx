@@ -12,8 +12,12 @@ import { motion } from "framer-motion";
 import Logo from "./Logo";
 import { useRetractable } from "./RetractableProvider";
 import { useTheme } from "./ThemeProvider";
+import UserAvatar from "./UserAvatar";
+import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
+import { SignOutAction } from "../_lib/actions";
 
-export default function Navbar() {
+export default function Navbar({ session }: { session: any }) {
   const pathname = usePathname();
   const NavIconStyling = `size-6`;
   const { theme, setTheme } = useTheme();
@@ -68,7 +72,38 @@ export default function Navbar() {
           ))}
         </ul>
       </div>
-      <div className="hidden xl:block w-full px-8  text-preset-3 text-icon">
+      {/*user avatar*/}
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger className=" w-full xl:flex items-center gap-4 py-2 cursor-default hidden px-8 text-preset-3 text-icon">
+            <UserAvatar session={session} />
+            {/* <img
+              src={session?.user?.image}
+              alt="asd"
+              className="size-7 -mr-[2px] rounded-full"
+            /> */}
+            {!isRetracted && (
+              <motion.span
+                layout
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                {session.user.name}
+              </motion.span>
+            )}
+          </TooltipTrigger>
+          <TooltipContent>
+            <form action={SignOutAction}>
+              <button className="text-preset-3 text-icon bg-background border-border border px-4 py-2 rounded-lg hover:bg-background/70 transition-all duration-150">
+                Sign Out
+              </button>
+            </form>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <div className="hidden xl:block w-full px-8 text-preset-3 text-icon">
+        {/* Theme switcher */}
         <div
           onClick={() => {
             setTheme(theme === "dark" ? "light" : "dark");
@@ -93,6 +128,8 @@ export default function Navbar() {
             </motion.span>
           )}
         </div>
+
+        {/* Retracting navbar */}
         <motion.button
           layout
           onClick={() => {

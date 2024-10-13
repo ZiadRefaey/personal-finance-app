@@ -11,6 +11,6 @@ export async function SignInWithSpotify() {
 export async function SignInWithGithub() {
   await signIn("github", { redirectTo: "/" });
 }
-export async function SignOut() {
+export async function SignOutAction() {
   await signOut({ redirectTo: "/login" });
 }
