@@ -21,7 +21,7 @@ export default function NavItem({
       <Link
         className={`group relative ${
           (pathname === "/" && label.toLowerCase() === "overview") ||
-          pathname === "/" + label.toLowerCase()
+          pathname === "/" + label.toLowerCase().replace(" ", "-")
             ? " after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-green xl:after:h-full xl:after:w-[6px] xl:rounded-r-xl after:opacity-100 bg-background text-green"
             : "bg-inherit text-icon hover:text-seperator"
         }  ${
