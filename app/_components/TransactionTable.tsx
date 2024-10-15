@@ -1,84 +1,88 @@
 import React, { ReactNode } from "react";
 import avatar from "@/public/avatars/emma-richardson.jpg";
 import Image from "next/image";
+import TablePagination from "./TablePagination";
 
 export default function TransactionTable() {
   return (
-    <table className="w-full mt-6 divide-y divide-seperator">
-      <thead className="hidden md:table-header-group mb-6 my-3">
-        <TR className="text-start">
-          <TH>Recepient / Sender</TH>
+    <>
+      <table className="w-full mt-6 divide-y divide-seperator">
+        <thead className="hidden md:table-header-group mb-6 my-3">
+          <TR className="text-start">
+            <TH>Recepient / Sender</TH>
 
-          <TH>Category</TH>
+            <TH>Category</TH>
 
-          <TH>Transaction Date</TH>
+            <TH>Transaction Date</TH>
 
-          <TH>Amount</TH>
-        </TR>
-      </thead>
-      <tbody className="divide-y divide-seperator">
-        <TR>
-          <TableTitle
-            category="Personal Care"
-            image={avatar}
-            name="Emma Richardson"
-          />
-          <Category>Personal Care</Category>
-          <TD>19 Aug 2024</TD>
-          <Amount amount={75.5} deposite={true} />
-        </TR>
-        <TR>
-          <TableTitle
-            category="Personal Care"
-            image={avatar}
-            name="Emma Richardson"
-          />
-          <Category>Personal Care</Category>
-          <TD>19 Aug 2024</TD>
-          <Amount amount={75.5} deposite={true} />
-        </TR>
-        <TR>
-          <TableTitle
-            category="Personal Care"
-            image={avatar}
-            name="Emma Richardson"
-          />
-          <Category>Personal Care</Category>
-          <TD>19 Aug 2024</TD>
-          <Amount amount={75.5} deposite={true} />
-        </TR>
-        <TR>
-          <TableTitle
-            category="Personal Care"
-            image={avatar}
-            name="Emma Richardson"
-          />
-          <Category>Personal Care</Category>
-          <TD>19 Aug 2024</TD>
-          <Amount amount={75.5} deposite={true} />
-        </TR>
-        <TR>
-          <TableTitle
-            category="Personal Care"
-            image={avatar}
-            name="Emma Richardson"
-          />
-          <Category>Personal Care</Category>
-          <TD>19 Aug 2024</TD>
-          <Amount amount={75.5} deposite={false} />
-        </TR>
-        <TR>
-          <TableTitle
-            category="Personal Care"
-            image={avatar}
-            name="Emma Richardson"
-          />
-          <Category>Personal Care</Category>
-          <TD>19 Aug 2024</TD>
-          <Amount amount={75.5} deposite={true} />
-        </TR>
-      </tbody>
-    </table>
+            <TH>Amount</TH>
+          </TR>
+        </thead>
+        <tbody className="divide-y divide-seperator">
+          <TR>
+            <TableTitle
+              category="Personal Care"
+              image={avatar}
+              name="Emma Richardson"
+            />
+            <Category>Personal Care</Category>
+            <TD>19 Aug 2024</TD>
+            <Amount amount={75.5} deposite={true} />
+          </TR>
+          <TR>
+            <TableTitle
+              category="Personal Care"
+              image={avatar}
+              name="Emma Richardson"
+            />
+            <Category>Personal Care</Category>
+            <TD>19 Aug 2024</TD>
+            <Amount amount={75.5} deposite={true} />
+          </TR>
+          <TR>
+            <TableTitle
+              category="Personal Care"
+              image={avatar}
+              name="Emma Richardson"
+            />
+            <Category>Personal Care</Category>
+            <TD>19 Aug 2024</TD>
+            <Amount amount={75.5} deposite={true} />
+          </TR>
+          <TR>
+            <TableTitle
+              category="Personal Care"
+              image={avatar}
+              name="Emma Richardson"
+            />
+            <Category>Personal Care</Category>
+            <TD>19 Aug 2024</TD>
+            <Amount amount={75.5} deposite={true} />
+          </TR>
+          <TR>
+            <TableTitle
+              category="Personal Care"
+              image={avatar}
+              name="Emma Richardson"
+            />
+            <Category>Personal Care</Category>
+            <TD>19 Aug 2024</TD>
+            <Amount amount={75.5} deposite={false} />
+          </TR>
+          <TR>
+            <TableTitle
+              category="Personal Care"
+              image={avatar}
+              name="Emma Richardson"
+            />
+            <Category>Personal Care</Category>
+            <TD>19 Aug 2024</TD>
+            <Amount amount={75.5} deposite={true} />
+          </TR>
+        </tbody>
+      </table>
+      <TablePagination />
+    </>
   );
 }
 function TD({
