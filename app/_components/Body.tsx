@@ -11,13 +11,12 @@ type ContextProps = {
 };
 export default function Body({ children, className }: ContextProps) {
   const pathname = usePathname();
-  console.log(pathname);
   const { theme } = useTheme();
   const { isRetracted } = useRetractable();
   return (
     <motion.body
       layout
-      className={`${theme} ${className} bg-background w-[100vw] h-[100vh] ${
+      className={`${theme} ${className} bg-background w-[100vw] h-[100vh] overflow-x-hidden ${
         pathname === "/login"
           ? ``
           : `grid grid-cols-1 grid-rows-[1fr,52px] md:grid-rows-[1fr,74px] ${

@@ -1,5 +1,8 @@
 import React from "react";
 import Button from "../_components/Button";
+import Card from "../_components/Card";
+import TableControls from "../_components/TableControls";
+import TransactionTable from "../_components/TransactionTable";
 import DataTable from "../_components/DataTable";
 
 export default function page() {
@@ -11,7 +14,10 @@ export default function page() {
         </h1>
         <Button>New Transaction</Button>
       </div>
-      <DataTable />
+      <Card className="w-full bg-card-back-ground">
+        <TableControls />
+        <TransactionTable />
+      </Card>
     </>
   );
 }

@@ -1,13 +1,28 @@
-import React from "react";
-import Card from "./Card";
-import TableControls from "./TableControls";
-import TransactionTable from "./TransactionTable";
-
+"use state";
+import Data from "@/transactionsData.json";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useState } from "react";
+type Transaction = {
+  avatar: string;
+  name: string;
+  category: string;
+  date: string;
+  amount: number;
+  deposite: boolean;
+};
+const columnHelper = createColumnHelper<Transaction>();
 export default function DataTable() {
-  return (
-    <Card className="w-full bg-card-back-ground">
-      <TableControls />
-      <TransactionTable />
-    </Card>
-  );
+  const [data, setData] = useState<Transaction[]>([]);
+  // const columnHelper = createColumnHelper
+  const columns = [
+    columnHelper.accessor("name", {
+      header: () => <span>Recepient / Sender</span>,
+    }),
+  ];
+  return <></>;
 }

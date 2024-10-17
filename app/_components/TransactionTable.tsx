@@ -1,7 +1,47 @@
-import React, { ReactNode } from "react";
-import avatar from "@/public/avatars/emma-richardson.jpg";
+"use client";
+import React, { ReactNode, useState } from "react";
 import Image from "next/image";
 import TablePagination from "./TablePagination";
+import avatar from "@/public/avatars/emma-richardson.jpg";
+import { createColumnHelper } from "@tanstack/react-table";
+type Transaction = {
+  avatar: string;
+  name: string;
+  category: string;
+  date: Date;
+  amount: number;
+  deposite: boolean;
+};
+const columnHelper = createColumnHelper<Transaction>();
+const columns = [
+  columnHelper.accessor("name", {
+    header: "Recepient / Sender",
+    cell: (props) => (
+      <RecepientReceiver
+        image={props.row.original.avatar}
+        category={props.row.original.category}
+        name={props.getValue()}
+      />
+    ),
+  }),
+  columnHelper.accessor("category", {
+    header: "Category",
+    cell: (props) => <Category>{props.getValue()}</Category>,
+  }),
+  columnHelper.accessor("date", {
+    header: "Transaction Date",
+    cell: (props) => props.getValue().toDateString(),
+  }),
+  columnHelper.accessor("amount", {
+    header: "Amount",
+    cell: (props) => (
+      <Amount
+        amount={props.getValue()}
+        deposite={props.row.original.deposite}
+      />
+    ),
+  }),
+];
 
 export default function TransactionTable() {
   return (
@@ -20,57 +60,7 @@ export default function TransactionTable() {
         </thead>
         <tbody className="divide-y divide-seperator">
           <TR>
-            <TableTitle
-              category="Personal Care"
-              image={avatar}
-              name="Emma Richardson"
-            />
-            <Category>Personal Care</Category>
-            <TD>19 Aug 2024</TD>
-            <Amount amount={75.5} deposite={true} />
-          </TR>
-          <TR>
-            <TableTitle
-              category="Personal Care"
-              image={avatar}
-              name="Emma Richardson"
-            />
-            <Category>Personal Care</Category>
-            <TD>19 Aug 2024</TD>
-            <Amount amount={75.5} deposite={true} />
-          </TR>
-          <TR>
-            <TableTitle
-              category="Personal Care"
-              image={avatar}
-              name="Emma Richardson"
-            />
-            <Category>Personal Care</Category>
-            <TD>19 Aug 2024</TD>
-            <Amount amount={75.5} deposite={true} />
-          </TR>
-          <TR>
-            <TableTitle
-              category="Personal Care"
-              image={avatar}
-              name="Emma Richardson"
-            />
-            <Category>Personal Care</Category>
-            <TD>19 Aug 2024</TD>
-            <Amount amount={75.5} deposite={true} />
-          </TR>
-          <TR>
-            <TableTitle
-              category="Personal Care"
-              image={avatar}
-              name="Emma Richardson"
-            />
-            <Category>Personal Care</Category>
-            <TD>19 Aug 2024</TD>
-            <Amount amount={75.5} deposite={false} />
-          </TR>
-          <TR>
-            <TableTitle
+            <RecepientReceiver
               category="Personal Care"
               image={avatar}
               name="Emma Richardson"
@@ -126,14 +116,14 @@ function TH({
 }
 function Amount({ deposite, amount }: { deposite: boolean; amount: number }) {
   return (
-    <TD
+    <div
       className={`${
         deposite === true ? "text-green" : "text-red"
       } text-preset-4-bold`}
     >
       {deposite ? "+" : "-"}
       {amount.toFixed(2)}
-    </TD>
+    </div>
   );
 }
 
@@ -142,21 +132,24 @@ type TitleType = {
   name: string;
   category: string;
 };
-function TableTitle({ image, name, category }: TitleType) {
+function RecepientReceiver({ image, name, category }: TitleType) {
   return (
-    <TD className="flex items-center justify-start gap-4 row-span-2 py-4">
-      <Image
-        src={image}
-        alt={`${name}'s avatar`}
-        className="size-10 rounded-full"
-      />
+    <div className="flex items-center justify-start gap-4 row-span-2 py-4">
+      <div className="relative size-10">
+        <Image
+          src={image}
+          fill
+          alt={`${name}'s avatar`}
+          className="rounded-full object-cover"
+        />
+      </div>
       <div className="flex flex-col gap-1">
         <p className="text-primary text-preset-4-bold">{name}</p>
-        <p className="text-preset-5 text-secondary">{category}</p>
+        <p className="text-preset-5 text-secondary md:hidden">{category}</p>
       </div>
-    </TD>
+    </div>
   );
 }
 function Category({ children }: { children: ReactNode }) {
-  return <TD className="hidden md:table-cell">{children}</TD>;
+  return <div className="hidden md:table-cell">{children}</div>;
 }
