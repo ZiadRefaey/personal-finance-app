@@ -2,8 +2,13 @@
 import React, { ReactNode, useState } from "react";
 import Image from "next/image";
 import TablePagination from "./TablePagination";
-import avatar from "@/public/avatars/emma-richardson.jpg";
-import { createColumnHelper } from "@tanstack/react-table";
+import Data from "@/transactionsData.json";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 type Transaction = {
   avatar: string;
   name: string;
@@ -12,6 +17,10 @@ type Transaction = {
   amount: number;
   deposite: boolean;
 };
+const TableData = Data.map((item) => ({
+  ...item,
+  date: new Date(item.date),
+}));
 const columnHelper = createColumnHelper<Transaction>();
 const columns = [
   columnHelper.accessor("name", {
@@ -44,11 +53,19 @@ const columns = [
 ];
 
 export default function TransactionTable() {
+  const [data, setData] = useState<Transaction[]>(TableData);
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   return (
     <>
       <table className="w-full mt-6 divide-y divide-seperator">
         <thead className="hidden md:table-header-group mb-6 my-3">
-          <TR className="text-start">
+          {/* <TR className="text-start">
             <TH>Recepient / Sender</TH>
 
             <TH>Category</TH>
@@ -56,19 +73,32 @@ export default function TransactionTable() {
             <TH>Transaction Date</TH>
 
             <TH>Amount</TH>
-          </TR>
+          </TR> */}
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TR key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TH key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </TH>
+              ))}
+            </TR>
+          ))}
         </thead>
         <tbody className="divide-y divide-seperator">
-          <TR>
-            <RecepientReceiver
-              category="Personal Care"
-              image={avatar}
-              name="Emma Richardson"
-            />
-            <Category>Personal Care</Category>
-            <TD>19 Aug 2024</TD>
-            <Amount amount={75.5} deposite={true} />
-          </TR>
+          {table.getRowModel().rows.map((row) => (
+            <TR key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <TD key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TD>
+              ))}
+            </TR>
+          ))}
         </tbody>
       </table>
       <TablePagination />
