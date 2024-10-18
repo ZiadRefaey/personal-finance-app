@@ -390,5 +390,13 @@
     "date": "2024-07-02T19:50:05Z",
     "amount": 16.5,
     "deposite": false
+  },
+  {
+    "avatar": "/avatars/swift-ride-share.jpg",
+    "name": "Swift Ride Share",
+    "category": "Transportation",
+    "date": "2024-07-02T19:50:05Z",
+    "amount": 16.5,
+    "deposite": false
   }
 ]

@@ -7,8 +7,10 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import page from "../budgets/page";
 type Transaction = {
   avatar: string;
   name: string;
@@ -54,26 +56,26 @@ const columns = [
 
 export default function TransactionTable() {
   const [data, setData] = useState<Transaction[]>(TableData);
-
+  const [pagination, setPagination] = useState({
+    pageIndex: 0, //initial page index
+    pageSize: 10, //default page size
+  });
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination, //update the pagination state when internal APIs mutate the pagination state
+
+    state: {
+      pagination,
+    },
   });
 
   return (
     <>
-      <table className="w-full mt-6 divide-y divide-seperator">
+      <table className="w-full mt-6 divide-y divide-seperator min-h-[86vh]">
         <thead className="hidden md:table-header-group mb-6 my-3">
-          {/* <TR className="text-start">
-            <TH>Recepient / Sender</TH>
-
-            <TH>Category</TH>
-
-            <TH>Transaction Date</TH>
-
-            <TH>Amount</TH>
-          </TR> */}
           {table.getHeaderGroups().map((headerGroup) => (
             <TR key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
@@ -92,16 +94,36 @@ export default function TransactionTable() {
         <tbody className="divide-y divide-seperator">
           {table.getRowModel().rows.map((row) => (
             <TR key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TD key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TD>
-              ))}
+              {row.getVisibleCells().map((cell) => {
+                if (cell.column.id === "name")
+                  return (
+                    <TD className="col-span-2" key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TD>
+                  );
+                if (cell.column.id === "category")
+                  return (
+                    <TD className="hidden md:table-cell" key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TD>
+                  );
+                return (
+                  <TD key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TD>
+                );
+              })}
             </TR>
           ))}
         </tbody>
       </table>
-      <TablePagination />
+      <TablePagination table={table} />
     </>
   );
 }
@@ -164,7 +186,7 @@ type TitleType = {
 };
 function RecepientReceiver({ image, name, category }: TitleType) {
   return (
-    <div className="flex items-center justify-start gap-4 row-span-2 py-4">
+    <div className="flex items-center justify-start gap-4 pt-4  md:py-0">
       <div className="relative size-10">
         <Image
           src={image}

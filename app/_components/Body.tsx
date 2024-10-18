@@ -16,7 +16,7 @@ export default function Body({ children, className }: ContextProps) {
   return (
     <motion.body
       layout
-      className={`${theme} ${className} bg-background w-[100vw] h-[100vh] overflow-x-hidden ${
+      className={`${theme} ${className} bg-background w-[100vw] h-[100vh] overflow-y-hidden overflow-x-hidden ${
         pathname === "/login"
           ? ``
           : `grid grid-cols-1 grid-rows-[1fr,52px] md:grid-rows-[1fr,74px] ${

@@ -1,41 +1,42 @@
 import {
   Pagination,
-  PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+  PaginationPrev,
+} from "./Pagination";
 
-export default function TablePagination() {
+export default function TablePagination({ table }: { table: any }) {
   return (
-    <Pagination>
-      <PaginationContent className="w-full flex items-center justify-between mt-6">
-        <PaginationItem className="md:w-auto md:px-4">
-          <PaginationPrevious href="#" />
-        </PaginationItem>
-        <div className="flex items-center justify-center gap-2">
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
+    <Pagination className="mt-6">
+      <PaginationItem
+        onClick={() => table.previousPage()}
+        disabled={!table.getCanPreviousPage()}
+        className="w-auto md:px-4"
+      >
+        <PaginationPrev />
+      </PaginationItem>
+      <div className="flex items-center justify-center gap-2">
+        {Array.from({ length: table.getPageCount() }, (_, index) => (
+          <PaginationItem
+            className={`${
+              table.getState().pagination.pageIndex === index
+                ? "bg-primary border-primary text-card-back-ground"
+                : "text-primary"
+            }`}
+            onClick={() => table.setPageIndex(index)}
+            key={index}
+          >
+            {index + 1}
           </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">2</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">4</PaginationLink>
-          </PaginationItem>
-          <PaginationItem className="p-0 size-10">
-            <PaginationEllipsis />
-          </PaginationItem>
-        </div>
-        <PaginationItem className="md:w-auto md:px-4">
-          <PaginationNext href="#" />
-        </PaginationItem>
-      </PaginationContent>
+        ))}
+      </div>
+      <PaginationItem
+        onClick={() => table.nextPage()}
+        disabled={!table.getCanNextPage()}
+        className="w-auto md:px-4"
+      >
+        <PaginationNext />
+      </PaginationItem>
     </Pagination>
   );
 }
