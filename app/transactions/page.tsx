@@ -1,9 +1,6 @@
-import React from "react";
 import Button from "../_components/Button";
 import Card from "../_components/Card";
-import TableControls from "../_components/TableControls";
 import TransactionTable from "../_components/TransactionTable";
-import DataTable from "../_components/DataTable";
 
 export default function page() {
   return (
@@ -14,8 +11,7 @@ export default function page() {
         </h1>
         <Button>New Transaction</Button>
       </div>
-      <Card className="w-full bg-card-back-ground">
-        <TableControls />
+      <Card className="w-full bg-card-back-ground min-h-[86vh] flex items-center justify-between flex-col">
         <TransactionTable />
       </Card>
     </>

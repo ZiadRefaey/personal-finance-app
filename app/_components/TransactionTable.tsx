@@ -7,10 +7,11 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import page from "../budgets/page";
+import TableControls from "./TableControls";
 type Transaction = {
   avatar: string;
   name: string;
@@ -19,6 +20,11 @@ type Transaction = {
   amount: number;
   deposite: boolean;
 };
+type ColumnSort = {
+  id: string;
+  desc: boolean;
+};
+type SortingState = ColumnSort[];
 const TableData = Data.map((item) => ({
   ...item,
   date: new Date(item.date),
@@ -56,6 +62,7 @@ const columns = [
 
 export default function TransactionTable() {
   const [data, setData] = useState<Transaction[]>(TableData);
+  const [globalFilter, setGlobalFilter] = useState<any>([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
     pageSize: 10, //default page size
@@ -66,63 +73,72 @@ export default function TransactionTable() {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination, //update the pagination state when internal APIs mutate the pagination state
-
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: "includesString",
     state: {
       pagination,
+      globalFilter,
     },
+    onGlobalFilterChange: setGlobalFilter,
   });
-
+  console.log(table.getState().sorting);
   return (
     <>
-      <table className="w-full mt-6 divide-y divide-seperator min-h-[86vh]">
-        <thead className="hidden md:table-header-group mb-6 my-3">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TR key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TH key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TH>
-              ))}
-            </TR>
-          ))}
-        </thead>
-        <tbody className="divide-y divide-seperator">
-          {table.getRowModel().rows.map((row) => (
-            <TR key={row.id}>
-              {row.getVisibleCells().map((cell) => {
-                if (cell.column.id === "name")
+      <div className="w-full">
+        <TableControls table={table} />
+        <table className="w-full mt-6 divide-y divide-seperator ">
+          <thead className="hidden md:table-header-group mb-6 my-3">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TR key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TH key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TH>
+                ))}
+              </TR>
+            ))}
+          </thead>
+          <tbody className="divide-y divide-seperator">
+            {table.getRowModel().rows.map((row) => (
+              <TR key={row.id}>
+                {row.getVisibleCells().map((cell) => {
+                  if (cell.column.id === "name")
+                    return (
+                      <TD className="col-span-2" key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TD>
+                    );
+                  if (cell.column.id === "category")
+                    return (
+                      <TD className="hidden md:table-cell" key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TD>
+                    );
                   return (
-                    <TD className="col-span-2" key={cell.id}>
+                    <TD key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
                     </TD>
                   );
-                if (cell.column.id === "category")
-                  return (
-                    <TD className="hidden md:table-cell" key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TD>
-                  );
-                return (
-                  <TD key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TD>
-                );
-              })}
-            </TR>
-          ))}
-        </tbody>
-      </table>
+                })}
+              </TR>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <TablePagination table={table} />
     </>
   );

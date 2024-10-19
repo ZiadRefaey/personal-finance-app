@@ -7,7 +7,7 @@ import {
 
 export default function TablePagination({ table }: { table: any }) {
   return (
-    <Pagination className="mt-6">
+    <Pagination className="mt-6 w-full">
       <PaginationItem
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
