@@ -1,7 +1,4 @@
 "use client";
-import React, { ReactNode, useState } from "react";
-import Image from "next/image";
-import TablePagination from "./TablePagination";
 import Data from "@/transactionsData.json";
 import {
   createColumnHelper,
@@ -9,9 +6,13 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import TableControls from "./TableControls";
+import Image from "next/image";
+import { createContext, ReactNode, useState } from "react";
+import TablePagination from "./TablePagination";
+import TransactionsTableControls from "./TransactionsTableControls";
 type Transaction = {
   avatar: string;
   name: string;
@@ -44,10 +45,12 @@ const columns = [
   columnHelper.accessor("category", {
     header: "Category",
     cell: (props) => <Category>{props.getValue()}</Category>,
+    sortingFn: "text",
   }),
   columnHelper.accessor("date", {
     header: "Transaction Date",
     cell: (props) => props.getValue().toDateString(),
+    sortingFn: "datetime",
   }),
   columnHelper.accessor("amount", {
     header: "Amount",
@@ -57,15 +60,19 @@ const columns = [
         deposite={props.row.original.deposite}
       />
     ),
+    sortingFn: "alphanumeric",
   }),
 ];
-
+export const TransactionTableContext = createContext<any>(null);
+export const FeaturesStatesContext = createContext<any>(null);
 export default function TransactionTable() {
   const [data, setData] = useState<Transaction[]>(TableData);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
+  const [sorting, setSorting] = useState<SortingState>([]); // can set initial sorting state here
+
   const [pagination, setPagination] = useState({
-    pageIndex: 0, //initial page index
-    pageSize: 10, //default page size
+    pageIndex: 0,
+    pageSize: 10,
   });
   const table = useReactTable({
     data,
@@ -74,24 +81,32 @@ export default function TransactionTable() {
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination, //update the pagination state when internal APIs mutate the pagination state
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(), //provide a sorting row model
     globalFilterFn: "includesString",
     state: {
       pagination,
       globalFilter,
+      sorting,
     },
+    onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
   });
-  console.log(table.getState().sorting);
   return (
-    <>
+    <FeaturesStatesContext.Provider value={{ setSorting }}>
       <div className="w-full">
-        <TableControls table={table} />
+        <TransactionsTableControls table={table} />
+        {/* <TableControls table={table} setSorting={setSorting} /> */}
         <table className="w-full mt-6 divide-y divide-seperator ">
           <thead className="hidden md:table-header-group mb-6 my-3">
             {table.getHeaderGroups().map((headerGroup) => (
               <TR key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TH key={header.id}>
+                  <TH
+                    key={header.id}
+                    onClick={() => {
+                      console.log(header.column.getToggleSortingHandler());
+                    }}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -140,7 +155,7 @@ export default function TransactionTable() {
         </table>
       </div>
       <TablePagination table={table} />
-    </>
+    </FeaturesStatesContext.Provider>
   );
 }
 function TD({
@@ -172,12 +187,17 @@ function TR({
 function TH({
   children,
   className,
+  onClick,
 }: {
   children: ReactNode;
   className?: string;
+  onClick: () => void;
 }) {
   return (
-    <th className={`${className} text-start text-preset-5 text-secondary p-4`}>
+    <th
+      onClick={onClick}
+      className={`${className} text-start text-preset-5 text-secondary p-4`}
+    >
       {children}
     </th>
   );

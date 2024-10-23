@@ -1,18 +1,23 @@
-import TableFilter from "./TableFilter";
 import TableSearch from "./TableSearch";
 import TableSort from "./TableSort";
-
-export default function TableControls({
-  table,
-  hasSearch = true,
-  hasSort = true,
-  hasFilter = true,
-}: {
-  table: any;
+type sort = {
+  id: string;
+  desc: boolean;
+};
+type TableControls = {
+  table?: any;
+  sortingOptions?: { display: string; value: sort }[];
   hasSearch?: boolean;
   hasSort?: boolean;
   hasFilter?: boolean;
-}) {
+};
+export default function TableControls({
+  table,
+  sortingOptions,
+  hasSearch = true,
+  hasSort = true,
+  hasFilter = true,
+}: TableControls) {
   return (
     <div className="flex items-center justify-between w-full gap-4">
       {hasSearch && (
@@ -22,8 +27,8 @@ export default function TableControls({
         />
       )}
       <div className="flex items-end justify-center gap-2 md:gap-6 flex-col md:flex-row ">
-        {hasSort && <TableSort />}
-        {hasFilter && <TableFilter />}
+        {hasSort && <TableSort sortingOptions={sortingOptions} />}
+        {/* {hasFilter && <TableFilter />} */}
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ export default function page() {
           <BillsSummaryCard />
         </div>
         <Card>
-          <TableControls hasFilter={false} />
+          {/* <TableControls hasFilter={false} hasSort={false} /> */}
           <BillsTable />
         </Card>
       </div>

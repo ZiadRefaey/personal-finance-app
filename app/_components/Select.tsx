@@ -6,19 +6,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 type Select = {
-  value: string;
-  content: string[];
+  placeholder: string;
+  items: any;
+  valueChange: any;
 };
-export default function Select({ value, content }: Select) {
+export default function Select({ placeholder, items, valueChange }: Select) {
   return (
-    <SelectContainer>
-      <SelectTrigger className="max-w-[100px] w-auto md:max-w-auto bg-card-back-ground">
-        <SelectValue placeholder={value} />
+    <SelectContainer onValueChange={(value) => valueChange(value)}>
+      <SelectTrigger className="max-w-[100px] w-auto md:max-w-auto bg-card-back-ground capitalize">
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {content.map((value) => (
-          <SelectItem className=" capitalize" key={value} value={value}>
-            {value}
+        {items.map((item: { display: string; value: any }) => (
+          <SelectItem
+            className="capitalize"
+            key={item.value}
+            value={item.value}
+          >
+            {item.display}
           </SelectItem>
         ))}
       </SelectContent>
