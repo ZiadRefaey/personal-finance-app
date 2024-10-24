@@ -1,21 +1,26 @@
-import React from "react";
+import { useContext } from "react";
 import Select from "./Select";
-const SelectContent = [
-  "all transactions",
-  "entertainment",
-  "bills",
-  "groceries",
-  "dining out",
-  "transportation",
-  "personal care",
-];
-export default function TableFilter() {
+import { TransactionTableContext } from "./TransactionTable";
+
+export default function TableFilter({
+  filterOptions,
+}: {
+  filterOptions?: { display: string; value: string }[];
+}) {
+  const table = useContext(TransactionTableContext);
+  function handleFilter(value: string) {
+    table.getColumn("category")?.setFilterValue(value);
+  }
   return (
     <div className="flex items-center justify-center gap-2">
       <label className="text-preset-4 text-secondary hidden md:block">
         Filter
       </label>
-      <Select content={SelectContent} value="All Transactions" />
+      <Select
+        items={filterOptions}
+        placeholder="Filter"
+        valueChange={(value: string) => handleFilter(value)}
+      />
     </div>
   );
 }

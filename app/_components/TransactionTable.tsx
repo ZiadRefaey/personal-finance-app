@@ -13,6 +13,11 @@ import Image from "next/image";
 import { createContext, ReactNode, useState } from "react";
 import TablePagination from "./TablePagination";
 import TransactionsTableControls from "./TransactionsTableControls";
+interface ColumnFilter {
+  id: string;
+  value: unknown;
+}
+type ColumnFiltersState = ColumnFilter[];
 type Transaction = {
   avatar: string;
   name: string;
@@ -69,6 +74,7 @@ export default function TransactionTable() {
   const [data, setData] = useState<Transaction[]>(TableData);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
   const [sorting, setSorting] = useState<SortingState>([]); // can set initial sorting state here
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]); // can set initial column filter state here
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -87,75 +93,79 @@ export default function TransactionTable() {
       pagination,
       globalFilter,
       sorting,
+      columnFilters,
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
   });
+
   return (
-    <FeaturesStatesContext.Provider value={{ setSorting }}>
-      <div className="w-full">
-        <TransactionsTableControls table={table} />
-        {/* <TableControls table={table} setSorting={setSorting} /> */}
-        <table className="w-full mt-6 divide-y divide-seperator ">
-          <thead className="hidden md:table-header-group mb-6 my-3">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TR key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TH
-                    key={header.id}
-                    onClick={() => {
-                      console.log(header.column.getToggleSortingHandler());
-                    }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TH>
-                ))}
-              </TR>
-            ))}
-          </thead>
-          <tbody className="divide-y divide-seperator">
-            {table.getRowModel().rows.map((row) => (
-              <TR key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  if (cell.column.id === "name")
+    <TransactionTableContext.Provider value={table}>
+      <FeaturesStatesContext.Provider value={{ setSorting, setColumnFilters }}>
+        <div className="w-full">
+          <TransactionsTableControls table={table} />
+          <table className="w-full mt-6 divide-y divide-seperator ">
+            <thead className="hidden md:table-header-group mb-6 my-3">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TR key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TH
+                      key={header.id}
+                      onClick={() => {
+                        console.log(header.column.getToggleSortingHandler());
+                      }}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TH>
+                  ))}
+                </TR>
+              ))}
+            </thead>
+            <tbody className="divide-y divide-seperator">
+              {table.getRowModel().rows.map((row) => (
+                <TR key={row.id}>
+                  {row.getVisibleCells().map((cell) => {
+                    if (cell.column.id === "name")
+                      return (
+                        <TD className="col-span-2" key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TD>
+                      );
+                    if (cell.column.id === "category")
+                      return (
+                        <TD className="hidden md:table-cell" key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TD>
+                      );
                     return (
-                      <TD className="col-span-2" key={cell.id}>
+                      <TD key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
                         )}
                       </TD>
                     );
-                  if (cell.column.id === "category")
-                    return (
-                      <TD className="hidden md:table-cell" key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TD>
-                    );
-                  return (
-                    <TD key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TD>
-                  );
-                })}
-              </TR>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <TablePagination table={table} />
-    </FeaturesStatesContext.Provider>
+                  })}
+                </TR>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <TablePagination table={table} />
+      </FeaturesStatesContext.Provider>
+    </TransactionTableContext.Provider>
   );
 }
 function TD({

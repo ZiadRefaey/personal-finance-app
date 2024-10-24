@@ -17,12 +17,8 @@ export default function Select({ placeholder, items, valueChange }: Select) {
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {items.map((item: { display: string; value: any }) => (
-          <SelectItem
-            className="capitalize"
-            key={item.value}
-            value={item.value}
-          >
+        {items.map((item: { display: string; value: any }, index: number) => (
+          <SelectItem className="capitalize" key={index} value={item.value}>
             {item.display}
           </SelectItem>
         ))}
