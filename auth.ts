@@ -23,5 +23,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return false;
       }
     },
+    async session({ session }) {
+      const user = await getUser(session.user.email);
+      session.user.id = user.id;
+      return session;
+    },
   },
 });
