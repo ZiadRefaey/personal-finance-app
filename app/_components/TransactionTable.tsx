@@ -13,6 +13,7 @@ import Image from "next/image";
 import { createContext, ReactNode, useState } from "react";
 import TablePagination from "./TablePagination";
 import TransactionsTableControls from "./TransactionsTableControls";
+import Button from "./Button";
 interface ColumnFilter {
   id: string;
   value: unknown;
@@ -104,6 +105,7 @@ export default function TransactionTable() {
     <TransactionTableContext.Provider value={table}>
       <FeaturesStatesContext.Provider value={{ setSorting, setColumnFilters }}>
         <div className="w-full">
+          <Button>Hello</Button>
           <TransactionsTableControls table={table} />
           <table className="w-full mt-6 divide-y divide-seperator ">
             <thead className="hidden md:table-header-group mb-6 my-3">
