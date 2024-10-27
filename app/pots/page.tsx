@@ -1,6 +1,9 @@
 import React from "react";
-import Button from "../_components/Button";
+
 import PotCard from "../_components/PotCard";
+import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
+import AddPotForm from "../_components/AddPotForm";
+
 const dummyPopoverContent = (
   <div className="flex flex-col items-center justify-center gap-1">
     <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
@@ -47,7 +50,16 @@ export default function page() {
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
         <h1 className="text-preset-1 text-primary">Pots</h1>
-        <Button>+Add New Pot</Button>
+        <Modal>
+          <ModalTrigger modalName="add-pot">+Add New Pot</ModalTrigger>
+          <ModalWindow
+            header="Add New Pot"
+            modalName="add-pot"
+            form={<AddPotForm />}
+            description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
+          />
+        </Modal>
+        ;
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {Pots.map((pot) => (
