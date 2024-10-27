@@ -5,7 +5,6 @@ import { ThemeProvider } from "./_components/ThemeProvider";
 import Body from "./_components/Body";
 import Navbar from "./_components/Navbar";
 import RetractableProvider from "./_components/RetractableProvider";
-import { auth } from "@/auth";
 
 const publicSans = localFont({
   src: "./fonts/PublicSans-Regular.ttf",
@@ -26,7 +25,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
   return (
     <html lang="en">
       <ThemeProvider>
@@ -34,8 +32,7 @@ export default async function RootLayout({
           <Body
             className={`${publicSans.className} ${publicSansBold.variable} antialiased`}
           >
-            <Navbar session={session} />
-
+            <Navbar />
             <main className="w-full h-full overflow-y-scroll bg-background xl:order-2 px-4 md:px-10 py-6 md:py-8">
               {children}
             </main>

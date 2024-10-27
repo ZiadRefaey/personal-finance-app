@@ -1,23 +1,19 @@
 "use client";
-import NavItem from "./NavItem";
+import { usePathname } from "next/navigation";
+import { BiArrowFromRight, BiSolidPieChartAlt2 } from "react-icons/bi";
+import { FaSackDollar } from "react-icons/fa6";
 import { GoHomeFill } from "react-icons/go";
 import { LuArrowUpDown } from "react-icons/lu";
-import { BiSolidPieChartAlt2, BiArrowFromRight } from "react-icons/bi";
-import { FaSackDollar } from "react-icons/fa6";
+import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { PiReceiptFill } from "react-icons/pi";
-import { usePathname } from "next/navigation";
-import { MdLightMode, MdDarkMode } from "react-icons/md";
+import NavItem from "./NavItem";
 
 import { motion } from "framer-motion";
 import Logo from "./Logo";
 import { useRetractable } from "./RetractableProvider";
 import { useTheme } from "./ThemeProvider";
-import UserAvatar from "./UserAvatar";
-import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
-import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
-import { SignOutAction } from "../_lib/actions";
 
-export default function Navbar({ session }: { session: any }) {
+export default function Navbar() {
   const pathname = usePathname();
   const NavIconStyling = `size-6`;
   const { theme, setTheme } = useTheme();
@@ -72,31 +68,7 @@ export default function Navbar({ session }: { session: any }) {
           ))}
         </ul>
       </div>
-      {/*user avatar*/}
-      {/* <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger className=" w-full xl:flex items-center gap-4 py-2 cursor-default hidden px-8 text-preset-3 text-icon">
-            <UserAvatar session={session} />
-            {!isRetracted && (
-              <motion.span
-                layout
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-                {session.user.name}
-              </motion.span>
-            )}
-          </TooltipTrigger>
-          <TooltipContent>
-            <form action={SignOutAction}>
-              <button className="text-preset-3 text-icon bg-background border-border border px-4 py-2 rounded-lg hover:bg-background/70 transition-all duration-150">
-                Sign Out
-              </button>
-            </form>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider> */}
+
       <div className="hidden xl:block w-full px-8 text-preset-3 text-icon">
         {/* Theme switcher */}
         <div
