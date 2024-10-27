@@ -56,7 +56,7 @@ export function PieChartShad({ data }: any) {
   }, [chartData]);
 
   return (
-    <div className="size-[290px] flex items-center justify-center 2xl:size-[340px]  p-0 ">
+    <div className="size-[290px] flex items-center justify-center 2xl:size-[340px] relative z-1 p-0 ">
       <CardContent className="flex-1 p-0 ">
         <ChartContainer
           config={chartConfig}

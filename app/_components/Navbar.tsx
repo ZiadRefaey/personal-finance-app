@@ -73,15 +73,10 @@ export default function Navbar({ session }: { session: any }) {
         </ul>
       </div>
       {/*user avatar*/}
-      <TooltipProvider>
+      {/* <TooltipProvider>
         <Tooltip>
           <TooltipTrigger className=" w-full xl:flex items-center gap-4 py-2 cursor-default hidden px-8 text-preset-3 text-icon">
             <UserAvatar session={session} />
-            {/* <img
-              src={session?.user?.image}
-              alt="asd"
-              className="size-7 -mr-[2px] rounded-full"
-            /> */}
             {!isRetracted && (
               <motion.span
                 layout
@@ -101,7 +96,7 @@ export default function Navbar({ session }: { session: any }) {
             </form>
           </TooltipContent>
         </Tooltip>
-      </TooltipProvider>
+      </TooltipProvider> */}
       <div className="hidden xl:block w-full px-8 text-preset-3 text-icon">
         {/* Theme switcher */}
         <div

@@ -10,9 +10,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    authorized({ auth }) {
-      return !!auth?.user;
-    },
+    // authorized({ auth }) {
+    //   return !!auth?.user;
+    // },
     async signIn({ user }: any) {
       try {
         const existingUser = await getUser(user.email);
