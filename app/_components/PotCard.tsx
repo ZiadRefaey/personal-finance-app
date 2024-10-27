@@ -34,8 +34,8 @@ export default function PotCard({
       </div>
       <Progress
         value={percentage}
-        className="h-2"
-        indicatorClass={`${color}`}
+        className="h-2 z-10"
+        indicatorClass={`${color} relative z-10`}
       />
       <div className="flex items-center justify-between mt-[13px]">
         <p className="text-preset-5-bold text-secondary">{percentage}%</p>
