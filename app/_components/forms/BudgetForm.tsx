@@ -23,7 +23,7 @@ export default function BudgetForm() {
           <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
-          <SelectContent className="bg-white text-navbar relative z-[10000]">
+          <SelectContent className="bg-white text-navbar">
             {categories.map((category) => (
               <SelectItem value={category} key={category}>
                 <p className="text-preset-4 capitalize">{category}</p>
@@ -42,7 +42,7 @@ export default function BudgetForm() {
           <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
             <SelectValue placeholder="Theme" />
           </SelectTrigger>
-          <SelectContent className="bg-white text-navbar relative z-[10000]">
+          <SelectContent className="bg-white text-navbar">
             {colors.map((color) => (
               <SelectItem value={color} key={color}>
                 <div className="flex items-center justify-start gap-3">

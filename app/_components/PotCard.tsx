@@ -2,10 +2,10 @@ import React from "react";
 import Card from "./Card";
 import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
 import { Progress } from "@/components/ui/progress";
-import Button from "./Button";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import DeleteForm from "./forms/DeleteForm";
 import PotDepositeForm from "./forms/PotDepositeForm";
+import PotWithdrawalForm from "./forms/PotWithdrawForm";
 type PotType = {
   title: string;
   saved: string;
@@ -67,7 +67,21 @@ export default function PotCard({
           />
         </Modal>
 
-        <Button primary={false}>Withdraw</Button>
+        <Modal>
+          <ModalTrigger
+            primary={false}
+            className="w-full"
+            modalName="withdraw-pot"
+          >
+            Withdarw
+          </ModalTrigger>
+          <ModalWindow
+            header="Withdraw from Pot?"
+            modalName="withdraw-pot"
+            form={<PotWithdrawalForm />}
+            description="Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
+          />
+        </Modal>
       </div>
     </Card>
   );
