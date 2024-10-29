@@ -3,6 +3,8 @@ import Card from "./Card";
 import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
 import { Progress } from "@/components/ui/progress";
 import Button from "./Button";
+import { Modal, ModalTrigger, ModalWindow } from "./Modal";
+import DeletePotForm from "./forms/DeletePotForm";
 type PotType = {
   title: string;
   saved: string;
@@ -26,7 +28,19 @@ export default function PotCard({
           <div className={`size-4 rounded-full ${color}`}></div>
           <p className="text-preset-2 text-primary">{title}</p>
         </div>
-        <PopoverEllipsisTrigger content={popoverContent} />
+        <PopoverEllipsisTrigger
+          content={
+            <Modal>
+              <ModalTrigger modalName="delete-pot">Delete Pot</ModalTrigger>
+              <ModalWindow
+                header="Delete Pot?"
+                modalName="delete-pot"
+                form={<DeletePotForm />}
+                description="Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever."
+              />
+            </Modal>
+          }
+        />
       </div>
       <div className="flex items-center justify-between mt-8 mb-4">
         <p className="text-preset-4 text-secondary">Total Saved</p>
