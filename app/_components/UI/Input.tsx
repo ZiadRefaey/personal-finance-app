@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import React, { InputHTMLAttributes, ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 type HTMLInputTypeAttribute =
   | "button"
