@@ -3,13 +3,9 @@ import Card from "./Card";
 import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
 import { Progress } from "@/components/ui/progress";
 import BudgetSpendingSummary from "./BudgetSpendingSummary";
-const dummyPopoverContent = (
-  <div className="flex flex-col items-center justify-center gap-1">
-    <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-      Click me
-    </button>
-  </div>
-);
+import { Modal, ModalTrigger, ModalWindow } from "./Modal";
+import DeleteForm from "./forms/DeleteForm";
+
 type SpendingType = {
   name: string;
   image: any;
@@ -38,7 +34,23 @@ export default function BudgetCard({
           <div className={`size-4 rounded-full ${color}`}></div>
           <p className="text-preset-2 text-primary">{title}</p>
         </div>
-        <PopoverEllipsisTrigger content={dummyPopoverContent} />
+        <PopoverEllipsisTrigger
+          content={
+            <>
+              <Modal>
+                <ModalTrigger modalName="delete-budget">
+                  Delete Budget
+                </ModalTrigger>
+                <ModalWindow
+                  header="Delete Budget?"
+                  modalName="delete-budget"
+                  form={<DeleteForm />}
+                  description="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
+                />
+              </Modal>
+            </>
+          }
+        />
       </div>
       <p className="text-preset-4 text-secondary mt-5 mb-4">
         Maximum of ${total.toFixed(2)}

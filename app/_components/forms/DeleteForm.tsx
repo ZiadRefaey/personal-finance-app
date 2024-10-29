@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../Button";
 
-export default function DeletePotForm() {
+export default function DeleteForm() {
   return (
     <form className="w-full flex items-center justify-center flex-col">
       <Button

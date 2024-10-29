@@ -16,7 +16,11 @@ export default function PopoverEllipsisTrigger({ content }: PopoverType) {
       <PopoverTrigger className="p-2">
         <Image src={Ellipsis} alt="Popover Trigger Icon" />
       </PopoverTrigger>
-      <PopoverContent className="">{content}</PopoverContent>
+      <PopoverContent className="">
+        <div className="flex items-center justify-center flex-col">
+          {content}
+        </div>
+      </PopoverContent>
     </Popover>
   );
 }

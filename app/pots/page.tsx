@@ -4,13 +4,6 @@ import PotCard from "../_components/PotCard";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import AddPotForm from "../_components/forms/PotForm";
 
-const dummyPopoverContent = (
-  <div className="flex flex-col items-center justify-center gap-1">
-    <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-      Click me
-    </button>
-  </div>
-);
 const Pots = [
   {
     title: "Savings",
@@ -18,7 +11,6 @@ const Pots = [
     percentage: 7.95,
     target: 2000,
     color: "bg-green",
-    PopoverContent: dummyPopoverContent,
   },
   {
     title: "Concert Ticket",
@@ -26,7 +18,6 @@ const Pots = [
     percentage: 73.3,
     target: 150,
     color: "bg-navy",
-    PopoverContent: dummyPopoverContent,
   },
   {
     title: "Gift",
@@ -34,7 +25,6 @@ const Pots = [
     percentage: 66.6,
     target: 60,
     color: "bg-cyan",
-    PopoverContent: dummyPopoverContent,
   },
   {
     title: "New Laptop",
@@ -42,7 +32,6 @@ const Pots = [
     percentage: 7.95,
     target: 1000,
     color: "bg-yellow",
-    PopoverContent: dummyPopoverContent,
   },
 ];
 export default function page() {
@@ -65,7 +54,6 @@ export default function page() {
           <PotCard
             color={pot.color}
             percentage={pot.percentage}
-            popoverContent={pot.PopoverContent}
             saved={pot.saved}
             target={pot.target}
             title={pot.title}

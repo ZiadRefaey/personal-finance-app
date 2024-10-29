@@ -1,17 +1,16 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import Card from "./Card";
 import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
 import { Progress } from "@/components/ui/progress";
 import Button from "./Button";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
-import DeletePotForm from "./forms/DeletePotForm";
+import DeleteForm from "./forms/DeleteForm";
 type PotType = {
   title: string;
   saved: string;
   percentage: number;
   target: number;
   color: string;
-  popoverContent: ReactNode;
 };
 export default function PotCard({
   title,
@@ -19,7 +18,6 @@ export default function PotCard({
   percentage,
   target,
   color,
-  popoverContent,
 }: PotType) {
   return (
     <Card>
@@ -35,7 +33,7 @@ export default function PotCard({
               <ModalWindow
                 header="Delete Pot?"
                 modalName="delete-pot"
-                form={<DeletePotForm />}
+                form={<DeleteForm />}
                 description="Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever."
               />
             </Modal>
