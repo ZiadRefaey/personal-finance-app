@@ -42,15 +42,23 @@ function useModal() {
 export function ModalTrigger({
   children,
   modalName,
+  className,
+  primary = true,
 }: {
   children: ReactNode;
   modalName: string;
+  className?: string;
+  primary?: boolean;
 }) {
   const { setOpenModal } = useModal();
   function handleOpenModal() {
     setOpenModal(modalName);
   }
-  return <Button onClick={handleOpenModal}>{children}</Button>;
+  return (
+    <Button primary={primary} className={className} onClick={handleOpenModal}>
+      {children}
+    </Button>
+  );
 }
 
 export function ModalWindow({

@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import Button from "./Button";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import DeleteForm from "./forms/DeleteForm";
+import PotDepositeForm from "./forms/PotDepositeForm";
 type PotType = {
   title: string;
   saved: string;
@@ -54,7 +55,18 @@ export default function PotCard({
         <p className="text-preset-5 text-secondary">Target of ${target}</p>
       </div>
       <div className="mt-8 grid grid-cols-2 w-full gap-3">
-        <Button primary={false}>+ Add Money</Button>
+        <Modal>
+          <ModalTrigger primary={false} className="w-full" modalName="add-pot">
+            + Add Money
+          </ModalTrigger>
+          <ModalWindow
+            header="Add to Pot?"
+            modalName="add-pot"
+            form={<PotDepositeForm />}
+            description="Add money to your pot to keep it separate from your main balance. As soon as you add this money, it will be deducted from your current balance."
+          />
+        </Modal>
+
         <Button primary={false}>Withdraw</Button>
       </div>
     </Card>
