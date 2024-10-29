@@ -36,7 +36,7 @@ export default async function RootLayout({
           >
             <Navbar session={session} />
 
-            <main className="w-full h-full overflow-y-scroll bg-background xl:order-2 px-4 md:px-10 py-6 md:py-8">
+            <main className="w-full h-full overflow-y-scroll bg-background xl:order-2 px-4 md:px-10 py-6 md:py-8 z-[1] relative">
               {children}
             </main>
           </Body>

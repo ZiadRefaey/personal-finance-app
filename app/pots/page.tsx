@@ -2,7 +2,7 @@ import React from "react";
 
 import PotCard from "../_components/PotCard";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
-import AddPotForm from "../_components/AddPotForm";
+import AddPotForm from "../_components/forms/PotForm";
 
 const dummyPopoverContent = (
   <div className="flex flex-col items-center justify-center gap-1">
@@ -59,7 +59,6 @@ export default function page() {
             description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
           />
         </Modal>
-        ;
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {Pots.map((pot) => (

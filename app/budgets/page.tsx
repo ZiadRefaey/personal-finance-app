@@ -14,6 +14,8 @@ import Ethan from "@/public/avatars/ethan-clark.jpg";
 import Ella from "@/public/avatars/ella-phillips.jpg";
 import William from "@/public/avatars/william-harris.jpg";
 import Serenity from "@/public/avatars/serenity-spa-and-wellness.jpg";
+import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
+import AddBudgetForm from "../_components/forms/BudgetForm";
 
 type SpendingType = {
   name: string;
@@ -154,7 +156,15 @@ export default function page() {
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
         <h1 className="text-preset-1 text-primary">Budgets</h1>
-        <Button>+Add New Budget</Button>
+        <Modal>
+          <ModalTrigger modalName="add-budget">+Add Budget</ModalTrigger>
+          <ModalWindow
+            header="Add New Budget"
+            modalName="add-budget"
+            form={<AddBudgetForm />}
+            description="Choose a category to set a spending budget. These categories can help you monitor spending.."
+          />
+        </Modal>
       </div>
       <div className="flex items-start justify-center flex-col xl:flex-row gap-6">
         <BudgetsSpendingSummary data={BudgetsListData} />

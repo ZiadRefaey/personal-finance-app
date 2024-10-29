@@ -1,7 +1,5 @@
 import React from "react";
-import InputContainer from "./InputContainer";
-import Label from "./Label";
-import Input from "./Input";
+
 import {
   Select,
   SelectContent,
@@ -9,19 +7,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FaDollarSign } from "react-icons/fa6";
 import colors from "@/app/_lib/colors.json";
-import Button from "../app/_components/Button";
-export default function AddPotForm() {
+import InputContainer from "../UI/InputContainer";
+import Label from "../UI/Label";
+import Input from "../UI/Input";
+import Button from "../Button";
+
+export default function PotForm() {
   return (
     <form className="w-full flex items-center justify-center gap-3 flex-col">
       <InputContainer>
         <Label>Pot Name</Label>
-        <input className="border border-border w-full rounded-lg py-3 px-5 text-navbar"></input>
+        <Input type="text" />
         <p className="self-end text-preset-5">30 characters left</p>
       </InputContainer>
       <InputContainer>
-        <Label>Pot Name</Label>
-        <Input prefix={<></>} />
+        <Label>Target</Label>
+        <Input type="text" prefix={<FaDollarSign className="text-border" />} />
       </InputContainer>
       <InputContainer>
         <Label>Theme</Label>
@@ -40,11 +43,14 @@ export default function AddPotForm() {
                   <p className="text-preset-4 capitalize">{color}</p>
                 </div>
               </SelectItem>
-            ))}{" "}
+            ))}
           </SelectContent>
         </Select>
       </InputContainer>
-      <Button className="w-full p-3 text-preset-4-bold text-card-back-ground">
+      <Button
+        type="submit"
+        className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2"
+      >
         Add Pot
       </Button>
     </form>

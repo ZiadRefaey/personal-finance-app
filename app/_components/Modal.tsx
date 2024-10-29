@@ -12,27 +12,23 @@ import Button from "./Button";
 import Card from "./Card";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { createPortal } from "react-dom";
-// export default function Modal() {
-//   return (
-//     <div>
-//       <ModalTrigger handleOpenModal={handleOpenModal}>Button</ModalTrigger>
-//       <ModalWindow
-//         isOpen={isOpen}
-//         handleCloseModal={handleCloseModal}
-//       ></ModalWindow>
-//     </div>
-//   );
-// }
+
 interface ModalContextType {
   openModal: string;
   setOpenModal: Dispatch<SetStateAction<string>>;
 }
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
-export function Modal({ children }: { children: ReactNode }) {
+export function Modal({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   const [openModal, setOpenModal] = useState<string>("");
   return (
     <ModalContext.Provider value={{ openModal, setOpenModal }}>
-      {children}
+      <div className={className}>{children}</div>
     </ModalContext.Provider>
   );
 }
@@ -83,9 +79,9 @@ export function ModalWindow({
     <div
       className={`${
         openModal === modalName ? "block" : "hidden"
-      } fixed w-full h-full flex items-center justify-center top-0 left-0 px-5`}
+      } fixed w-full h-full flex items-center justify-center top-0 left-0 px-5 z-[100]`}
     >
-      <Card className="bg-card-back-ground z-[1000099999] w-full max-w-[560px] flex flex-col items-center justify-center gap-5">
+      <Card className="bg-card-back-ground z-[1000] w-full max-w-[560px] flex flex-col items-center justify-center gap-5">
         <div className="flex items-center justify-between w-full">
           <p className="text-preset-2 text-primary">{header}</p>
           <IoIosCloseCircleOutline
@@ -99,7 +95,7 @@ export function ModalWindow({
       </Card>
       <div
         onClick={handleCloseModal}
-        className={`w-full h-full bg-black/50 flex items-center justify-center z-[99999999] absolute`}
+        className={`w-full h-full bg-black/50 flex items-center justify-center z-[999] absolute`}
       ></div>
     </div>,
     document.body
