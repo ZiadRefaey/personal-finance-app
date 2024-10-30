@@ -12,7 +12,9 @@ export default function PotDepositeForm() {
         <Label>Amount to Add</Label>
         <Input type="text" prefix={<FaDollarSign className="text-border" />} />
       </InputContainer>
-      <Button className="w-full">Confirm Addition</Button>
+      <Button type="submit" className="w-full">
+        Confirm Addition
+      </Button>
     </form>
   );
 }

@@ -58,7 +58,10 @@ export default function NewTransactionForm() {
         </Select>
       </InputContainer>
 
-      <Button className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2">
+      <Button
+        type="submit"
+        className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2"
+      >
         Confirm Transaction
       </Button>
     </form>

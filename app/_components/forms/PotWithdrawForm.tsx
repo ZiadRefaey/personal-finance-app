@@ -12,7 +12,9 @@ export default function PotWithdrawalForm() {
         <Label>Amount to Withdraw</Label>
         <Input type="text" prefix={<FaDollarSign className="text-border" />} />
       </InputContainer>
-      <Button className="w-full">Confirm Withdrawal</Button>
+      <Button type="submit" className="w-full">
+        Confirm Withdrawal
+      </Button>
     </form>
   );
 }

@@ -60,7 +60,10 @@ function ProviderSignInButton({
 }) {
   return (
     <form className="w-full" action={providerFunc}>
-      <Button className="w-full flex items-center justify-center gap-4">
+      <Button
+        type="submit"
+        className="w-full flex items-center justify-center gap-4"
+      >
         Sign In With {providerName}{" "}
         <span className="inline-flex ">{providerIcon}</span>
       </Button>
