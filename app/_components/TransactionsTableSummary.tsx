@@ -2,22 +2,47 @@ import React from "react";
 import TransactionRow from "./TransactionRow";
 import Card from "./Card";
 import OverviewSectionHeader from "./OverviewSectionHeader";
-type TransactionsType = {
-  name: string;
-  image: any;
-  amount: string;
-  date: string;
-  deposite: boolean;
-}[];
+import William from "@/public/avatars/william-harris.jpg";
+import Serenity from "@/public/avatars/serenity-spa-and-wellness.jpg";
+// type TransactionsType = {
+//   name: string;
+//   image: any;
+//   amount: string;
+//   date: string;
+//   deposite: boolean;
+// }[];
 export default function TransactionsTableSummary({
-  transactions,
+  // transactions,
   bg,
   title,
 }: {
-  transactions: TransactionsType;
+  // transactions: TransactionsType;
   bg: "primary" | "secondary";
   title: string;
 }) {
+  const spendingSummary = [
+    {
+      name: "William Harris",
+      image: William,
+      amount: "10.00",
+      date: "5 Aug 2024",
+      deposite: false,
+    },
+    {
+      name: "Serenity Spa & Wellness",
+      image: Serenity,
+      amount: "30.00",
+      date: "3 Aug 2024",
+      deposite: false,
+    },
+    {
+      name: "Serenity Spa & Wellness",
+      image: Serenity,
+      amount: "30.00",
+      date: "3 July 2024",
+      deposite: false,
+    },
+  ];
   return (
     <Card bg={`${bg}`}>
       <OverviewSectionHeader
@@ -35,7 +60,7 @@ export default function TransactionsTableSummary({
 
       <div className="flex flex-col divide-y-[1px] -my-6 divide-seperator">
         {/* Dummy Transactions Data */}
-        {transactions.map((row) => (
+        {spendingSummary.map((row) => (
           <TransactionRow
             amount={row.amount}
             date={row.date}

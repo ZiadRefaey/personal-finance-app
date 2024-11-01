@@ -15,11 +15,11 @@ export const description = "A donut chart with text";
 
 export function PieChartShad({ data }: any) {
   const chartData = data.map(
-    (obj: { title: string; spent: number; total: number; color: string }) => ({
-      budget: obj.title,
-      spent: obj.spent,
-      total: obj.total,
-      fill: `var(--${obj.color.slice(3)})`,
+    (obj: { name: string; maximum: number; color: string }) => ({
+      budget: obj.name,
+      spent: 40.5,
+      maximum: obj.maximum,
+      fill: `var(--${obj.color})`,
     })
   );
   const chartConfig = {
@@ -52,11 +52,11 @@ export function PieChartShad({ data }: any) {
     return chartData.reduce((acc: number, curr: any) => acc + curr.spent, 0);
   }, [chartData]);
   const totalBudget = React.useMemo(() => {
-    return chartData.reduce((acc: number, curr: any) => acc + curr.total, 0);
+    return chartData.reduce((acc: number, curr: any) => acc + curr.maximum, 0);
   }, [chartData]);
 
   return (
-    <div className="size-[290px] flex items-center justify-center 2xl:size-[340px]  p-0 ">
+    <div className="size-[290px] flex items-center justify-center 2xl:size-[340px] p-0 ">
       <CardContent className="flex-1 p-0 ">
         <ChartContainer
           config={chartConfig}
