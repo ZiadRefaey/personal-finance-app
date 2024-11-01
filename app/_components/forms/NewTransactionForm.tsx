@@ -23,7 +23,7 @@ export default function NewTransactionForm() {
     <form className="w-full flex items-center justify-center gap-3 flex-col">
       <InputContainer>
         <Label>Recepient</Label>
-        <Select>
+        <Select name="recepient">
           <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
             <SelectValue placeholder="Recepient" />
           </SelectTrigger>
@@ -39,12 +39,16 @@ export default function NewTransactionForm() {
 
       <InputContainer>
         <Label>Amount</Label>
-        <Input type="text" prefix={<FaDollarSign className="text-border" />} />
+        <Input
+          name="amount"
+          type="text"
+          prefix={<FaDollarSign className="text-border" />}
+        />
       </InputContainer>
 
       <InputContainer>
         <Label>Category</Label>
-        <Select>
+        <Select name="category">
           <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
             <SelectValue placeholder="Category" />
           </SelectTrigger>

@@ -2,7 +2,7 @@ import React from "react";
 
 import PotCard from "../_components/PotCard";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
-import AddPotForm from "../_components/forms/PotForm";
+import PotForm from "../_components/forms/PotForm";
 
 const Pots = [
   {
@@ -44,9 +44,10 @@ export default function page() {
           <ModalWindow
             header="Add New Pot"
             modalName="add-pot"
-            form={<AddPotForm />}
             description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
-          />
+          >
+            <PotForm />
+          </ModalWindow>
         </Modal>
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">

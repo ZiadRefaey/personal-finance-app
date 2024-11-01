@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "../_components/Button";
 import BudgetCardsList from "../_components/BudgetCardsList";
 import BudgetsSpendingSummary from "../_components/BudgetsSpendingSummary";
 
@@ -15,7 +14,8 @@ import Ella from "@/public/avatars/ella-phillips.jpg";
 import William from "@/public/avatars/william-harris.jpg";
 import Serenity from "@/public/avatars/serenity-spa-and-wellness.jpg";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
-import AddBudgetForm from "../_components/forms/BudgetForm";
+import BudgetForm from "../_components/forms/BudgetForm";
+import { CreateBudget } from "../_lib/actions";
 
 type SpendingType = {
   name: string;
@@ -151,7 +151,7 @@ const BudgetsListData: BudgetData = [
     ],
   },
 ];
-export default function page() {
+export default async function page() {
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
@@ -161,9 +161,10 @@ export default function page() {
           <ModalWindow
             header="Add New Budget"
             modalName="add-budget"
-            form={<AddBudgetForm />}
             description="Choose a category to set a spending budget. These categories can help you monitor spending.."
-          />
+          >
+            <BudgetForm action={CreateBudget} />
+          </ModalWindow>
         </Modal>
       </div>
       <div className="flex items-start justify-center flex-col xl:flex-row gap-6">

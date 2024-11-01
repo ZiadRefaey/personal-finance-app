@@ -19,12 +19,16 @@ export default function PotForm() {
     <form className="w-full flex items-center justify-center gap-3 flex-col">
       <InputContainer>
         <Label>Pot Name</Label>
-        <Input type="text" />
+        <Input name="name" type="text" />
         <p className="self-end text-preset-5">30 characters left</p>
       </InputContainer>
       <InputContainer>
         <Label>Target</Label>
-        <Input type="text" prefix={<FaDollarSign className="text-border" />} />
+        <Input
+          name="target"
+          type="text"
+          prefix={<FaDollarSign className="text-border" />}
+        />
       </InputContainer>
       <InputContainer>
         <Label>Theme</Label>

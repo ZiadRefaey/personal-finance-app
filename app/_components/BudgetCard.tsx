@@ -44,9 +44,10 @@ export default function BudgetCard({
                 <ModalWindow
                   header="Delete Budget?"
                   modalName="delete-budget"
-                  form={<DeleteForm />}
                   description="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
-                />
+                >
+                  <DeleteForm />
+                </ModalWindow>
               </Modal>
             </>
           }

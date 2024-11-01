@@ -9,14 +9,15 @@ type ContextProps = {
   children: ReactNode;
   className: string;
 };
-export default function Body({ children, className }: ContextProps) {
+export default function Body({ children }: ContextProps) {
   const pathname = usePathname();
   const { theme } = useTheme();
   const { isRetracted } = useRetractable();
   return (
-    <motion.body
+    <motion.div
+      id="layout-container"
       layout
-      className={`${theme} ${className} bg-background w-[100vw] h-[100vh] overflow-y-hidden overflow-x-hidden ${
+      className={`${theme} bg-background w-[100vw] h-[100vh] overflow-y-hidden overflow-x-hidden ${
         pathname === "/login"
           ? ``
           : `grid grid-cols-1 grid-rows-[1fr,52px] md:grid-rows-[1fr,74px] ${
@@ -27,6 +28,6 @@ export default function Body({ children, className }: ContextProps) {
       } `}
     >
       {children}
-    </motion.body>
+    </motion.div>
   );
 }

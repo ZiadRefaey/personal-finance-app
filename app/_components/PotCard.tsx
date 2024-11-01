@@ -34,9 +34,10 @@ export default function PotCard({
               <ModalWindow
                 header="Delete Pot?"
                 modalName="delete-pot"
-                form={<DeleteForm />}
                 description="Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever."
-              />
+              >
+                <DeleteForm />
+              </ModalWindow>
             </Modal>
           }
         />
@@ -62,9 +63,10 @@ export default function PotCard({
           <ModalWindow
             header="Add to Pot?"
             modalName="add-pot"
-            form={<PotDepositeForm />}
             description="Add money to your pot to keep it separate from your main balance. As soon as you add this money, it will be deducted from your current balance."
-          />
+          >
+            <PotDepositeForm />
+          </ModalWindow>
         </Modal>
 
         <Modal>
@@ -78,9 +80,10 @@ export default function PotCard({
           <ModalWindow
             header="Withdraw from Pot?"
             modalName="withdraw-pot"
-            form={<PotWithdrawalForm />}
             description="Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
-          />
+          >
+            <PotWithdrawalForm />
+          </ModalWindow>
         </Modal>
       </div>
     </Card>

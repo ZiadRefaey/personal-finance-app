@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import React, { ReactNode } from "react";
 
 type HTMLInputTypeAttribute =
@@ -26,30 +25,32 @@ type HTMLInputTypeAttribute =
   | "week";
 
 export default function Input({
-  className,
   prefix,
   type,
+  name,
 }: {
-  className?: string;
   prefix?: ReactNode;
   type: HTMLInputTypeAttribute;
+  name: string;
 }) {
   if (prefix)
     return (
       <div
-        className={`border border-border w-full rounded-lg py-3 px-5 text-navbar items-center justify-start flex gap-3 bg-white text-preset-4`}
+        className={`border border-border w-full rounded-lg py-3 px-5 text- items-center justify-start flex gap-3 bg-white text-preset-4`}
       >
         <div className="text-border text-xl">{prefix}</div>
-        <input type={type} className="w-full h-full outline-none text-navbar" />
+        <input
+          name={name}
+          type={type}
+          className={`w-full h-full outline-none text-navbar`}
+        />
       </div>
     );
   return (
     <input
       type={type}
-      className={cn(
-        `border border-border w-full rounded-lg py-3 px-5 text-navbar outline-none text-preset-4`,
-        className
-      )}
+      name={name}
+      className="border border-border w-full rounded-lg py-3 px-5 text-black outline-none text-preset-4"
     />
   );
 }

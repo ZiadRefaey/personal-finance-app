@@ -2,7 +2,6 @@ import React from "react";
 import TotalBillsCard from "../_components/TotalBillsCard";
 import BillsSummaryCard from "../_components/BillsSummaryCard";
 import Card from "../_components/Card";
-import TableControls from "../_components/TableControls";
 import BillsTable from "../_components/BillsTable";
 
 export default function page() {

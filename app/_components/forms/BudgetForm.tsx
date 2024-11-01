@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 import {
@@ -13,39 +14,55 @@ import InputContainer from "../UI/InputContainer";
 import Label from "../UI/Label";
 import Input from "../UI/Input";
 import Button from "../Button";
-const categories = ["Entertainment", "Bills", "Dining Out", "Personal Care"];
-export default function BudgetForm() {
+import { useToast } from "@/hooks/use-toast";
+import { useModal } from "../Modal";
+type ActionFunction = (formData: FormData) => Promise<void | string>;
+
+export default function BudgetForm({ action }: { action: ActionFunction }) {
+  const { setOpenModal } = useModal();
+  const { toast } = useToast();
+  function handleCloseModal() {
+    setOpenModal("");
+  }
+  async function clientAction(formData: FormData) {
+    const result = await action(formData);
+    if (result) {
+      toast({
+        title: "Something went wrong!",
+        description: result,
+      });
+    } else {
+      toast({ title: "Budget Created Successfully" });
+      handleCloseModal();
+    }
+  }
   return (
-    <form className="w-full flex items-center justify-center gap-3 flex-col">
+    <form
+      action={clientAction}
+      className="w-full flex items-center justify-center gap-3 flex-col"
+    >
       <InputContainer>
         <Label>Budget Category</Label>
-        <Select>
-          <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
-            <SelectValue placeholder="Category" />
-          </SelectTrigger>
-          <SelectContent className="bg-white text-navbar">
-            {categories.map((category) => (
-              <SelectItem value={category} key={category}>
-                <p className="text-preset-4 capitalize">{category}</p>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Input name="category" type="text" />
       </InputContainer>
       <InputContainer>
         <Label>Maximum Spend</Label>
-        <Input type="text" prefix={<FaDollarSign className="text-border" />} />
+        <Input
+          name="max"
+          type="text"
+          prefix={<FaDollarSign className="text-border" />}
+        />
       </InputContainer>
       <InputContainer>
         <Label>Theme</Label>
-        <Select>
+        <Select name="color">
           <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
             <SelectValue placeholder="Theme" />
           </SelectTrigger>
           <SelectContent className="bg-white text-navbar">
             {colors.map((color) => (
               <SelectItem value={color} key={color}>
-                <div className="flex items-center justify-start gap-3">
+                <div className="flex items-center justify-center gap-3">
                   <div
                     className={`size-4 rounded-full`}
                     style={{ backgroundColor: `var(--${color})` }}
@@ -57,7 +74,10 @@ export default function BudgetForm() {
           </SelectContent>
         </Select>
       </InputContainer>
-      <Button type="submit" className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2">
+      <Button
+        type="submit"
+        className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2"
+      >
         Add Budget
       </Button>
     </form>

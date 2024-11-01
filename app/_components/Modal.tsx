@@ -32,7 +32,7 @@ export function Modal({
     </ModalContext.Provider>
   );
 }
-function useModal() {
+export function useModal() {
   const context = useContext(ModalContext);
   if (context === undefined)
     throw new Error("useThemeContext must be used within a ThemeProvider");
@@ -64,13 +64,13 @@ export function ModalTrigger({
 export function ModalWindow({
   header,
   description,
-  form,
+  children,
   modalName,
 }: {
   header: string;
   description: string;
-  form: ReactNode;
   modalName: string;
+  children: ReactNode;
 }) {
   const [isMounted, setIsMounted] = useState(false);
   const { openModal, setOpenModal } = useModal();
@@ -82,6 +82,8 @@ export function ModalWindow({
   }, []);
 
   if (!isMounted) return null; // Prevents rendering on the server
+  const container = document.getElementById("layout-container");
+  if (!container) return null;
 
   return createPortal(
     <div
@@ -99,13 +101,13 @@ export function ModalWindow({
         </div>
         <p className="text-secondary text-preset-4">{description}</p>
 
-        {form}
+        {children}
       </Card>
       <div
         onClick={handleCloseModal}
         className={`w-full h-full bg-black/50 flex items-center justify-center z-[999] absolute`}
       ></div>
     </div>,
-    document.body
+    container
   );
 }

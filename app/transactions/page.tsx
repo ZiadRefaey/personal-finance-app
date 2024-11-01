@@ -1,4 +1,3 @@
-import Button from "../_components/Button";
 import Card from "../_components/Card";
 import NewTransactionForm from "../_components/forms/NewTransactionForm";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
@@ -16,9 +15,10 @@ export default function page() {
           <ModalWindow
             header="Add New Pot"
             modalName="add-pot"
-            form={<NewTransactionForm />}
             description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
-          />
+          >
+            <NewTransactionForm />
+          </ModalWindow>
         </Modal>
       </div>
       <Card className="w-full bg-card-back-ground min-h-[86vh] flex items-center justify-between flex-col">

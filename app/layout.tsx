@@ -6,6 +6,7 @@ import Body from "./_components/Body";
 import Navbar from "./_components/Navbar";
 import RetractableProvider from "./_components/RetractableProvider";
 import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 const publicSans = localFont({
   src: "./fonts/PublicSans-Regular.ttf",
@@ -31,15 +32,18 @@ export default async function RootLayout({
     <html lang="en">
       <ThemeProvider>
         <RetractableProvider>
-          <Body
+          <body
             className={`${publicSans.className} ${publicSansBold.variable} antialiased`}
           >
-            <Navbar session={session} />
+            <Body className={``}>
+              <Navbar session={session} />
 
-            <main className="w-full h-full overflow-y-scroll bg-background xl:order-2 px-4 md:px-10 py-6 md:py-8 z-[1] relative">
-              {children}
-            </main>
-          </Body>
+              <main className="w-full h-full overflow-y-scroll bg-background xl:order-2 px-4 md:px-10 py-6 md:py-8 z-[1] relative">
+                {children}
+              </main>
+            </Body>
+            <Toaster />
+          </body>
         </RetractableProvider>
       </ThemeProvider>
     </html>
