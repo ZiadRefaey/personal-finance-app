@@ -45,3 +45,8 @@ export async function createBudget(
   }
   return data;
 }
+
+export async function deleteBudget(budgetID: number) {
+  const { error } = await supabase.from("budgets").delete().eq("id", budgetID);
+  return error;
+}

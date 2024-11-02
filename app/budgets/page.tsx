@@ -8,47 +8,6 @@ import { CreateBudget } from "../_lib/actions";
 import { auth } from "@/auth";
 import { readBudgets } from "../_lib/data-service";
 
-type SpendingType = {
-  name: string;
-  image: any;
-  amount: string;
-  date: string;
-  deposite: false;
-}[];
-type BudgetData = {
-  title: string;
-  total: number;
-  spent: number;
-  color: string;
-}[];
-
-// Budget Cards dummy data
-const BudgetsListData: BudgetData = [
-  {
-    title: "Entertainment",
-    total: 50,
-    spent: 15,
-    color: "green",
-  },
-  {
-    title: "Bills",
-    total: 750,
-    spent: 250,
-    color: "cyan",
-  },
-  {
-    title: "Dining Out",
-    total: 75,
-    spent: 133.75,
-    color: "yellow",
-  },
-  {
-    title: "Personal Care",
-    total: 100,
-    spent: 40,
-    color: "gold",
-  },
-];
 export const revalidate = 0;
 export default async function page() {
   const session = await auth();

@@ -20,7 +20,6 @@ export default async function BudgetCardsList({
 }: {
   data: BudgetDataType;
 }) {
-  console.log(data);
   return (
     <div className="flex flex-col items-center justify-start gap-6 w-full">
       {data.map((budget) => (
@@ -28,7 +27,7 @@ export default async function BudgetCardsList({
           color={budget.color}
           title={budget.name}
           total={budget.maximum}
-          // spendingSummary={budget.spendingSummary}
+          id={budget.id}
           key={budget.id}
         />
       ))}

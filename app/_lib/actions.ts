@@ -1,7 +1,7 @@
 "use server";
 
 import { signOut, signIn, auth } from "@/auth";
-import { createBudget } from "./data-service";
+import { createBudget, deleteBudget } from "./data-service";
 
 export async function SignInWithGoogle() {
   await signIn("google", { redirectTo: "/" });
@@ -19,7 +19,6 @@ export async function CreateBudget(formData: FormData) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
   try {
-    console.log(formData);
     await createBudget(
       Number(session?.user?.id),
       formData.get("category"),
@@ -29,4 +28,8 @@ export async function CreateBudget(formData: FormData) {
   } catch (error: any) {
     return error.message;
   }
+}
+export async function DeleteBudget(budgetID: number) {
+  const error = await deleteBudget(budgetID);
+  if (error) return error.message;
 }

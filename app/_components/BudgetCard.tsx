@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import BudgetSpendingSummary from "./BudgetSpendingSummary";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import DeleteForm from "./forms/DeleteForm";
+import { DeleteBudget } from "../_lib/actions";
 
 // type SpendingType = {
 //   name: string;
@@ -17,13 +18,16 @@ type BudgetCardType = {
   color: string;
   title: string;
   total: number;
+  id: number;
   // spendingSummary: SpendingType;
 };
 export default function BudgetCard({
   color,
   title,
   total,
+  id,
 }: // spendingSummary,
+
 BudgetCardType) {
   return (
     <Card className="w-full">
@@ -47,7 +51,7 @@ BudgetCardType) {
                   modalName="delete-budget"
                   description="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
                 >
-                  <DeleteForm />
+                  <DeleteForm id={id} action={DeleteBudget} />
                 </ModalWindow>
               </Modal>
             </>
