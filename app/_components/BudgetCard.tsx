@@ -51,7 +51,11 @@ BudgetCardType) {
                   modalName="delete-budget"
                   description="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
                 >
-                  <DeleteForm id={id} action={DeleteBudget} />
+                  <DeleteForm
+                    deleteMessage="Budget successfuly deleted."
+                    id={id}
+                    action={DeleteBudget}
+                  />
                 </ModalWindow>
               </Modal>
             </>

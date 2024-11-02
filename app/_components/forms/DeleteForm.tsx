@@ -3,13 +3,16 @@ import React from "react";
 import Button from "../Button";
 import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
+type ActionFunction = (id: number) => Promise<void | string>;
 
 export default function DeleteForm({
   action,
   id,
+  deleteMessage,
 }: {
-  action: any;
+  action: ActionFunction;
   id: number;
+  deleteMessage: string;
 }) {
   const { setOpenModal } = useModal();
   async function clientAction() {
@@ -17,7 +20,7 @@ export default function DeleteForm({
     if (result) {
       toast({ title: "Sometihng went wrong", description: result });
     } else {
-      toast({ title: "Budget Deleted!" });
+      toast({ title: deleteMessage });
       setOpenModal("");
     }
   }

@@ -6,13 +6,15 @@ import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import DeleteForm from "./forms/DeleteForm";
 import PotDepositeForm from "./forms/PotDepositeForm";
 import PotWithdrawalForm from "./forms/PotWithdrawForm";
+import { DeletePot } from "../_lib/actions";
 type PotType = {
   title: string;
   saved: number;
   goal: number;
   color: string;
+  id: number;
 };
-export default function PotCard({ title, saved, goal, color }: PotType) {
+export default function PotCard({ title, saved, goal, color, id }: PotType) {
   const percentage = (saved / goal) * 100;
   return (
     <Card>
@@ -33,7 +35,11 @@ export default function PotCard({ title, saved, goal, color }: PotType) {
                 modalName="delete-pot"
                 description="Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever."
               >
-                <DeleteForm />
+                <DeleteForm
+                  deleteMessage="Pot successfuly deleted."
+                  action={DeletePot}
+                  id={id}
+                />
               </ModalWindow>
             </Modal>
           }

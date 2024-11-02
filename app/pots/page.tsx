@@ -29,6 +29,7 @@ export default async function page() {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {pots.map((pot) => (
           <PotCard
+            id={pot.id}
             color={pot.color}
             saved={pot.saved}
             goal={pot.goal}

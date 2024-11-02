@@ -1,7 +1,12 @@
 "use server";
 
 import { signOut, signIn, auth } from "@/auth";
-import { createBudget, createPot, deleteBudget } from "./data-service";
+import {
+  createBudget,
+  createPot,
+  deleteBudget,
+  deletePot,
+} from "./data-service";
 
 export async function SignInWithGoogle() {
   await signIn("google", { redirectTo: "/" });
@@ -50,4 +55,9 @@ export async function CreatePot(formData: FormData, userID: number) {
   } catch (error: any) {
     return error.message;
   }
+}
+
+export async function DeletePot(potID: number) {
+  const error = await deletePot(potID);
+  if (error) return error.message;
 }

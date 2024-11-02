@@ -90,3 +90,9 @@ export async function createPot(
   if (error) throw new Error(error.message);
   return data;
 }
+
+//deleting a pot using ID
+export async function deletePot(potID: number) {
+  const { error } = await supabase.from("pots").delete().eq("id", potID);
+  return error;
+}
