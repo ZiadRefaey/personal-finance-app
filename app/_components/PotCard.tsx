@@ -24,7 +24,10 @@ export default function PotCard({
     <Card>
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center justify-center gap-4">
-          <div className={`size-4 rounded-full ${color}`}></div>
+          <div
+            className={`size-4 rounded-full`}
+            style={{ backgroundColor: `var(--${color})` }}
+          ></div>
           <p className="text-preset-2 text-primary">{title}</p>
         </div>
         <PopoverEllipsisTrigger
@@ -49,7 +52,8 @@ export default function PotCard({
       <Progress
         value={percentage}
         className="h-2 z-10"
-        indicatorClass={`${color} relative z-10`}
+        indicatorClass={`relative z-10`}
+        indicatorColor={color}
       />
       <div className="flex items-center justify-between mt-[13px]">
         <p className="text-preset-5-bold text-secondary">{percentage}%</p>

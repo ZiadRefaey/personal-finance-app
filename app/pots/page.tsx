@@ -10,28 +10,28 @@ const Pots = [
     saved: "159.00",
     percentage: 7.95,
     target: 2000,
-    color: "bg-green",
+    color: "green",
   },
   {
     title: "Concert Ticket",
     saved: "110.00",
     percentage: 73.3,
     target: 150,
-    color: "bg-navy",
+    color: "navy",
   },
   {
     title: "Gift",
     saved: "40.00",
     percentage: 66.6,
     target: 60,
-    color: "bg-cyan",
+    color: "cyan",
   },
   {
     title: "New Laptop",
     saved: "10.00",
     percentage: 7.95,
     target: 1000,
-    color: "bg-yellow",
+    color: "yellow",
   },
 ];
 export default function page() {
