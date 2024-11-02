@@ -14,7 +14,6 @@ export async function createUser(email: string, fullName: string) {
     .insert([{ email, fullName }])
     .select();
   if (error) {
-    console.log(error);
     return false;
   }
   return data;

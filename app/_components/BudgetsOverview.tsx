@@ -10,7 +10,6 @@ import { readBudgets } from "../_lib/data-service";
 export default async function BudgetsOverview() {
   const session = await auth();
   const budgets = await readBudgets(Number(session?.user?.id));
-
   return (
     <Card>
       <OverviewSectionHeader
@@ -24,10 +23,19 @@ export default async function BudgetsOverview() {
           </div>
         }
       />
-      <div className="flex items-center justify-center flex-col">
-        <PieChartShad data={budgets} />
-        <BudgetSpendingSummaryDetails data={budgets} />
-      </div>
+      {budgets.length === 0 && (
+        <div className="w-full items-center justify-center">
+          <p className="text-center text-primary text-preset-2">
+            Please Create a new budget
+          </p>
+        </div>
+      )}
+      {budgets.length > 0 && (
+        <div className="flex items-center justify-center flex-col">
+          <PieChartShad data={budgets} />
+          <BudgetSpendingSummaryDetails data={budgets} />
+        </div>
+      )}
     </Card>
   );
 }

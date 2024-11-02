@@ -10,7 +10,11 @@ export default function PotDepositeForm() {
     <form className="flex flex-col items-center justify-center gap-5 w-full">
       <InputContainer>
         <Label>Amount to Add</Label>
-        <Input type="text" prefix={<FaDollarSign className="text-border" />} />
+        <Input
+          name="amount"
+          type="text"
+          prefix={<FaDollarSign className="text-border" />}
+        />
       </InputContainer>
       <Button type="submit" className="w-full">
         Confirm Addition

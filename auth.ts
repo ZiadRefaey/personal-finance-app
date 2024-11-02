@@ -16,7 +16,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user }: any) {
       try {
         const existingUser = await getUser(user.email);
-        console.log(existingUser);
         if (!existingUser) await createUser(user.email, user.name);
         return true;
       } catch {

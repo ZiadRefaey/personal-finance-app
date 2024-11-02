@@ -10,7 +10,11 @@ export default function PotWithdrawalForm() {
     <form className="flex flex-col items-center justify-center gap-5 w-full">
       <InputContainer>
         <Label>Amount to Withdraw</Label>
-        <Input type="text" prefix={<FaDollarSign className="text-border" />} />
+        <Input
+          name="amount"
+          type="text"
+          prefix={<FaDollarSign className="text-border" />}
+        />
       </InputContainer>
       <Button type="submit" className="w-full">
         Confirm Withdrawal

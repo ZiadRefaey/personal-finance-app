@@ -12,6 +12,7 @@ export const revalidate = 0;
 export default async function page() {
   const session = await auth();
   const budgets = await readBudgets(Number(session?.user?.id));
+
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
@@ -27,10 +28,19 @@ export default async function page() {
           </ModalWindow>
         </Modal>
       </div>
-      <div className="flex items-start justify-center flex-col xl:flex-row gap-6">
-        <BudgetsSpendingSummary data={budgets} />
-        <BudgetCardsList data={budgets} />
-      </div>
+      {budgets.length === 0 && (
+        <div className="w-full items-center justify-center">
+          <p className="text-center text-primary text-preset-2">
+            Please Create a new budget
+          </p>
+        </div>
+      )}
+      {budgets.length > 0 && (
+        <div className="flex items-start justify-center flex-col xl:flex-row gap-6">
+          <BudgetsSpendingSummary data={budgets} />
+          <BudgetCardsList data={budgets} />
+        </div>
+      )}
     </>
   );
 }
