@@ -47,7 +47,13 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
       </div>
       <div className="flex items-center justify-between mt-8 mb-4">
         <p className="text-preset-4 text-secondary">Total Saved</p>
-        <p className="text-preset-1 text-secondary self-start">${saved}</p>
+        <p className="text-preset-1 text-secondary self-start">
+          $
+          {saved.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </p>
       </div>
       <Progress
         value={percentage}
@@ -56,8 +62,12 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
         indicatorColor={color}
       />
       <div className="flex items-center justify-between mt-[13px]">
-        <p className="text-preset-5-bold text-secondary">{percentage}%</p>
-        <p className="text-preset-5 text-secondary">Target of ${goal}</p>
+        <p className="text-preset-5-bold text-secondary">
+          {percentage.toFixed(2)}%
+        </p>
+        <p className="text-preset-5 text-secondary">
+          Target of ${goal.toLocaleString("en-US")}
+        </p>
       </div>
       <div className="mt-8 grid grid-cols-2 w-full gap-3">
         <Modal>
@@ -69,7 +79,7 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
             modalName="add-pot"
             description="Add money to your pot to keep it separate from your main balance. As soon as you add this money, it will be deducted from your current balance."
           >
-            <PotDepositeForm />
+            <PotDepositeForm currentSaved={saved} id={id} />
           </ModalWindow>
         </Modal>
 
@@ -86,7 +96,7 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
             modalName="withdraw-pot"
             description="Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
           >
-            <PotWithdrawalForm />
+            <PotWithdrawalForm currentSaved={saved} id={id} />
           </ModalWindow>
         </Modal>
       </div>

@@ -96,3 +96,14 @@ export async function deletePot(potID: number) {
   const { error } = await supabase.from("pots").delete().eq("id", potID);
   return error;
 }
+
+export async function updatePotSaved(potID: number, saved: number) {
+  if (saved < 0) throw new Error("The result must be more than 0");
+  const { data, error } = await supabase
+    .from("pots")
+    .update({ saved })
+    .eq("id", potID)
+    .select();
+  if (error) throw new Error(error.message);
+  return data;
+}

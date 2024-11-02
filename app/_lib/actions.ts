@@ -6,6 +6,7 @@ import {
   createPot,
   deleteBudget,
   deletePot,
+  updatePotSaved,
 } from "./data-service";
 
 export async function SignInWithGoogle() {
@@ -60,4 +61,12 @@ export async function CreatePot(formData: FormData, userID: number) {
 export async function DeletePot(potID: number) {
   const error = await deletePot(potID);
   if (error) return error.message;
+}
+
+export async function UpdatePotsSaved(potID: number, saved: number) {
+  try {
+    await updatePotSaved(potID, saved);
+  } catch (error: any) {
+    return error.message;
+  }
 }
