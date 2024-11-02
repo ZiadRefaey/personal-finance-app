@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 import {
@@ -13,26 +14,55 @@ import InputContainer from "../UI/InputContainer";
 import Label from "../UI/Label";
 import Input from "../UI/Input";
 import Button from "../Button";
+import { toast } from "@/hooks/use-toast";
+import { useModal } from "../Modal";
+type ActionFunction = (
+  formData: FormData,
+  userID: number
+) => Promise<void | string>;
 
-export default function PotForm() {
+export default function PotForm({
+  action,
+  userID,
+}: {
+  action: ActionFunction;
+  userID: number;
+}) {
+  const { setOpenModal } = useModal();
+
+  async function clientAction(formData: FormData) {
+    const result = await action(formData, userID);
+    if (result) {
+      toast({
+        title: "Something went wrong",
+        description: result,
+      });
+    } else {
+      toast({ title: "Pot Created Successfully!" });
+      setOpenModal("");
+    }
+  }
   return (
-    <form className="w-full flex items-center justify-center gap-3 flex-col">
+    <form
+      action={clientAction}
+      className="w-full flex items-center justify-center gap-3 flex-col"
+    >
       <InputContainer>
         <Label>Pot Name</Label>
-        <Input name="name" type="text" />
+        <Input name="title" type="text" />
         <p className="self-end text-preset-5">30 characters left</p>
       </InputContainer>
       <InputContainer>
         <Label>Target</Label>
         <Input
-          name="target"
+          name="goal"
           type="text"
           prefix={<FaDollarSign className="text-border" />}
         />
       </InputContainer>
       <InputContainer>
         <Label>Theme</Label>
-        <Select>
+        <Select name="color">
           <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
             <SelectValue placeholder="Theme" />
           </SelectTrigger>

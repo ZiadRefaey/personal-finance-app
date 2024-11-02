@@ -11,6 +11,7 @@ import { readBudgets } from "../_lib/data-service";
 export const revalidate = 0;
 export default async function page() {
   const session = await auth();
+  const userID = Number(session?.user?.id);
   const budgets = await readBudgets(Number(session?.user?.id));
 
   return (
@@ -24,7 +25,7 @@ export default async function page() {
             modalName="add-budget"
             description="Choose a category to set a spending budget. These categories can help you monitor spending.."
           >
-            <BudgetForm action={CreateBudget} />
+            <BudgetForm userID={userID} action={CreateBudget} />
           </ModalWindow>
         </Modal>
       </div>

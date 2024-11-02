@@ -1,4 +1,5 @@
 import { supabase } from "@/app/_lib/supabase";
+import { auth } from "@/auth";
 export async function getUser(email: string) {
   const { data } = await supabase
     .from("users")
@@ -26,6 +27,7 @@ export async function readBudgets(userID: number | undefined) {
   if (error) throw new Error(error.message);
   return data;
 }
+
 export async function createBudget(
   userID: number | undefined,
   budgetName: null | FormDataEntryValue,
@@ -48,4 +50,43 @@ export async function createBudget(
 export async function deleteBudget(budgetID: number) {
   const { error } = await supabase.from("budgets").delete().eq("id", budgetID);
   return error;
+}
+
+export async function readPots(userID: number) {
+  const { data, error } = await supabase
+    .from("pots")
+    .select("*")
+    .eq("userID", userID);
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function createPot(
+  userID: number,
+  title: FormDataEntryValue | null,
+  color: FormDataEntryValue | null,
+  goal: FormDataEntryValue | null
+) {
+  //getting the user ID
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+
+  //retrieving all the users Pots for validation
+  const pots = await readPots(userID);
+  // checking if the user has a pot with the same title
+  const potExists = pots.some((pot) => pot.title === title);
+  if (potExists) throw new Error("This pot already exists.");
+
+  //checking if the user has a pot with the same color
+  const colorExists = pots.some((pot) => pot.color === color);
+  if (colorExists) throw new Error("This color already exists.");
+
+  //creating a pot with the input data
+  const { data, error } = await supabase
+    .from("pots")
+    .insert([{ userID, color, goal, title, saved: 0 }])
+    .select();
+  if (error) throw new Error(error.message);
+  return data;
 }

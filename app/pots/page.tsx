@@ -3,6 +3,8 @@ import React from "react";
 import PotCard from "../_components/PotCard";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import PotForm from "../_components/forms/PotForm";
+import { CreatePot } from "../_lib/actions";
+import { auth } from "@/auth";
 
 const Pots = [
   {
@@ -34,7 +36,9 @@ const Pots = [
     color: "yellow",
   },
 ];
-export default function page() {
+export default async function page() {
+  const session = await auth();
+  const userID = Number(session?.user?.id);
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
@@ -46,7 +50,7 @@ export default function page() {
             modalName="add-pot"
             description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
           >
-            <PotForm />
+            <PotForm userID={userID} action={CreatePot} />
           </ModalWindow>
         </Modal>
       </div>

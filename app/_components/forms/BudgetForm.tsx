@@ -16,16 +16,25 @@ import Input from "../UI/Input";
 import Button from "../Button";
 import { useToast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
-type ActionFunction = (formData: FormData) => Promise<void | string>;
+type ActionFunction = (
+  formData: FormData,
+  userID: number
+) => Promise<void | string>;
 
-export default function BudgetForm({ action }: { action: ActionFunction }) {
+export default function BudgetForm({
+  action,
+  userID,
+}: {
+  action: ActionFunction;
+  userID: number;
+}) {
   const { setOpenModal } = useModal();
   const { toast } = useToast();
   function handleCloseModal() {
     setOpenModal("");
   }
   async function clientAction(formData: FormData) {
-    const result = await action(formData);
+    const result = await action(formData, userID);
     if (result) {
       toast({
         title: "Something went wrong!",

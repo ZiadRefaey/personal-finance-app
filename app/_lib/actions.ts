@@ -1,7 +1,7 @@
 "use server";
 
 import { signOut, signIn, auth } from "@/auth";
-import { createBudget, deleteBudget } from "./data-service";
+import { createBudget, createPot, deleteBudget } from "./data-service";
 
 export async function SignInWithGoogle() {
   await signIn("google", { redirectTo: "/" });
@@ -15,12 +15,14 @@ export async function SignInWithGithub() {
 export async function SignOutAction() {
   await signOut({ redirectTo: "/login" });
 }
-export async function CreateBudget(formData: FormData) {
+export async function CreateBudget(formData: FormData, userID: number) {
+  //Make sure the user is logged in
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
+  //create a budget
   try {
     await createBudget(
-      Number(session?.user?.id),
+      userID,
       formData.get("category"),
       formData.get("color"),
       formData.get("max")
@@ -29,7 +31,23 @@ export async function CreateBudget(formData: FormData) {
     return error.message;
   }
 }
+
+//deleting a budget
 export async function DeleteBudget(budgetID: number) {
   const error = await deleteBudget(budgetID);
   if (error) return error.message;
+}
+
+export async function CreatePot(formData: FormData, userID: number) {
+  //
+  try {
+    await createPot(
+      userID,
+      formData.get("title"),
+      formData.get("color"),
+      formData.get("goal")
+    );
+  } catch (error: any) {
+    return error.message;
+  }
 }
