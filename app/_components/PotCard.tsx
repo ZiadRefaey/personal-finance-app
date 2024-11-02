@@ -8,18 +8,12 @@ import PotDepositeForm from "./forms/PotDepositeForm";
 import PotWithdrawalForm from "./forms/PotWithdrawForm";
 type PotType = {
   title: string;
-  saved: string;
-  percentage: number;
-  target: number;
+  saved: number;
+  goal: number;
   color: string;
 };
-export default function PotCard({
-  title,
-  saved,
-  percentage,
-  target,
-  color,
-}: PotType) {
+export default function PotCard({ title, saved, goal, color }: PotType) {
+  const percentage = (saved / goal) * 100;
   return (
     <Card>
       <div className="flex items-center justify-between w-full">
@@ -57,7 +51,7 @@ export default function PotCard({
       />
       <div className="flex items-center justify-between mt-[13px]">
         <p className="text-preset-5-bold text-secondary">{percentage}%</p>
-        <p className="text-preset-5 text-secondary">Target of ${target}</p>
+        <p className="text-preset-5 text-secondary">Target of ${goal}</p>
       </div>
       <div className="mt-8 grid grid-cols-2 w-full gap-3">
         <Modal>

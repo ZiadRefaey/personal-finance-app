@@ -5,40 +5,12 @@ import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import PotForm from "../_components/forms/PotForm";
 import { CreatePot } from "../_lib/actions";
 import { auth } from "@/auth";
+import { readPots } from "../_lib/data-service";
 
-const Pots = [
-  {
-    title: "Savings",
-    saved: "159.00",
-    percentage: 7.95,
-    target: 2000,
-    color: "green",
-  },
-  {
-    title: "Concert Ticket",
-    saved: "110.00",
-    percentage: 73.3,
-    target: 150,
-    color: "navy",
-  },
-  {
-    title: "Gift",
-    saved: "40.00",
-    percentage: 66.6,
-    target: 60,
-    color: "cyan",
-  },
-  {
-    title: "New Laptop",
-    saved: "10.00",
-    percentage: 7.95,
-    target: 1000,
-    color: "yellow",
-  },
-];
 export default async function page() {
   const session = await auth();
   const userID = Number(session?.user?.id);
+  const pots = await readPots(userID);
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
@@ -55,12 +27,11 @@ export default async function page() {
         </Modal>
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        {Pots.map((pot) => (
+        {pots.map((pot) => (
           <PotCard
             color={pot.color}
-            percentage={pot.percentage}
             saved={pot.saved}
-            target={pot.target}
+            goal={pot.goal}
             title={pot.title}
             key={pot.title}
           />
