@@ -128,3 +128,16 @@ export async function updatePotSaved(potID: number, saved: number) {
   if (error) throw new Error(error.message);
   return data;
 }
+
+export async function uploadFile(path: string, file: any) {
+  const { data, error } = await supabase.storage
+    .from("bucket_name")
+    .upload(path, file);
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function getFileUrl(filepath: string) {
+  const { data } = supabase.storage.from("bucket").getPublicUrl(filepath);
+  return data.publicUrl;
+}
