@@ -8,6 +8,7 @@ import {
   deletePot,
   updatePotSaved,
 } from "./data-service";
+import { revalidatePath } from "next/cache";
 
 export async function SignInWithGoogle() {
   await signIn("google", { redirectTo: "/" });
@@ -33,6 +34,7 @@ export async function CreateBudget(formData: FormData, userID: number) {
       formData.get("color"),
       formData.get("max")
     );
+    revalidatePath("/budgets");
   } catch (error: any) {
     return error.message;
   }
@@ -41,6 +43,8 @@ export async function CreateBudget(formData: FormData, userID: number) {
 //deleting a budget
 export async function DeleteBudget(budgetID: number) {
   const error = await deleteBudget(budgetID);
+  revalidatePath("/budgets");
+
   if (error) return error.message;
 }
 
@@ -53,6 +57,7 @@ export async function CreatePot(formData: FormData, userID: number) {
       formData.get("color"),
       formData.get("goal")
     );
+    revalidatePath("/pots");
   } catch (error: any) {
     return error.message;
   }
@@ -60,12 +65,15 @@ export async function CreatePot(formData: FormData, userID: number) {
 
 export async function DeletePot(potID: number) {
   const error = await deletePot(potID);
+  revalidatePath("/pots");
+
   if (error) return error.message;
 }
 
 export async function UpdatePotsSaved(potID: number, saved: number) {
   try {
     await updatePotSaved(potID, saved);
+    revalidatePath("/pots");
   } catch (error: any) {
     return error.message;
   }
