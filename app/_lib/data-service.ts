@@ -34,9 +34,18 @@ export async function createBudget(
   color: null | FormDataEntryValue,
   max: null | FormDataEntryValue
 ) {
-  const budgets = await readBudgets(userID);
-  const exists = budgets.some((budget) => budget.name === budgetName);
-  if (exists) throw new Error("this budget already exists");
+  //Authentication
+  //Make sure the user is logged in
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+  const userBudgets = await readBudgets(userID);
+
+  const budgetExists = userBudgets.some((budget) => budget.name === budgetName);
+  if (budgetExists) throw new Error("this budget already exists");
+
+  const colorExists = userBudgets.some((budget) => budget.color === color);
+  if (colorExists) throw new Error("This color already exists.");
+
   const { data, error } = await supabase
     .from("budgets")
     .insert([{ userID, name: budgetName, color, maximum: max }])
@@ -48,6 +57,12 @@ export async function createBudget(
 }
 
 export async function deleteBudget(budgetID: number) {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+  const userBudgets = await readBudgets(Number(session.user?.id));
+  const exists = userBudgets.some((budget) => budget.id === budgetID);
+  if (!exists) throw new Error("You are not authorized to delete this budget");
+
   const { error } = await supabase.from("budgets").delete().eq("id", budgetID);
   return error;
 }
@@ -68,6 +83,7 @@ export async function createPot(
   color: FormDataEntryValue | null,
   goal: FormDataEntryValue | null
 ) {
+  //Authentication
   //getting the user ID
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
@@ -93,6 +109,11 @@ export async function createPot(
 
 //deleting a pot using ID
 export async function deletePot(potID: number) {
+  const session = await auth();
+  const userPots = await readBudgets(Number(session?.user?.id));
+  const exists = userPots.some((pot) => pot.id === potID);
+  if (!exists) throw new Error("You are not authorized to delete this pot");
+
   const { error } = await supabase.from("pots").delete().eq("id", potID);
   return error;
 }
