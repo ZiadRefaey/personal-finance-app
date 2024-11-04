@@ -8,8 +8,8 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import Button from "./Button";
-import Card from "./Card";
+import Button from "./UI/Button";
+import Card from "./UI/Card";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { createPortal } from "react-dom";
 

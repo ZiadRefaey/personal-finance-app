@@ -13,7 +13,7 @@ import colors from "@/app/_lib/colors.json";
 import InputContainer from "../UI/InputContainer";
 import Label from "../UI/Label";
 import Input from "../UI/Input";
-import Button from "../Button";
+import Button from "../UI/Button";
 import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
 type ActionFunction = (

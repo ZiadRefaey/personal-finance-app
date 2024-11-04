@@ -1,7 +1,7 @@
 import React from "react";
 import TotalBillsCard from "../_components/TotalBillsCard";
 import BillsSummaryCard from "../_components/BillsSummaryCard";
-import Card from "../_components/Card";
+import Card from "../_components/UI/Card";
 import BillsTable from "../_components/BillsTable";
 
 export default function page() {

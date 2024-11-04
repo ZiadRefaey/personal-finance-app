@@ -4,7 +4,7 @@ import InputContainer from "../UI/InputContainer";
 import Label from "../UI/Label";
 import Input from "../UI/Input";
 import { FaDollarSign } from "react-icons/fa6";
-import Button from "../Button";
+import Button from "../UI/Button";
 import { useModal } from "../Modal";
 import { UpdatePotsSaved } from "@/app/_lib/actions";
 import { toast } from "@/hooks/use-toast";

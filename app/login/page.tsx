@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Button from "../_components/Button";
+import Button from "../_components/UI/Button";
 import Logo from "../_components/Logo";
 import {
   SignInWithGithub,

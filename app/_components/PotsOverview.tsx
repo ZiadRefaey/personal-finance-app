@@ -1,4 +1,4 @@
-import Card from "./Card";
+import Card from "./UI/Card";
 
 import Pot from "@/public/icon-pot.svg";
 import Image from "next/image";

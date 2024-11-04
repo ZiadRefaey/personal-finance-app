@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "./Card";
+import Card from "./UI/Card";
 import OverviewSectionHeader from "./OverviewSectionHeader";
 import BudgetSpendingSummaryDetails from "./BudgetSpendingSummaryDetails";
 import { PieChartShad } from "./PieChartShad";

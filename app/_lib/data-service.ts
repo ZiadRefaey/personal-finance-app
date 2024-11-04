@@ -128,7 +128,14 @@ export async function updatePotSaved(potID: number, saved: number) {
   if (error) throw new Error(error.message);
   return data;
 }
-
+export async function getVendors(userId: number) {
+  const { data, error } = await supabase
+    .from("vendors")
+    .select("*")
+    .eq("userId", userId);
+  if (error) throw new Error(error.message);
+  return data;
+}
 export async function createVendor(
   userId: number,
   name: FormDataEntryValue | null,
@@ -153,4 +160,20 @@ export async function uploadFile(path: string, fileName: string, file: File) {
 export async function getFileUrl(filepath: string) {
   const { data } = supabase.storage.from("avatars").getPublicUrl(filepath);
   return data.publicUrl;
+}
+
+export async function createTransaction(
+  vendor: FormDataEntryValue | null,
+  budget: FormDataEntryValue | null,
+  amount: FormDataEntryValue | null,
+  budgetId: number,
+  vendorId: number,
+  userId: number
+) {
+  const { data, error } = await supabase
+    .from("transactions")
+    .insert([{ vendor, budget, amount, budgetId, vendorId, userId }])
+    .select();
+  if (error) throw new Error(error.message);
+  return data;
 }

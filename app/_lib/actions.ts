@@ -1,13 +1,18 @@
 "use server";
-
+async function authenticatedUser(session: any) {
+  if (!session) throw new Error("User must be authenticated");
+}
 import { signOut, signIn, auth } from "@/auth";
 import {
   createBudget,
   createPot,
+  createTransaction,
   createVendor,
   deleteBudget,
   deletePot,
   getFileUrl,
+  getVendors,
+  readBudgets,
   updatePotSaved,
   uploadFile,
 } from "./data-service";
@@ -84,7 +89,7 @@ export async function CreateNewVendor(formData: FormData) {
   try {
     //authenticate the user
     const session = await auth();
-    if (!session) throw new Error("User must be authenticated");
+    authenticatedUser(session);
 
     //get file data as File
     const image = formData.get("image") as File;
@@ -100,10 +105,42 @@ export async function CreateNewVendor(formData: FormData) {
 
     //create a new record with the image's id and name from the form submission
     await createVendor(
-      Number(session.user?.id),
+      Number(session?.user?.id),
       formData.get("name"),
       imageUrl
     );
+    revalidatePath("/transactions");
+  } catch (error: any) {
+    return error.message;
+  }
+}
+
+export async function CreateTransaction(formData: FormData) {
+  try {
+    const session = await auth();
+    authenticatedUser(session);
+    const userId = Number(session?.user?.id);
+    const budgetName = formData.get("category");
+    const userBudgets = await readBudgets(userId);
+    const budgetObject = userBudgets.filter(
+      (budget) => budgetName === budget.name
+    );
+
+    const vendorName = formData.get("vendor");
+    const userVendors = await getVendors(userId);
+    const vendorObject = userVendors.filter(
+      (vendor) => vendorName === vendor.name
+    );
+
+    await createTransaction(
+      vendorName,
+      budgetName,
+      formData.get("amount"),
+      budgetObject[0].id,
+      vendorObject[0].id,
+      userId
+    );
+    revalidatePath("/transactions");
   } catch (error: any) {
     return error.message;
   }

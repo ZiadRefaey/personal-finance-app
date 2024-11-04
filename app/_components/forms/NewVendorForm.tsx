@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Button from "../Button";
+import Button from "../UI/Button";
 import { CreateNewVendor } from "@/app/_lib/actions";
 import { Input as ShadcnInput } from "@/components/ui/input";
 import InputContainer from "../UI/InputContainer";

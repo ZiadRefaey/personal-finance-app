@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Button from "../Button";
+import Button from "../UI/Button";
 import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
 type ActionFunction = (id: number) => Promise<void | string>;
