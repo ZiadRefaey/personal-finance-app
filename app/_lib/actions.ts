@@ -6,7 +6,9 @@ import {
   createPot,
   deleteBudget,
   deletePot,
+  getFileUrl,
   updatePotSaved,
+  uploadFile,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
 
@@ -71,6 +73,20 @@ export async function UpdatePotsSaved(potID: number, saved: number) {
   try {
     await updatePotSaved(potID, saved);
     revalidatePath("/pots");
+  } catch (error: any) {
+    return error.message;
+  }
+}
+export async function CreateNewVendor(formData: FormData) {
+  try {
+    const session = await auth();
+    if (!session) throw new Error("User must be authenticated");
+
+    const image = formData.get("image") as File;
+    const imageName = `${String(session?.user?.id)} - ${image.name}`;
+    const result = await uploadFile("vendors", imageName, image);
+    const url = await getFileUrl(`vendors/${imageName}`);
+    return result;
   } catch (error: any) {
     return error.message;
   }

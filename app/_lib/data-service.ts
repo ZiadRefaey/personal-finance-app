@@ -129,15 +129,15 @@ export async function updatePotSaved(potID: number, saved: number) {
   return data;
 }
 
-export async function uploadFile(path: string, file: any) {
+export async function uploadFile(path: string, fileName: string, file: File) {
   const { data, error } = await supabase.storage
-    .from("bucket_name")
-    .upload(path, file);
+    .from(`avatars`)
+    .upload(`${path}/${fileName}`, file);
   if (error) throw new Error(error.message);
   return data;
 }
 
 export async function getFileUrl(filepath: string) {
-  const { data } = supabase.storage.from("bucket").getPublicUrl(filepath);
+  const { data } = supabase.storage.from("avatars").getPublicUrl(filepath);
   return data.publicUrl;
 }

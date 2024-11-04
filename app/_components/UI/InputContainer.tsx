@@ -11,7 +11,7 @@ export default function InputContainer({
   return (
     <div
       className={cn(
-        `gap-1 flex flex-col w-full items-start justify-center text-secondary`,
+        `gap-1 flex flex-col w-full items-start justify-center`,
         className
       )}
     >

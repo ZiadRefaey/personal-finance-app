@@ -9,6 +9,8 @@ export default function Label({
   className?: string;
 }) {
   return (
-    <label className={cn(`text-preset-4-bold`, className)}>{children}</label>
+    <label className={cn(`text-preset-4-bold text-secondary`, className)}>
+      {children}
+    </label>
   );
 }
