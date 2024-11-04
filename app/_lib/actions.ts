@@ -4,6 +4,7 @@ import { signOut, signIn, auth } from "@/auth";
 import {
   createBudget,
   createPot,
+  createVendor,
   deleteBudget,
   deletePot,
   getFileUrl,
@@ -63,10 +64,12 @@ export async function CreatePot(formData: FormData, userID: number) {
 }
 
 export async function DeletePot(potID: number) {
-  const error = await deletePot(potID);
-  revalidatePath("/pots");
-
-  if (error) return error.message;
+  try {
+    await deletePot(potID);
+    revalidatePath("/pots");
+  } catch (error: any) {
+    return error.message;
+  }
 }
 
 export async function UpdatePotsSaved(potID: number, saved: number) {
@@ -79,14 +82,28 @@ export async function UpdatePotsSaved(potID: number, saved: number) {
 }
 export async function CreateNewVendor(formData: FormData) {
   try {
+    //authenticate the user
     const session = await auth();
     if (!session) throw new Error("User must be authenticated");
 
+    //get file data as File
     const image = formData.get("image") as File;
+
+    //create a unique name for each image according to user ID
     const imageName = `${String(session?.user?.id)} - ${image.name}`;
-    const result = await uploadFile("vendors", imageName, image);
-    const url = await getFileUrl(`vendors/${imageName}`);
-    return result;
+
+    //upload the image to supabase's bucket
+    await uploadFile("vendors", imageName, image);
+
+    //retrieve the url of the uploaded image to store it in the database
+    const imageUrl = await getFileUrl(`vendors/${imageName}`);
+
+    //create a new record with the image's id and name from the form submission
+    await createVendor(
+      Number(session.user?.id),
+      formData.get("name"),
+      imageUrl
+    );
   } catch (error: any) {
     return error.message;
   }

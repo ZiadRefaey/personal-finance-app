@@ -110,12 +110,12 @@ export async function createPot(
 //deleting a pot using ID
 export async function deletePot(potID: number) {
   const session = await auth();
-  const userPots = await readBudgets(Number(session?.user?.id));
-  const exists = userPots.some((pot) => pot.id === potID);
+  const userPots = await readPots(Number(session?.user?.id));
+  const exists = userPots.some((pot) => Number(pot.id) === Number(potID));
   if (!exists) throw new Error("You are not authorized to delete this pot");
 
   const { error } = await supabase.from("pots").delete().eq("id", potID);
-  return error;
+  if (error) throw new Error(error.message);
 }
 
 export async function updatePotSaved(potID: number, saved: number) {
@@ -124,6 +124,19 @@ export async function updatePotSaved(potID: number, saved: number) {
     .from("pots")
     .update({ saved })
     .eq("id", potID)
+    .select();
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function createVendor(
+  userId: number,
+  name: FormDataEntryValue | null,
+  image: string
+) {
+  const { data, error } = await supabase
+    .from("vendors")
+    .insert([{ userId, name, image }])
     .select();
   if (error) throw new Error(error.message);
   return data;

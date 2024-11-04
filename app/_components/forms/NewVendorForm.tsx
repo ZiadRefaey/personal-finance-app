@@ -6,11 +6,19 @@ import { Input as ShadcnInput } from "@/components/ui/input";
 import InputContainer from "../UI/InputContainer";
 import Label from "../UI/Label";
 import Input from "../UI/Input";
+import { toast } from "@/hooks/use-toast";
+import { useModal } from "../Modal";
 
 export default function NewVendorForm() {
+  const { setOpenModal } = useModal();
   async function clientAction(formData: FormData) {
     const result = await CreateNewVendor(formData);
-    if (result) console.log(result);
+    if (result) {
+      toast({ title: "Something went wrong.", description: result });
+    } else {
+      toast({ title: "Vender created successfully" });
+      setOpenModal("");
+    }
   }
 
   return (
