@@ -3,7 +3,7 @@ import NewVendorForm from "../_components/forms/NewVendorForm";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import TransactionTable from "../_components/TransactionTable";
 import TransactionForm from "../_components/forms/TransactionForm";
-import { getVendors, readBudgets } from "../_lib/data-service";
+import { getTransactions, getVendors, readBudgets } from "../_lib/data-service";
 import { auth } from "@/auth";
 
 export default async function page() {
@@ -14,6 +14,7 @@ export default async function page() {
   const categories = budgets.map((budget) => budget.name);
   const vendors = await getVendors(userId);
   const vendorsNames = vendors.map((vendor) => vendor.name);
+  const transactions = await getTransactions(userId);
   return (
     <>
       <div className="w-full flex flex-col items-start justify-center md:flex-row md:justify-between gap-10 mb-[42px]">
@@ -50,7 +51,7 @@ export default async function page() {
         </div>
       </div>
       <Card className="w-full bg-card-back-ground min-h-[86vh] flex items-center justify-between flex-col">
-        <TransactionTable />
+        <TransactionTable transactions={transactions} />
       </Card>
     </>
   );

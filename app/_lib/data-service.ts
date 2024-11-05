@@ -162,9 +162,28 @@ export async function getFileUrl(filepath: string) {
   return data.publicUrl;
 }
 
+export async function getTransactions(userId: number) {
+  const { data, error } = await supabase
+    .from("transactions")
+    .select(
+      `*,
+      vendors (image,name),
+      budgets(name)`
+    )
+    .eq("userId", userId);
+  if (error) throw new Error(error.message);
+  return data;
+}
+export async function getTransactionsWithVendors() {
+  const { data, error } = await supabase.from("transactions").select(`
+    *,
+    vendors ( image,name ),
+    budgets(name)
+  `);
+  if (error) throw new Error(error.message);
+  return data;
+}
 export async function createTransaction(
-  vendor: FormDataEntryValue | null,
-  budget: FormDataEntryValue | null,
   amount: FormDataEntryValue | null,
   budgetId: number,
   vendorId: number,
@@ -172,7 +191,7 @@ export async function createTransaction(
 ) {
   const { data, error } = await supabase
     .from("transactions")
-    .insert([{ vendor, budget, amount, budgetId, vendorId, userId }])
+    .insert([{ amount, budgetId, vendorId, userId }])
     .select();
   if (error) throw new Error(error.message);
   return data;

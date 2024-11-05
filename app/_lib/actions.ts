@@ -133,8 +133,6 @@ export async function CreateTransaction(formData: FormData) {
     );
 
     await createTransaction(
-      vendorName,
-      budgetName,
       formData.get("amount"),
       budgetObject[0].id,
       vendorObject[0].id,

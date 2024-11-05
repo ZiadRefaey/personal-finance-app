@@ -20,7 +20,7 @@ export default function Button({
       type={type}
       onClick={onClick}
       className={cn(
-        ` rounded-lg p-4 transition-all duration-150  ${
+        ` rounded-lg p-4 transition-all duration-150 ${
           primary
             ? "bg-primary text-card-back-ground hover:bg-secondary text-preset-4"
             : "bg-background text-primary border-[1px] border-transparent hover:border-border hover:bg-inherit text-preset-4"

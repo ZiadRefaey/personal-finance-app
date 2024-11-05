@@ -16,7 +16,7 @@ export default function NewVendorForm() {
     if (result) {
       toast({ title: "Something went wrong.", description: result });
     } else {
-      toast({ title: "Vender created successfully" });
+      toast({ title: "Vendor created successfully" });
       setOpenModal("");
     }
   }

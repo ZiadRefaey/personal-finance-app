@@ -1,5 +1,4 @@
 "use client";
-import Data from "@/transactionsData.json";
 import {
   createColumnHelper,
   flexRender,
@@ -18,6 +17,16 @@ interface ColumnFilter {
   value: unknown;
 }
 type ColumnFiltersState = ColumnFilter[];
+type TransactionSupabase = {
+  id: number;
+  created_at: string;
+  amount: number;
+  userId: number;
+  budgetId: number;
+  vendorId: number;
+  vendors: { name: string; image: string };
+  budgets: { name: string };
+};
 type Transaction = {
   avatar: string;
   name: string;
@@ -31,10 +40,7 @@ type ColumnSort = {
   desc: boolean;
 };
 type SortingState = ColumnSort[];
-const TableData = Data.map((item) => ({
-  ...item,
-  date: new Date(item.date),
-}));
+
 const columnHelper = createColumnHelper<Transaction>();
 const columns = [
   columnHelper.accessor("name", {
@@ -70,8 +76,20 @@ const columns = [
 ];
 export const TransactionTableContext = createContext<any>(null);
 export const FeaturesStatesContext = createContext<any>(null);
-export default function TransactionTable() {
-  const [data, setData] = useState<Transaction[]>(TableData);
+export default function TransactionTable({
+  transactions,
+}: {
+  transactions: TransactionSupabase[];
+}) {
+  const tableData = transactions.map((transaction: TransactionSupabase) => ({
+    avatar: transaction.vendors.image,
+    name: transaction.vendors.name,
+    category: transaction.budgets.name,
+    date: new Date(transaction.created_at),
+    amount: transaction.amount,
+    deposite: false,
+  }));
+  const [data, setData] = useState<Transaction[]>(tableData);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
   const [sorting, setSorting] = useState<SortingState>([]); // can set initial sorting state here
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]); // can set initial column filter state here
@@ -110,12 +128,7 @@ export default function TransactionTable() {
               {table.getHeaderGroups().map((headerGroup) => (
                 <TR key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TH
-                      key={header.id}
-                      onClick={() => {
-                        console.log(header.column.getToggleSortingHandler());
-                      }}
-                    >
+                    <TH key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -201,7 +214,7 @@ function TH({
 }: {
   children: ReactNode;
   className?: string;
-  onClick: () => void;
+  onClick?: () => void;
 }) {
   return (
     <th

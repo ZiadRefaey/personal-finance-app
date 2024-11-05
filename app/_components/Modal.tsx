@@ -55,7 +55,11 @@ export function ModalTrigger({
     setOpenModal(modalName);
   }
   return (
-    <Button primary={primary} className={className} onClick={handleOpenModal}>
+    <Button
+      primary={primary}
+      className={`${className} text-primary`}
+      onClick={handleOpenModal}
+    >
       {children}
     </Button>
   );
