@@ -89,7 +89,7 @@ export default function Navbar({ session }: { session: any }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
               >
-                {session.user.name}
+                {session?.user?.name}
               </motion.span>
             )}
           </TooltipTrigger>

@@ -2,33 +2,29 @@ import React from "react";
 import Card from "./UI/Card";
 import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
 import { Progress } from "@/components/ui/progress";
-import BudgetSpendingSummary from "./BudgetSpendingSummary";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import DeleteForm from "./forms/DeleteForm";
 import { DeleteBudget } from "../_lib/actions";
+import TransactionsTableSummary from "./TransactionsTableSummary";
+import { getBudgetTransactions } from "../_lib/data-service";
+import { auth } from "@/auth";
 
-// type SpendingType = {
-//   name: string;
-//   image: any;
-//   amount: string;
-//   date: string;
-//   deposite: false;
-// }[];
 type BudgetCardType = {
   color: string;
   title: string;
   total: number;
   id: number;
-  // spendingSummary: SpendingType;
 };
-export default function BudgetCard({
+export default async function BudgetCard({
   color,
   title,
   total,
   id,
-}: // spendingSummary,
-
-BudgetCardType) {
+}: BudgetCardType) {
+  const session = await auth();
+  const userId = Number(session?.user?.id);
+  const transactions = await getBudgetTransactions(userId, id);
+  const spent = transactions.reduce((acc, curr) => acc + curr.amount, 0);
   return (
     <Card className="w-full">
       <div className="flex items-center justify-between w-full">
@@ -67,7 +63,7 @@ BudgetCardType) {
       </p>
       <div className="p-1 bg-background rounded-sm mb-4">
         <Progress
-          value={(40 / 100) * 100}
+          value={(spent / total) * 100}
           indicatorColor={color}
           className="h-6 rounded-sm"
           indicatorClass={`rounded-r-sm`}
@@ -82,8 +78,11 @@ BudgetCardType) {
           <div className="flex flex-col items-start justify-between h-full">
             <p className="text-preset-5 text-secondary">Spent</p>
             <p className="text-preset-4-bold text-primary">
-              {/* ${spent.toFixed(2)} */}
-              $0.00
+              $
+              {spent.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </p>
           </div>
         </div>
@@ -93,13 +92,20 @@ BudgetCardType) {
           <div className="flex flex-col items-start justify-between">
             <p className="text-preset-5 text-secondary">Remaining</p>
             <p className="text-preset-4-bold text-primary">
-              {/* total - spent */}${(total - 0).toFixed(2)}
+              $
+              {(total - spent).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </p>
           </div>
         </div>
       </div>
-      {/* <BudgetSpendingSummary SpendingSummaryData={spendingSummary} /> */}
-      <BudgetSpendingSummary />
+      <TransactionsTableSummary
+        transactions={transactions}
+        bg="secondary"
+        title="Latest Spending"
+      />
     </Card>
   );
 }

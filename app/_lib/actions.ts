@@ -47,10 +47,12 @@ export async function CreateBudget(formData: FormData, userID: number) {
 
 //deleting a budget
 export async function DeleteBudget(budgetID: number) {
-  const error = await deleteBudget(budgetID);
-  revalidatePath("/budgets");
-
-  if (error) return error.message;
+  try {
+    await deleteBudget(budgetID);
+    revalidatePath("/budgets");
+  } catch (error: any) {
+    return error.message;
+  }
 }
 
 export async function CreatePot(formData: FormData, userID: number) {
@@ -125,21 +127,23 @@ export async function CreateTransaction(formData: FormData) {
     const budgetObject = userBudgets.filter(
       (budget) => budgetName === budget.name
     );
-
+    const newSpent =
+      Number(budgetObject[0].spent) + Number(formData.get("amount"));
     const vendorName = formData.get("vendor");
     const userVendors = await getVendors(userId);
     const vendorObject = userVendors.filter(
       (vendor) => vendorName === vendor.name
     );
-
-    await createTransaction(
+    const transactionData = await createTransaction(
       formData.get("amount"),
       budgetObject[0].id,
       vendorObject[0].id,
-      userId
+      userId,
+      newSpent
     );
+    return transactionData;
     revalidatePath("/transactions");
   } catch (error: any) {
-    return error.message;
+    throw new Error(error.message);
   }
 }

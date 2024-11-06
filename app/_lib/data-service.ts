@@ -19,17 +19,17 @@ export async function createUser(email: string, fullName: string) {
   }
   return data;
 }
-export async function readBudgets(userID: number | undefined) {
+export async function readBudgets(userId: number | undefined) {
   const { data, error } = await supabase
     .from("budgets")
     .select("*")
-    .eq("userID", userID);
+    .eq("userId", userId);
   if (error) throw new Error(error.message);
   return data;
 }
 
 export async function createBudget(
-  userID: number | undefined,
+  userId: number | undefined,
   budgetName: null | FormDataEntryValue,
   color: null | FormDataEntryValue,
   max: null | FormDataEntryValue
@@ -38,7 +38,7 @@ export async function createBudget(
   //Make sure the user is logged in
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
-  const userBudgets = await readBudgets(userID);
+  const userBudgets = await readBudgets(userId);
 
   const budgetExists = userBudgets.some((budget) => budget.name === budgetName);
   if (budgetExists) throw new Error("this budget already exists");
@@ -48,7 +48,7 @@ export async function createBudget(
 
   const { data, error } = await supabase
     .from("budgets")
-    .insert([{ userID, name: budgetName, color, maximum: max }])
+    .insert([{ userId, name: budgetName, color, maximum: max }])
     .select();
   if (error) {
     throw new Error(error.message);
@@ -56,29 +56,34 @@ export async function createBudget(
   return data;
 }
 
-export async function deleteBudget(budgetID: number) {
+export async function deleteBudget(budgetId: number) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
   const userBudgets = await readBudgets(Number(session.user?.id));
-  const exists = userBudgets.some((budget) => budget.id === budgetID);
+  const exists = userBudgets.some((budget) => budget.id === budgetId);
   if (!exists) throw new Error("You are not authorized to delete this budget");
 
-  const { error } = await supabase.from("budgets").delete().eq("id", budgetID);
-  return error;
+  const { error: transactionsError } = await supabase
+    .from("transactions")
+    .delete()
+    .eq("budgetId", budgetId);
+  const { error } = await supabase.from("budgets").delete().eq("id", budgetId);
+  if (transactionsError) throw new Error(transactionsError.message);
+  if (error) throw new Error(error.message);
 }
 
-export async function readPots(userID: number) {
+export async function readPots(userId: number) {
   const { data, error } = await supabase
     .from("pots")
     .select("*")
-    .eq("userID", userID);
+    .eq("userId", userId);
 
   if (error) throw new Error(error.message);
   return data;
 }
 
 export async function createPot(
-  userID: number,
+  userId: number,
   title: FormDataEntryValue | null,
   color: FormDataEntryValue | null,
   goal: FormDataEntryValue | null
@@ -89,7 +94,7 @@ export async function createPot(
   if (!session) throw new Error("You must be logged in");
 
   //retrieving all the users Pots for validation
-  const pots = await readPots(userID);
+  const pots = await readPots(userId);
   // checking if the user has a pot with the same title
   const potExists = pots.some((pot) => pot.title === title);
   if (potExists) throw new Error("This pot already exists.");
@@ -101,7 +106,7 @@ export async function createPot(
   //creating a pot with the input data
   const { data, error } = await supabase
     .from("pots")
-    .insert([{ userID, color, goal, title, saved: 0 }])
+    .insert([{ userId, color, goal, title, saved: 0 }])
     .select();
   if (error) throw new Error(error.message);
   return data;
@@ -183,15 +188,59 @@ export async function getTransactionsWithVendors() {
   if (error) throw new Error(error.message);
   return data;
 }
+
 export async function createTransaction(
   amount: FormDataEntryValue | null,
   budgetId: number,
   vendorId: number,
-  userId: number
-) {
-  const { data, error } = await supabase
+  userId: number,
+  spent: number
+): Promise<any> {
+  const { data: transactionData, error: transactionError } = await supabase
     .from("transactions")
     .insert([{ amount, budgetId, vendorId, userId }])
+    .select(`amount,created_at,budgets(name),vendors(name,image)`);
+  const { error: budgetError } = await supabase
+    .from("budgets")
+    .update({ spent })
+    .eq("id", budgetId)
+    .select();
+  if (transactionError) throw new Error(transactionError.message);
+  if (budgetError) throw new Error(budgetError.message);
+  return transactionData;
+}
+
+export async function getBudgetTransactions(userId: number, budgetId: number) {
+  const { data, error } = await supabase
+    .from("transactions")
+    .select(
+      ` amount, created_at,
+     vendors(name,image)
+    `
+    )
+    .eq("budgetId", budgetId)
+    .eq("userId", userId);
+  if (error) throw new Error(error.message);
+  return data;
+}
+export async function getBudgetsTransactions(userId: number) {
+  const { data, error } = await supabase
+    .from("transactions")
+    .select(
+      ` amount, created_at,
+     vendors(name,image),
+     budgets(name,color,maximum)
+    `
+    )
+    .eq("userId", userId);
+  if (error) throw new Error(error.message);
+  return data;
+}
+export async function updateBudgetSpent(budgetId: number, spent: number) {
+  const { data, error } = await supabase
+    .from("budgets")
+    .update({ spent })
+    .eq("id", budgetId)
     .select();
   if (error) throw new Error(error.message);
   return data;

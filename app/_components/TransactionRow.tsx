@@ -3,8 +3,8 @@ import React from "react";
 
 type TransactionType = {
   name: string;
-  image: any;
-  amount: string;
+  image: string;
+  amount: number;
   date: string;
   deposite: boolean;
 };
@@ -19,11 +19,14 @@ export default function TransactionRow({
     return (
       <div className="flex items-center justify-between py-5">
         <div className="flex items-center justify-center gap-4">
-          <Image
-            src={image}
-            alt={`${name}'s avatar`}
-            className="size-10 rounded-full"
-          />
+          <div className="relative object-cover size-10">
+            <Image
+              src={image}
+              fill
+              alt={`${name}'s avatar`}
+              className="rounded-full"
+            />
+          </div>
           <p className="text-preset-4-bold text-primary">{name}</p>
         </div>
         <div>
@@ -32,9 +35,11 @@ export default function TransactionRow({
               deposite ? "text-green" : "text-red"
             } text-preset-4-bold mb-2`}
           >
-            {deposite ? "+" : "-"}${amount}
+            {deposite ? "+" : "-"}${amount.toFixed(2)}
           </p>
-          <p className="text-5 text-secondary">{date}</p>
+          <p className="text-5 text-secondary">
+            {new Date(date).toDateString()}
+          </p>
         </div>
       </div>
     );

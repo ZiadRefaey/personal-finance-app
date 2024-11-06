@@ -1,12 +1,5 @@
 import BudgetCard from "./BudgetCard";
 
-// type SpendingType = {
-//   name: string;
-//   image: any;
-//   amount: string;
-//   date: string;
-//   deposite: false;
-// }[];
 type BudgetDataType = {
   id: number;
   created_at: Date;

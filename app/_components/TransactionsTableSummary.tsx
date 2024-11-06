@@ -2,47 +2,21 @@ import React from "react";
 import TransactionRow from "./TransactionRow";
 import Card from "./UI/Card";
 import OverviewSectionHeader from "./OverviewSectionHeader";
-import William from "@/public/avatars/william-harris.jpg";
-import Serenity from "@/public/avatars/serenity-spa-and-wellness.jpg";
-// type TransactionsType = {
-//   name: string;
-//   image: any;
-//   amount: string;
-//   date: string;
-//   deposite: boolean;
-// }[];
+
+type TransactionsType = {
+  amount: number;
+  created_at: string;
+  vendors: { name: string; image: string };
+}[];
 export default function TransactionsTableSummary({
-  // transactions,
+  transactions,
   bg,
   title,
 }: {
-  // transactions: TransactionsType;
+  transactions?: any;
   bg: "primary" | "secondary";
   title: string;
 }) {
-  const spendingSummary = [
-    {
-      name: "William Harris",
-      image: William,
-      amount: "10.00",
-      date: "5 Aug 2024",
-      deposite: false,
-    },
-    {
-      name: "Serenity Spa & Wellness",
-      image: Serenity,
-      amount: "30.00",
-      date: "3 Aug 2024",
-      deposite: false,
-    },
-    {
-      name: "Serenity Spa & Wellness",
-      image: Serenity,
-      amount: "30.00",
-      date: "3 July 2024",
-      deposite: false,
-    },
-  ];
   return (
     <Card bg={`${bg}`}>
       <OverviewSectionHeader
@@ -57,20 +31,27 @@ export default function TransactionsTableSummary({
           </div>
         }
       />
-
-      <div className="flex flex-col divide-y-[1px] -my-6 divide-seperator">
-        {/* Dummy Transactions Data */}
-        {spendingSummary.map((row) => (
-          <TransactionRow
-            amount={row.amount}
-            date={row.date}
-            deposite={row.deposite}
-            image={row.image}
-            name={row.name}
-            key={row.name}
-          />
-        ))}
-      </div>
+      {transactions?.length === 0 && (
+        <div className="w-full flex items-center justify-center p-10">
+          <p className="text-primary text-preset-2">
+            Please make a transaction
+          </p>
+        </div>
+      )}
+      {transactions?.length > 0 && (
+        <div className="flex flex-col divide-y-[1px] -my-6 divide-seperator">
+          {transactions?.map((transaction: any, index: number) => (
+            <TransactionRow
+              amount={transaction.amount}
+              date={transaction.created_at}
+              deposite={false}
+              image={transaction.vendors.image}
+              name={transaction.vendors.name}
+              key={index}
+            />
+          ))}
+        </div>
+      )}
     </Card>
   );
 }

@@ -1,11 +1,12 @@
 import React from "react";
 type BudgetDataType = {
   id: number;
-  created_at: Date;
-  userID: number;
+  created_at: string;
+  userId: number;
   name: string;
-  maximum: number;
   color: string;
+  maximum: number;
+  spent: number;
 }[];
 export default function BudgetSpendingSummaryDetails({
   data,
@@ -19,6 +20,7 @@ export default function BudgetSpendingSummaryDetails({
           color={budget.color}
           title={budget.name}
           total={budget.maximum}
+          spent={budget.spent}
           key={budget.id}
         />
       ))}
@@ -29,10 +31,12 @@ function SpendingRow({
   color,
   title,
   total,
+  spent,
 }: {
   color: string;
   title: string;
   total: number;
+  spent: number;
 }) {
   return (
     <div className="py-4 flex items-center justify-between w-full">
@@ -44,7 +48,7 @@ function SpendingRow({
         <p className="text-preset-4 text-secondary">{title}</p>
       </div>
       <div className="flex items-center justify-center">
-        <p className="text-preset-3 text-primary">$40.50</p>
+        <p className="text-preset-3 text-primary">${spent.toFixed(2)}</p>
         <p className="text-preset-5 text-secondary">
           &nbsp;of ${total.toFixed(2)}
         </p>

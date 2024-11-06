@@ -3,11 +3,12 @@ import { PieChartShad } from "./PieChartShad";
 
 type BudgetDataType = {
   id: number;
-  created_at: Date;
-  userID: number;
+  created_at: string;
+  userId: number;
   name: string;
-  maximum: number;
   color: string;
+  maximum: number;
+  spent: number;
 }[];
 export default function BudgetsSpendingSummary({
   data,

@@ -18,15 +18,15 @@ import { useToast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
 type ActionFunction = (
   formData: FormData,
-  userID: number
+  userId: number
 ) => Promise<void | string>;
 
 export default function BudgetForm({
   action,
-  userID,
+  userId,
 }: {
   action: ActionFunction;
-  userID: number;
+  userId: number;
 }) {
   const { setOpenModal } = useModal();
   const { toast } = useToast();
@@ -34,7 +34,7 @@ export default function BudgetForm({
     setOpenModal("");
   }
   async function clientAction(formData: FormData) {
-    const result = await action(formData, userID);
+    const result = await action(formData, userId);
     if (result) {
       toast({
         title: "Something went wrong!",

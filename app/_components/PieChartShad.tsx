@@ -15,9 +15,9 @@ export const description = "A donut chart with text";
 
 export function PieChartShad({ data }: any) {
   const chartData = data.map(
-    (obj: { name: string; maximum: number; color: string }) => ({
+    (obj: { name: string; maximum: number; color: string; spent: number }) => ({
       budget: obj.name,
-      spent: 40.5,
+      spent: obj.spent,
       maximum: obj.maximum,
       fill: `var(--${obj.color})`,
     })

@@ -17,16 +17,7 @@ interface ColumnFilter {
   value: unknown;
 }
 type ColumnFiltersState = ColumnFilter[];
-type TransactionSupabase = {
-  id: number;
-  created_at: string;
-  amount: number;
-  userId: number;
-  budgetId: number;
-  vendorId: number;
-  vendors: { name: string; image: string };
-  budgets: { name: string };
-};
+
 type Transaction = {
   avatar: string;
   name: string;
@@ -76,20 +67,7 @@ const columns = [
 ];
 export const TransactionTableContext = createContext<any>(null);
 export const FeaturesStatesContext = createContext<any>(null);
-export default function TransactionTable({
-  transactions,
-}: {
-  transactions: TransactionSupabase[];
-}) {
-  const tableData = transactions.map((transaction: TransactionSupabase) => ({
-    avatar: transaction.vendors.image,
-    name: transaction.vendors.name,
-    category: transaction.budgets.name,
-    date: new Date(transaction.created_at),
-    amount: transaction.amount,
-    deposite: false,
-  }));
-  const [data, setData] = useState<Transaction[]>(tableData);
+export default function TransactionTable({ data }: { data: Transaction[] }) {
   const [globalFilter, setGlobalFilter] = useState<any>([]);
   const [sorting, setSorting] = useState<SortingState>([]); // can set initial sorting state here
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]); // can set initial column filter state here
