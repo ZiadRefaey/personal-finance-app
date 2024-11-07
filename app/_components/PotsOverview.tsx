@@ -22,11 +22,9 @@ export default function PotsOverview() {
         title="Pots"
         popoverTitle="See Details"
         popoverContent={
-          <div className="flex flex-col items-center justify-center gap-1">
-            <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-              Click me
-            </button>
-          </div>
+          <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
+            Click me
+          </button>
         }
       />
 

@@ -7,6 +7,7 @@ import DeleteForm from "./forms/DeleteForm";
 import PotDepositeForm from "./forms/PotDepositeForm";
 import PotWithdrawalForm from "./forms/PotWithdrawForm";
 import { DeletePot } from "../_lib/actions";
+import PopoverButton from "./UI/PopoverButton";
 type PotType = {
   title: string;
   saved: number;
@@ -28,20 +29,26 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
         </div>
         <PopoverEllipsisTrigger
           content={
-            <Modal>
-              <ModalTrigger modalName="delete-pot">Delete Pot</ModalTrigger>
-              <ModalWindow
-                header="Delete Pot?"
-                modalName="delete-pot"
-                description="Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever."
-              >
-                <DeleteForm
-                  deleteMessage="Pot successfuly deleted."
-                  action={DeletePot}
-                  id={id}
-                />
-              </ModalWindow>
-            </Modal>
+            <div className="flex flex-col items-center justify-center gap-4">
+              <PopoverButton>
+                <Modal>
+                  <ModalTrigger className="hover:bg-red" modalName="delete-pot">
+                    Delete Pot
+                  </ModalTrigger>
+                  <ModalWindow
+                    header="Delete Pot?"
+                    modalName="delete-pot"
+                    description="Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever."
+                  >
+                    <DeleteForm
+                      deleteMessage="Pot successfuly deleted."
+                      action={DeletePot}
+                      id={id}
+                    />
+                  </ModalWindow>
+                </Modal>
+              </PopoverButton>
+            </div>
           }
         />
       </div>
