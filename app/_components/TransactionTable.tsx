@@ -88,7 +88,7 @@ export default function TransactionTable({ data }: { data: Transaction[] }) {
     state: {
       pagination,
       globalFilter,
-      sorting,
+      sorting: sorting.length > 0 ? sorting : [{ id: "date", desc: true }],
       columnFilters,
     },
     onSortingChange: setSorting,
