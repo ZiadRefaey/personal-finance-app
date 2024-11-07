@@ -13,6 +13,7 @@ import {
   getFileUrl,
   getVendors,
   readBudgets,
+  updatePot,
   updatePotSaved,
   uploadFile,
 } from "./data-service";
@@ -60,6 +61,20 @@ export async function CreatePot(formData: FormData, userID: number) {
   try {
     await createPot(
       userID,
+      formData.get("title"),
+      formData.get("color"),
+      formData.get("goal")
+    );
+    revalidatePath("/pots");
+  } catch (error: any) {
+    return error.message;
+  }
+}
+
+export async function UpdatePot(formData: FormData, potId: number) {
+  try {
+    await updatePot(
+      potId,
       formData.get("title"),
       formData.get("color"),
       formData.get("goal")

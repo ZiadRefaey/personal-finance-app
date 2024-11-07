@@ -18,27 +18,34 @@ import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
 type ActionFunction = (
   formData: FormData,
-  userID: number
+  userId: number
 ) => Promise<void | string>;
 
 export default function PotForm({
   action,
-  userID,
+  formData,
+  id,
+  successMessage,
 }: {
   action: ActionFunction;
-  userID: number;
+  formData?: { title: string; goal: number; color: string };
+  id: number;
+  successMessage: string;
 }) {
   const { setOpenModal } = useModal();
-
+  function formDataExists(input: any) {
+    if (formData) return input;
+    else return null;
+  }
   async function clientAction(formData: FormData) {
-    const result = await action(formData, userID);
+    const result = await action(formData, id);
     if (result) {
       toast({
         title: "Something went wrong",
         description: result,
       });
     } else {
-      toast({ title: "Pot Created Successfully!" });
+      toast({ title: successMessage });
       setOpenModal("");
     }
   }
@@ -49,12 +56,17 @@ export default function PotForm({
     >
       <InputContainer>
         <Label>Pot Name</Label>
-        <Input name="title" type="text" />
+        <Input
+          defaultValue={formDataExists(formData?.title)}
+          name="title"
+          type="text"
+        />
         <p className="self-end text-preset-5">30 characters left</p>
       </InputContainer>
       <InputContainer>
         <Label>Target</Label>
         <Input
+          defaultValue={formDataExists(formData?.goal)}
           name="goal"
           type="text"
           prefix={<FaDollarSign className="text-border" />}
@@ -85,7 +97,7 @@ export default function PotForm({
         type="submit"
         className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2"
       >
-        Add Pot
+        {formData ? "Update Pot" : "Create Pot"}
       </Button>
     </form>
   );

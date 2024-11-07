@@ -25,10 +25,12 @@ type HTMLInputTypeAttribute =
   | "week";
 
 export default function Input({
+  defaultValue,
   prefix,
   type,
   name,
 }: {
+  defaultValue?: any;
   prefix?: ReactNode;
   type: HTMLInputTypeAttribute;
   name: string;
@@ -40,6 +42,7 @@ export default function Input({
       >
         <div className="text-border text-xl">{prefix}</div>
         <input
+          defaultValue={defaultValue}
           name={name}
           type={type}
           className={`w-full h-full outline-none text-navbar`}
@@ -48,6 +51,7 @@ export default function Input({
     );
   return (
     <input
+      defaultValue={defaultValue}
       type={type}
       name={name}
       className="border border-border w-full rounded-lg py-3 px-5 text-black outline-none text-preset-4"

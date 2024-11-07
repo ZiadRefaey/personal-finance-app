@@ -72,7 +72,7 @@ export async function deleteBudget(budgetId: number) {
   if (error) throw new Error(error.message);
 }
 
-export async function readPots(userId: number) {
+export async function getPots(userId: number) {
   const { data, error } = await supabase
     .from("pots")
     .select("*")
@@ -94,7 +94,7 @@ export async function createPot(
   if (!session) throw new Error("You must be logged in");
 
   //retrieving all the users Pots for validation
-  const pots = await readPots(userId);
+  const pots = await getPots(userId);
   // checking if the user has a pot with the same title
   const potExists = pots.some((pot) => pot.title === title);
   if (potExists) throw new Error("This pot already exists.");
@@ -112,23 +112,42 @@ export async function createPot(
   return data;
 }
 
-//deleting a pot using ID
-export async function deletePot(potID: number) {
+//update a pot using ID
+export async function updatePot(
+  potId: number,
+  title: FormDataEntryValue | null,
+  color: FormDataEntryValue | null,
+  goal: FormDataEntryValue | null
+) {
   const session = await auth();
-  const userPots = await readPots(Number(session?.user?.id));
-  const exists = userPots.some((pot) => Number(pot.id) === Number(potID));
-  if (!exists) throw new Error("You are not authorized to delete this pot");
+  const userPots = await getPots(Number(session?.user?.id));
+  const exists = userPots.some((pot) => Number(pot.id) === Number(potId));
+  if (!exists) throw new Error("You are not authorized to update this pot");
 
-  const { error } = await supabase.from("pots").delete().eq("id", potID);
+  const { error } = await supabase
+    .from("pots")
+    .update({ title, color, goal })
+    .eq("id", potId);
   if (error) throw new Error(error.message);
 }
 
-export async function updatePotSaved(potID: number, saved: number) {
+//deleting a pot using ID
+export async function deletePot(potId: number) {
+  const session = await auth();
+  const userPots = await getPots(Number(session?.user?.id));
+  const exists = userPots.some((pot) => Number(pot.id) === Number(potId));
+  if (!exists) throw new Error("You are not authorized to delete this pot");
+
+  const { error } = await supabase.from("pots").delete().eq("id", potId);
+  if (error) throw new Error(error.message);
+}
+
+export async function updatePotSaved(potId: number, saved: number) {
   if (saved < 0) throw new Error("The result must be more than 0");
   const { data, error } = await supabase
     .from("pots")
     .update({ saved })
-    .eq("id", potID)
+    .eq("id", potId)
     .select();
   if (error) throw new Error(error.message);
   return data;

@@ -6,8 +6,9 @@ import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import DeleteForm from "./forms/DeleteForm";
 import PotDepositeForm from "./forms/PotDepositeForm";
 import PotWithdrawalForm from "./forms/PotWithdrawForm";
-import { DeletePot } from "../_lib/actions";
+import { DeletePot, UpdatePot } from "../_lib/actions";
 import PopoverButton from "./UI/PopoverButton";
+import PotForm from "./forms/PotForm";
 type PotType = {
   title: string;
   saved: number;
@@ -16,6 +17,11 @@ type PotType = {
   id: number;
 };
 export default function PotCard({ title, saved, goal, color, id }: PotType) {
+  const editPotFormData = {
+    title,
+    goal,
+    color,
+  };
   const percentage = (saved / goal) * 100;
   return (
     <Card>
@@ -30,6 +36,26 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
         <PopoverEllipsisTrigger
           content={
             <div className="flex flex-col items-center justify-center gap-4">
+              <PopoverButton>
+                <Modal>
+                  <ModalTrigger className="w-full" modalName="edit-pot">
+                    Edit Pot
+                  </ModalTrigger>
+                  <ModalWindow
+                    header="Edit Pot."
+                    modalName="edit-pot"
+                    description="Edit your pot to set savings targets. These can help keep you on track as you save for special purchases."
+                  >
+                    {/* <div></div> */}
+                    <PotForm
+                      successMessage="Pot updated successfully."
+                      formData={editPotFormData}
+                      action={UpdatePot}
+                      id={id}
+                    />
+                  </ModalWindow>
+                </Modal>
+              </PopoverButton>
               <PopoverButton>
                 <Modal>
                   <ModalTrigger className="hover:bg-red" modalName="delete-pot">

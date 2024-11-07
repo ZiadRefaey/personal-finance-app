@@ -5,12 +5,13 @@ import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import PotForm from "../_components/forms/PotForm";
 import { CreatePot } from "../_lib/actions";
 import { auth } from "@/auth";
-import { readPots } from "../_lib/data-service";
+import { getPots } from "../_lib/data-service";
 
 export default async function page() {
   const session = await auth();
-  const userID = Number(session?.user?.id);
-  const pots = await readPots(userID);
+  const userId = Number(session?.user?.id);
+  const pots = await getPots(userId);
+
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
@@ -22,7 +23,7 @@ export default async function page() {
             modalName="add-pot"
             description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
           >
-            <PotForm userID={userID} action={CreatePot} />
+            <PotForm successMessage="Pot created successfully." id={userId} action={CreatePot} />
           </ModalWindow>
         </Modal>
       </div>
