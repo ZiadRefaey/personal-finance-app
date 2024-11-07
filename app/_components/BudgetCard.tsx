@@ -25,6 +25,14 @@ export default async function BudgetCard({
   const userId = Number(session?.user?.id);
   const transactions = await getBudgetTransactions(userId, id);
   const spent = transactions.reduce((acc, curr) => acc + curr.amount, 0);
+
+  //creating a shallow copy of transactions, sorting it then getting the latest 3 transactions for the summary
+  const sortedTransactions = [...transactions]
+    .sort(
+      (a: any, b: any) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    .slice(0, 3);
   return (
     <Card className="w-full">
       <div className="flex items-center justify-between w-full">
@@ -102,7 +110,7 @@ export default async function BudgetCard({
         </div>
       </div>
       <TransactionsTableSummary
-        transactions={transactions}
+        transactions={sortedTransactions}
         bg="secondary"
         title="Latest Spending"
       />

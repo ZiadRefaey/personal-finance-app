@@ -26,7 +26,7 @@ export default async function BudgetsOverview() {
       {budgets.length === 0 && (
         <div className="w-full items-center justify-center">
           <p className="text-center text-primary text-preset-2">
-            Please Create a new budget
+            No budgets created yet.
           </p>
         </div>
       )}

@@ -1,10 +1,20 @@
+import { auth } from "@/auth";
+import { getTransactions } from "../_lib/data-service";
 import TransactionsTableSummary from "./TransactionsTableSummary";
 
-const spendingSummary: any = [];
-export default function TransactionsOverview() {
+export default async function TransactionsOverview() {
+  const session = await auth();
+  const userId = Number(session?.user?.id);
+  const transactions = await getTransactions(userId);
+  const sortedTransactions = [...transactions]
+    .sort(
+      (a: any, b: any) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    .slice(0, 5);
   return (
     <TransactionsTableSummary
-      transactions={spendingSummary}
+      transactions={sortedTransactions}
       bg="primary"
       title="Transactions"
     />

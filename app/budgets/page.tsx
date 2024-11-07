@@ -6,14 +6,13 @@ import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import BudgetForm from "../_components/forms/BudgetForm";
 import { CreateBudget } from "../_lib/actions";
 import { auth } from "@/auth";
-import { getBudgetsTransactions, readBudgets } from "../_lib/data-service";
+import { readBudgets } from "../_lib/data-service";
 
 export const revalidate = 0;
 export default async function page() {
   const session = await auth();
   const userId = Number(session?.user?.id);
   const budgets = await readBudgets(userId);
-  // const budgetsTransactions = await getBudgetsTransactions(userId);
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">

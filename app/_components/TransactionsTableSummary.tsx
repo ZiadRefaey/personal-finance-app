@@ -3,11 +3,6 @@ import TransactionRow from "./TransactionRow";
 import Card from "./UI/Card";
 import OverviewSectionHeader from "./OverviewSectionHeader";
 
-type TransactionsType = {
-  amount: number;
-  created_at: string;
-  vendors: { name: string; image: string };
-}[];
 export default function TransactionsTableSummary({
   transactions,
   bg,
@@ -34,7 +29,7 @@ export default function TransactionsTableSummary({
       {transactions?.length === 0 && (
         <div className="w-full flex items-center justify-center p-10">
           <p className="text-primary text-preset-2">
-            Please make a transaction
+            No transactions made yet.
           </p>
         </div>
       )}

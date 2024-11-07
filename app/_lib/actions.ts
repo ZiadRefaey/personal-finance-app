@@ -141,8 +141,9 @@ export async function CreateTransaction(formData: FormData) {
       userId,
       newSpent
     );
-    return transactionData;
     revalidatePath("/transactions");
+    revalidatePath("/budgets");
+    return transactionData;
   } catch (error: any) {
     throw new Error(error.message);
   }
