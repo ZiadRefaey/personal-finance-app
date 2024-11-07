@@ -57,7 +57,7 @@ export function ModalTrigger({
   return (
     <Button
       primary={primary}
-      className={`${className} text-primary`}
+      className={`${className}`}
       onClick={handleOpenModal}
     >
       {children}
