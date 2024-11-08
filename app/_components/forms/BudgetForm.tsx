@@ -18,30 +18,42 @@ import { useToast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
 type ActionFunction = (
   formData: FormData,
-  userId: number
+  id: number
 ) => Promise<void | string>;
 
 export default function BudgetForm({
   action,
-  userId,
+  id,
+  successMessage,
+  formData,
 }: {
   action: ActionFunction;
-  userId: number;
+  id: number;
+  successMessage: string;
+  formData?: {
+    color: string;
+    title: string;
+    total: number;
+  };
 }) {
+  function formDataExists(input: any) {
+    if (formData) return input;
+    else return null;
+  }
   const { setOpenModal } = useModal();
   const { toast } = useToast();
   function handleCloseModal() {
     setOpenModal("");
   }
   async function clientAction(formData: FormData) {
-    const result = await action(formData, userId);
+    const result = await action(formData, id);
     if (result) {
       toast({
         title: "Something went wrong!",
         description: result,
       });
     } else {
-      toast({ title: "Budget Created Successfully" });
+      toast({ title: successMessage });
       handleCloseModal();
     }
   }
@@ -52,11 +64,16 @@ export default function BudgetForm({
     >
       <InputContainer>
         <Label>Budget Category</Label>
-        <Input name="category" type="text" />
+        <Input
+          defaultValue={formDataExists(formData?.title)}
+          name="category"
+          type="text"
+        />
       </InputContainer>
       <InputContainer>
         <Label>Maximum Spend</Label>
         <Input
+          defaultValue={formDataExists(formData?.total)}
           name="max"
           type="text"
           prefix={<FaDollarSign className="text-border" />}

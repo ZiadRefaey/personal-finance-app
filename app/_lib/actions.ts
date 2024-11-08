@@ -12,10 +12,11 @@ import {
   deletePot,
   getFileUrl,
   getVendors,
-  readBudgets,
+  getBudgets,
   updatePot,
   updatePotSaved,
   uploadFile,
+  updateBudget,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
 
@@ -31,11 +32,26 @@ export async function SignInWithGithub() {
 export async function SignOutAction() {
   await signOut({ redirectTo: "/login" });
 }
-export async function CreateBudget(formData: FormData, userID: number) {
+export async function CreateBudget(formData: FormData, userId: number) {
   //create a budget
   try {
     await createBudget(
-      userID,
+      userId,
+      formData.get("category"),
+      formData.get("color"),
+      formData.get("max")
+    );
+    revalidatePath("/budgets");
+  } catch (error: any) {
+    return error.message;
+  }
+}
+
+//Updating a budget using budget Id
+export async function UpdateBudget(formData: FormData, budgetId: number) {
+  try {
+    await updateBudget(
+      budgetId,
       formData.get("category"),
       formData.get("color"),
       formData.get("max")
@@ -138,7 +154,7 @@ export async function CreateTransaction(formData: FormData) {
     authenticatedUser(session);
     const userId = Number(session?.user?.id);
     const budgetName = formData.get("category");
-    const userBudgets = await readBudgets(userId);
+    const userBudgets = await getBudgets(userId);
     const budgetObject = userBudgets.filter(
       (budget) => budgetName === budget.name
     );

@@ -6,13 +6,13 @@ import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import BudgetForm from "../_components/forms/BudgetForm";
 import { CreateBudget } from "../_lib/actions";
 import { auth } from "@/auth";
-import { readBudgets } from "../_lib/data-service";
+import { getBudgets } from "../_lib/data-service";
 
 export const revalidate = 0;
 export default async function page() {
   const session = await auth();
   const userId = Number(session?.user?.id);
-  const budgets = await readBudgets(userId);
+  const budgets = await getBudgets(userId);
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
@@ -22,9 +22,13 @@ export default async function page() {
           <ModalWindow
             header="Add New Budget"
             modalName="add-budget"
-            description="Choose a category to set a spending budget. These categories can help you monitor spending.."
+            description="Choose a category to set a spending budget. These categories can help you monitor spending."
           >
-            <BudgetForm userId={userId} action={CreateBudget} />
+            <BudgetForm
+              id={userId}
+              action={CreateBudget}
+              successMessage="Budget successfully created."
+            />
           </ModalWindow>
         </Modal>
       </div>

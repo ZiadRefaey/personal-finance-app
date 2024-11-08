@@ -46,7 +46,6 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
                     modalName="edit-pot"
                     description="Edit your pot to set savings targets. These can help keep you on track as you save for special purchases."
                   >
-                    {/* <div></div> */}
                     <PotForm
                       successMessage="Pot updated successfully."
                       formData={editPotFormData}

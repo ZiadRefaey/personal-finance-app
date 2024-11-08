@@ -19,11 +19,20 @@ export async function createUser(email: string, fullName: string) {
   }
   return data;
 }
-export async function readBudgets(userId: number | undefined) {
+export async function getBudgets(userId: number | undefined) {
   const { data, error } = await supabase
     .from("budgets")
     .select("*")
     .eq("userId", userId);
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+async function getBudget(budgetId: number) {
+  const { data, error } = await supabase
+    .from("budgets")
+    .select("*")
+    .eq("id", budgetId);
   if (error) throw new Error(error.message);
   return data;
 }
@@ -38,7 +47,7 @@ export async function createBudget(
   //Make sure the user is logged in
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
-  const userBudgets = await readBudgets(userId);
+  const userBudgets = await getBudgets(userId);
 
   const budgetExists = userBudgets.some((budget) => budget.name === budgetName);
   if (budgetExists) throw new Error("this budget already exists");
@@ -56,10 +65,43 @@ export async function createBudget(
   return data;
 }
 
+//updating a budget based on its ID
+export async function updateBudget(
+  budgetId: number,
+  name: null | FormDataEntryValue,
+  color: null | FormDataEntryValue,
+  maximum: null | FormDataEntryValue
+) {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+  const userBudgets = await getBudgets(Number(session.user?.id));
+  const userBudget = await getBudget(budgetId);
+  const exists = userBudgets.some((budget) => budget.id === budgetId);
+  if (!exists) throw new Error("You are not authorized to delete this budget");
+
+  //checks if the name exists in all budgets except for the current budget (if the user changes other values but leaves the budget name)
+  const budgetExists = userBudgets.some(
+    (budget) => budget.name === name && userBudget[0].name !== name
+  );
+  if (budgetExists) throw new Error("this budget already exists");
+
+  //checks if the color exists in all budgets except for the current budget (if the user changes other values but leaves the budget color)
+  const colorExists = userBudgets.some(
+    (budget) => budget.color === color && userBudget[0].color !== color
+  );
+  if (colorExists) throw new Error("This color already exists.");
+
+  const { error } = await supabase
+    .from("budgets")
+    .update({ name, color, maximum })
+    .eq("id", budgetId);
+  if (error) throw new Error(error.message);
+}
+
 export async function deleteBudget(budgetId: number) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
-  const userBudgets = await readBudgets(Number(session.user?.id));
+  const userBudgets = await getBudgets(Number(session.user?.id));
   const exists = userBudgets.some((budget) => budget.id === budgetId);
   if (!exists) throw new Error("You are not authorized to delete this budget");
 

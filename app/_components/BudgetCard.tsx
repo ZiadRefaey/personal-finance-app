@@ -4,10 +4,12 @@ import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
 import { Progress } from "@/components/ui/progress";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import DeleteForm from "./forms/DeleteForm";
-import { DeleteBudget } from "../_lib/actions";
+import { DeleteBudget, UpdateBudget } from "../_lib/actions";
 import TransactionsTableSummary from "./TransactionsTableSummary";
 import { getBudgetTransactions } from "../_lib/data-service";
 import { auth } from "@/auth";
+import PopoverButton from "./UI/PopoverButton";
+import BudgetForm from "./forms/BudgetForm";
 
 type BudgetCardType = {
   color: string;
@@ -25,6 +27,13 @@ export default async function BudgetCard({
   const userId = Number(session?.user?.id);
   const transactions = await getBudgetTransactions(userId, id);
   const spent = transactions.reduce((acc, curr) => acc + curr.amount, 0);
+
+  //data to be passed to update form as default values.
+  const editBudgetFormData = {
+    title,
+    color,
+    total,
+  };
 
   //creating a shallow copy of transactions, sorting it then getting the latest 3 transactions for the summary
   const sortedTransactions = [...transactions]
@@ -46,22 +55,43 @@ export default async function BudgetCard({
         <PopoverEllipsisTrigger
           content={
             <>
-              <Modal>
-                <ModalTrigger modalName="delete-budget">
-                  Delete Budget
-                </ModalTrigger>
-                <ModalWindow
-                  header="Delete Budget?"
-                  modalName="delete-budget"
-                  description="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
-                >
-                  <DeleteForm
-                    deleteMessage="Budget successfuly deleted."
-                    id={id}
-                    action={DeleteBudget}
-                  />
-                </ModalWindow>
-              </Modal>
+              <PopoverButton>
+                <Modal>
+                  <ModalTrigger modalName="edit-budget">
+                    Edit Budget
+                  </ModalTrigger>
+                  <ModalWindow
+                    header="Edit Budget"
+                    modalName="edit-budget"
+                    description="Edit your budget to choose a category to set a spending budget. These categories can help you monitor spending.."
+                  >
+                    <BudgetForm
+                      action={UpdateBudget}
+                      id={id}
+                      successMessage="Budget successfully updated."
+                      formData={editBudgetFormData}
+                    />
+                  </ModalWindow>
+                </Modal>
+              </PopoverButton>
+              <PopoverButton>
+                <Modal>
+                  <ModalTrigger modalName="delete-budget">
+                    Delete Budget
+                  </ModalTrigger>
+                  <ModalWindow
+                    header="Delete Budget?"
+                    modalName="delete-budget"
+                    description="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
+                  >
+                    <DeleteForm
+                      deleteMessage="Budget successfuly deleted."
+                      id={id}
+                      action={DeleteBudget}
+                    />
+                  </ModalWindow>
+                </Modal>
+              </PopoverButton>
             </>
           }
         />

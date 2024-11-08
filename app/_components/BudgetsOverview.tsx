@@ -5,11 +5,11 @@ import BudgetSpendingSummaryDetails from "./BudgetSpendingSummaryDetails";
 import { PieChartShad } from "./PieChartShad";
 
 import { auth } from "@/auth";
-import { readBudgets } from "../_lib/data-service";
+import { getBudgets } from "../_lib/data-service";
 
 export default async function BudgetsOverview() {
   const session = await auth();
-  const budgets = await readBudgets(Number(session?.user?.id));
+  const budgets = await getBudgets(Number(session?.user?.id));
   return (
     <Card>
       <OverviewSectionHeader
