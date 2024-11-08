@@ -5,6 +5,7 @@ import Image from "next/image";
 import OverviewSectionHeader from "./OverviewSectionHeader";
 import { getPots } from "../_lib/data-service";
 import { auth } from "@/auth";
+import { FormatNumber } from "../_lib/helperFuncs";
 
 type PotDetailsType = {
   title: string;
@@ -38,7 +39,9 @@ export default async function PotsOverview() {
           <Image src={Pot} alt="Pot Icon" />
           <div className="">
             <p className="text-secondary text-preset-4 mb-3">Total Saved</p>
-            <p className="text-primary text-preset-1">${totalSaved}</p>
+            <p className="text-primary text-preset-1">
+              ${totalSaved.toLocaleString()}
+            </p>
           </div>
         </div>
 
@@ -65,8 +68,11 @@ function PotDetails({ title, amount, color }: PotDetailsType) {
       ></div>
       <div>
         <p className="text-secondary text-preset-5">{title}</p>
-        <p className="text-preset-4-bold text-primary">${amount}</p>
+        <p className="text-preset-4-bold text-primary">
+          ${FormatNumber(amount)}
+        </p>
       </div>
+      {}
     </div>
   );
 }

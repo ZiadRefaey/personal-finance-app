@@ -12,6 +12,7 @@ import Image from "next/image";
 import { createContext, ReactNode, useState } from "react";
 import TablePagination from "./TablePagination";
 import TransactionsTableControls from "./TransactionsTableControls";
+import { FormatNumber } from "../_lib/helperFuncs";
 interface ColumnFilter {
   id: string;
   value: unknown;
@@ -56,12 +57,7 @@ const columns = [
   }),
   columnHelper.accessor("amount", {
     header: "Amount",
-    cell: (props) => (
-      <Amount
-        amount={props.getValue()}
-        deposite={props.row.original.deposite}
-      />
-    ),
+    cell: (props) => <Amount amount={props.getValue()} />,
     sortingFn: "alphanumeric",
   }),
 ];
@@ -203,15 +199,10 @@ function TH({
     </th>
   );
 }
-function Amount({ deposite, amount }: { deposite: boolean; amount: number }) {
+function Amount({ amount }: { amount: number }) {
   return (
-    <div
-      className={`${
-        deposite === true ? "text-green" : "text-red"
-      } text-preset-4-bold`}
-    >
-      {deposite ? "+" : "-"}
-      {amount.toFixed(2)}
+    <div className={`text-primary text-preset-4-bold`}>
+      {FormatNumber(amount)}
     </div>
   );
 }

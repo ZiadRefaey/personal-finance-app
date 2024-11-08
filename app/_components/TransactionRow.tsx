@@ -1,19 +1,18 @@
 import Image from "next/image";
 import React from "react";
+import { FormatNumber } from "../_lib/helperFuncs";
 
 type TransactionType = {
   name: string;
   image: string;
   amount: number;
   date: string;
-  deposite: boolean;
 };
 export default function TransactionRow({
   name,
   image,
   amount,
   date,
-  deposite,
 }: TransactionType) {
   {
     return (
@@ -30,14 +29,10 @@ export default function TransactionRow({
           <p className="text-preset-4-bold text-primary">{name}</p>
         </div>
         <div>
-          <p
-            className={`${
-              deposite ? "text-green" : "text-red"
-            } text-preset-4-bold mb-2`}
-          >
-            {deposite ? "+" : "-"}${amount.toFixed(2)}
+          <p className={`text-primary text-preset-3 mb-2`}>
+            ${FormatNumber(amount)}
           </p>
-          <p className="text-5 text-secondary">
+          <p className="text-preset-5 text-secondary">
             {new Date(date).toDateString()}
           </p>
         </div>

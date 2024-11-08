@@ -1,4 +1,5 @@
 import React from "react";
+import { FormatNumber } from "../_lib/helperFuncs";
 type BudgetDataType = {
   id: number;
   created_at: string;
@@ -48,9 +49,9 @@ function SpendingRow({
         <p className="text-preset-4 text-secondary">{title}</p>
       </div>
       <div className="flex items-center justify-center">
-        <p className="text-preset-3 text-primary">${spent.toFixed(2)}</p>
+        <p className="text-preset-3 text-primary">${FormatNumber(spent)}</p>
         <p className="text-preset-5 text-secondary">
-          &nbsp;of ${total.toFixed(2)}
+          &nbsp;of ${total.toLocaleString()}
         </p>
       </div>
     </div>

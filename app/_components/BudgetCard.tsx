@@ -10,6 +10,7 @@ import { getBudgetTransactions } from "../_lib/data-service";
 import { auth } from "@/auth";
 import PopoverButton from "./UI/PopoverButton";
 import BudgetForm from "./forms/BudgetForm";
+import { FormatNumber } from "../_lib/helperFuncs";
 
 type BudgetCardType = {
   color: string;
@@ -97,7 +98,7 @@ export default async function BudgetCard({
         />
       </div>
       <p className="text-preset-4 text-secondary mt-5 mb-4">
-        Maximum of ${total.toFixed(2)}
+        Maximum of ${FormatNumber(total)}
       </p>
       <div className="p-1 bg-background rounded-sm mb-4">
         <Progress
@@ -116,11 +117,7 @@ export default async function BudgetCard({
           <div className="flex flex-col items-start justify-between h-full">
             <p className="text-preset-5 text-secondary">Spent</p>
             <p className="text-preset-4-bold text-primary">
-              $
-              {spent.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              ${FormatNumber(spent)}
             </p>
           </div>
         </div>
@@ -130,11 +127,7 @@ export default async function BudgetCard({
           <div className="flex flex-col items-start justify-between">
             <p className="text-preset-5 text-secondary">Remaining</p>
             <p className="text-preset-4-bold text-primary">
-              $
-              {(total - spent).toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              ${FormatNumber(total - spent)}
             </p>
           </div>
         </div>

@@ -39,7 +39,6 @@ export default function TransactionsTableSummary({
             <TransactionRow
               amount={transaction.amount}
               date={transaction.created_at}
-              deposite={false}
               image={transaction.vendors.image}
               name={transaction.vendors.name}
               key={index}

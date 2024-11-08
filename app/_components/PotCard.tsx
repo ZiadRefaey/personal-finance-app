@@ -9,6 +9,7 @@ import PotWithdrawalForm from "./forms/PotWithdrawForm";
 import { DeletePot, UpdatePot } from "../_lib/actions";
 import PopoverButton from "./UI/PopoverButton";
 import PotForm from "./forms/PotForm";
+import { FormatNumber } from "../_lib/helperFuncs";
 type PotType = {
   title: string;
   saved: number;
@@ -80,11 +81,7 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
       <div className="flex items-center justify-between mt-8 mb-4">
         <p className="text-preset-4 text-secondary">Total Saved</p>
         <p className="text-preset-1 text-secondary self-start">
-          $
-          {saved.toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
+          ${FormatNumber(saved)}
         </p>
       </div>
       <Progress
@@ -98,7 +95,7 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
           {percentage.toFixed(2)}%
         </p>
         <p className="text-preset-5 text-secondary">
-          Target of ${goal.toLocaleString("en-US")}
+          Target of ${FormatNumber(goal)}
         </p>
       </div>
       <div className="mt-8 grid grid-cols-2 w-full gap-3">

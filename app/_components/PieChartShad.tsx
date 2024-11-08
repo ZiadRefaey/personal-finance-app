@@ -10,6 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { FormatNumber } from "../_lib/helperFuncs";
 
 export const description = "A donut chart with text";
 
@@ -89,14 +90,14 @@ export function PieChartShad({ data }: any) {
                           y={viewBox.cy}
                           className="fill-primary text-preset-1 mb-2"
                         >
-                          ${totalSpending.toLocaleString()}
+                          ${FormatNumber(totalSpending)}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 32}
                           className="fill-secondary text-preset-5"
                         >
-                          of ${totalBudget} limit
+                          of ${FormatNumber(totalBudget)} limit
                         </tspan>
                       </text>
                     );
