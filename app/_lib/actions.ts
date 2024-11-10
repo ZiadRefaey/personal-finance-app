@@ -110,9 +110,9 @@ export async function DeletePot(potID: number) {
   }
 }
 
-export async function UpdatePotsSaved(potID: number, saved: number) {
+export async function UpdatePotsSaved(potId: number, saved: number) {
   try {
-    await updatePotSaved(potID, saved);
+    await updatePotSaved(potId, saved);
     revalidatePath("/pots");
   } catch (error: any) {
     return error.message;

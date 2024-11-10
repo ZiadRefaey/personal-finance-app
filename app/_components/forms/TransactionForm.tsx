@@ -2,7 +2,7 @@
 import InputContainer from "../UI/InputContainer";
 import { useForm } from "react-hook-form";
 import Label from "../UI/Label";
-import { Inputs } from "@/app/_lib/types";
+import { TransactionFormInputs } from "@/app/_lib/types";
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ export default function TransactionForm({
     clearErrors,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<Inputs>();
+  } = useForm<TransactionFormInputs>();
 
   async function onSubmit(data: any) {
     try {

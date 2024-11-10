@@ -185,7 +185,11 @@ export async function deletePot(potId: number) {
 }
 
 export async function updatePotSaved(potId: number, saved: number) {
-  if (saved < 0) throw new Error("The result must be more than 0");
+  if (saved < 0)
+    throw new Error("You can't withdraw more than what is deposited");
+  if (typeof saved !== "number") {
+    throw new Error("Input is invalid.");
+  }
   const { data, error } = await supabase
     .from("pots")
     .update({ saved })
