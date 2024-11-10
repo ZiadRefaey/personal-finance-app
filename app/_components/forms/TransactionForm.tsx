@@ -1,6 +1,8 @@
 "use client";
 import InputContainer from "../UI/InputContainer";
+import { useForm } from "react-hook-form";
 import Label from "../UI/Label";
+import { Inputs } from "@/app/_lib/types";
 import {
   Select,
   SelectContent,
@@ -14,8 +16,7 @@ import Button from "../UI/Button";
 import { CreateTransaction } from "@/app/_lib/actions";
 import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
-import { useFormStatus } from "react-dom";
-
+import InputError from "../UI/InputError";
 type namesType = string[];
 export default function TransactionForm({
   categories,
@@ -26,10 +27,22 @@ export default function TransactionForm({
   vendorsNames: namesType;
   setTransactionData: any;
 }) {
-  const { setOpenModal } = useModal();
-  async function clientAction(formData: FormData) {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    clearErrors,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<Inputs>();
+
+  async function onSubmit(data: any) {
     try {
-      const result = await CreateTransaction(formData);
+      const result = await CreateTransaction(
+        data.vendor,
+        data.amount,
+        data.category
+      );
       const transaction = {
         avatar: result[0].vendors.image,
         name: result[0].vendors.name,
@@ -45,46 +58,74 @@ export default function TransactionForm({
         },
       ]);
       toast({ title: "Transaction created successfuly" });
+      reset();
       setOpenModal("");
     } catch (error: any) {
       toast({ title: "Something went wrong", description: error.message });
     }
   }
+  const { setOpenModal } = useModal();
+
   return (
     <>
       <form
-        action={clientAction}
+        onSubmit={handleSubmit(onSubmit)}
+        // action={clientAction}
         className="w-full flex items-center justify-center gap-3 flex-col"
       >
         <InputContainer>
           <Label>Vendors</Label>
-          <Select name="vendor">
-            <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
+          <Select
+            onValueChange={(value) => {
+              setValue("vendor", value);
+              clearErrors("vendor");
+            }}
+            name="vendor"
+          >
+            <SelectTrigger
+              {...register("vendor", { required: "This field is required." })}
+              className="w-full bg-white text-navbar py-[22px] rounded-lg"
+            >
               <SelectValue placeholder="Vendor" />
             </SelectTrigger>
             <SelectContent className="bg-white text-navbar">
-              {vendorsNames.map((vendor) => (
-                <SelectItem value={vendor} key={vendor}>
-                  <p className="text-preset-4 capitalize">{vendor}</p>
+              {vendorsNames.map((vendorName) => (
+                <SelectItem value={vendorName} key={vendorName}>
+                  <p className="text-preset-4 capitalize">{vendorName}</p>
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          {errors.vendor && <InputError>{errors.vendor.message}</InputError>}
         </InputContainer>
 
         <InputContainer>
           <Label>Amount</Label>
           <Input
+            register={register("amount", {
+              required: "This field is required.",
+              min: { value: 1, message: "Cannot be less that 1" },
+            })}
             name="amount"
-            type="text"
+            type="number"
             prefix={<FaDollarSign className="text-border" />}
           />
+          {errors.amount && <InputError>{errors.amount.message}</InputError>}
         </InputContainer>
 
         <InputContainer>
           <Label>Category</Label>
-          <Select name="category">
-            <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
+          <Select
+            onValueChange={(value) => {
+              setValue("category", value);
+              clearErrors("category");
+            }}
+            name="category"
+          >
+            <SelectTrigger
+              {...register("category", { required: "This field is required." })}
+              className="w-full bg-white text-navbar py-[22px] rounded-lg"
+            >
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent className="bg-white text-navbar">
@@ -95,22 +136,25 @@ export default function TransactionForm({
               ))}
             </SelectContent>
           </Select>
+          {errors.category && (
+            <InputError>{errors.category.message}</InputError>
+          )}
         </InputContainer>
 
-        <Submit />
+        <Submit isSubmitting={isSubmitting} />
       </form>
     </>
   );
 }
-function Submit() {
-  const { pending } = useFormStatus();
+function Submit({ isSubmitting }: { isSubmitting: boolean }) {
   return (
     <>
       <Button
+        disabled={isSubmitting}
         type="submit"
         className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2"
       >
-        {pending ? "Submitting..." : "Submit Transaction"}
+        {isSubmitting ? "Submitting..." : "Submit Transaction"}
       </Button>
     </>
   );

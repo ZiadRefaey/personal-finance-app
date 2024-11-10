@@ -5,6 +5,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 const Select = SelectPrimitive.Root;
 
@@ -14,9 +15,12 @@ const SelectValue = SelectPrimitive.Value;
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    register?: UseFormRegisterReturn;
+  }
+>(({ className, children, register, ...props }, ref) => (
   <SelectPrimitive.Trigger
+    {...register}
     name={props.name}
     ref={ref}
     className={cn(

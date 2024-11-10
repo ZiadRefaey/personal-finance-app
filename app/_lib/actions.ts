@@ -148,34 +148,78 @@ export async function CreateNewVendor(formData: FormData) {
   }
 }
 
-export async function CreateTransaction(formData: FormData) {
+export async function CreateTransaction(
+  vendor: string,
+  amount: number,
+  category: string
+) {
   try {
+    //getting the user ID
     const session = await auth();
+    //ensuring the user is logged in
     authenticatedUser(session);
     const userId = Number(session?.user?.id);
-    const budgetName = formData.get("category");
+    const budgetName = category;
     const userBudgets = await getBudgets(userId);
+    //getting the budget to retrieve the budget Id with it
     const budgetObject = userBudgets.filter(
       (budget) => budgetName === budget.name
     );
-    const newSpent =
-      Number(budgetObject[0].spent) + Number(formData.get("amount"));
-    const vendorName = formData.get("vendor");
+    const newSpent = Number(budgetObject[0].spent) + Number(amount);
+    //getting the vendor to retrieve the ID
+    const vendorName = vendor;
     const userVendors = await getVendors(userId);
     const vendorObject = userVendors.filter(
       (vendor) => vendorName === vendor.name
     );
+    //calling the supabase API
     const transactionData = await createTransaction(
-      formData.get("amount"),
+      amount,
       budgetObject[0].id,
       vendorObject[0].id,
       userId,
       newSpent
     );
+
+    //updating the data displayed after successful operation
     revalidatePath("/transactions");
     revalidatePath("/budgets");
+
+    //returning the transaction data
     return transactionData;
   } catch (error: any) {
     throw new Error(error.message);
   }
 }
+
+// export async function CreateTransaction(formData: FormData) {
+//   try {
+//     const session = await auth();
+//     authenticatedUser(session);
+//     const userId = Number(session?.user?.id);
+//     const budgetName = formData.get("category");
+//     const userBudgets = await getBudgets(userId);
+//     const budgetObject = userBudgets.filter(
+//       (budget) => budgetName === budget.name
+//     );
+//     const newSpent =
+//       Number(budgetObject[0].spent) + Number(formData.get("amount"));
+//     const vendorName = formData.get("vendor");
+//     const userVendors = await getVendors(userId);
+//     const vendorObject = userVendors.filter(
+//       (vendor) => vendorName === vendor.name
+//     );
+//     const transactionData = await createTransaction(
+//       formData.get("amount"),
+//       budgetObject[0].id,
+//       vendorObject[0].id,
+//       userId,
+//       newSpent
+//     );
+//     revalidatePath("/transactions");
+//     revalidatePath("/budgets");
+//     return transactionData;
+//   } catch (error: any) {
+//     throw new Error(error.message);
+//   }
+// }

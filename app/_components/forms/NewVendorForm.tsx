@@ -23,6 +23,7 @@ export default function NewVendorForm() {
 
   return (
     <form
+    
       action={clientAction}
       className="w-full flex items-center justify-center gap-3 flex-col"
     >

@@ -251,7 +251,7 @@ export async function getTransactionsWithVendors() {
 }
 
 export async function createTransaction(
-  amount: FormDataEntryValue | null,
+  amount: number,
   budgetId: number,
   vendorId: number,
   userId: number,
