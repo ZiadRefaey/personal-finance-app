@@ -123,12 +123,18 @@ export async function getPots(userId: number) {
   if (error) throw new Error(error.message);
   return data;
 }
-
+function ServerSideValidatePot(title: string, goal: number, color: string) {
+  if (title === "") throw new Error("Name cannot be empty");
+  if (title.length > 30)
+    throw new Error("Name cannot exceed 30 characters long.");
+  if (goal <= 0) throw new Error("Target should be higher than 0.");
+  if (color === "" || color.length === 0) throw new Error("Must have a color");
+}
 export async function createPot(
   userId: number,
-  title: FormDataEntryValue | null,
-  color: FormDataEntryValue | null,
-  goal: FormDataEntryValue | null
+  title: string,
+  color: string,
+  goal: number
 ) {
   //Authentication
   //getting the user ID
@@ -145,6 +151,9 @@ export async function createPot(
   const colorExists = pots.some((pot) => pot.color === color);
   if (colorExists) throw new Error("This color already exists.");
 
+  //basic server side validaction
+  ServerSideValidatePot(title, goal, color);
+
   //creating a pot with the input data
   const { data, error } = await supabase
     .from("pots")
@@ -157,15 +166,16 @@ export async function createPot(
 //update a pot using ID
 export async function updatePot(
   potId: number,
-  title: FormDataEntryValue | null,
-  color: FormDataEntryValue | null,
-  goal: FormDataEntryValue | null
+  title: string,
+  color: string,
+  goal: number
 ) {
   const session = await auth();
   const userPots = await getPots(Number(session?.user?.id));
   const exists = userPots.some((pot) => Number(pot.id) === Number(potId));
   if (!exists) throw new Error("You are not authorized to update this pot");
 
+  ServerSideValidatePot(title, goal, color);
   const { error } = await supabase
     .from("pots")
     .update({ title, color, goal })

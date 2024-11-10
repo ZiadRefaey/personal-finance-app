@@ -16,10 +16,9 @@ import Input from "../UI/Input";
 import Button from "../UI/Button";
 import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
-type ActionFunction = (
-  formData: FormData,
-  userId: number
-) => Promise<void | string>;
+import { useForm } from "react-hook-form";
+import { PotFormInput } from "@/app/_lib/types";
+import InputError from "../UI/InputError";
 
 export default function PotForm({
   action,
@@ -27,18 +26,37 @@ export default function PotForm({
   id,
   successMessage,
 }: {
-  action: ActionFunction;
+  action: (
+    title: string,
+    goal: number,
+    color: string,
+    id: number
+  ) => Promise<void | string>;
   formData?: { title: string; goal: number; color: string };
   id: number;
   successMessage: string;
 }) {
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<PotFormInput>({
+    defaultValues: {
+      title: formData?.title || "",
+      goal: formData?.goal || undefined,
+      color: formData?.color || undefined,
+    },
+  });
+  const titleValue = watch("title");
+  const maxCharacters = 30;
+  const charactersLeft = maxCharacters - titleValue.length;
   const { setOpenModal } = useModal();
-  function formDataExists(input: any) {
-    if (formData) return input;
-    else return null;
-  }
-  async function clientAction(formData: FormData) {
-    const result = await action(formData, id);
+
+  async function clientAction(data: any) {
+    const result = await action(data.title, data.goal, data.color, id);
     if (result) {
       toast({
         title: "Something went wrong",
@@ -46,36 +64,64 @@ export default function PotForm({
       });
     } else {
       toast({ title: successMessage });
+      reset();
       setOpenModal("");
     }
   }
   return (
     <form
-      action={clientAction}
+      onSubmit={handleSubmit(clientAction)}
       className="w-full flex items-center justify-center gap-3 flex-col"
     >
       <InputContainer>
         <Label>Pot Name</Label>
         <Input
-          defaultValue={formDataExists(formData?.title)}
+          register={{
+            ...register("title", {
+              required: "This field is required.",
+              maxLength: {
+                value: 30,
+                message: "Name cannot exceed 30 characters long.",
+              },
+            }),
+          }}
           name="title"
           type="text"
         />
-        <p className="self-end text-preset-5">30 characters left</p>
+        <p
+          className={`self-end text-preset-4 ${
+            charactersLeft < 0 ? "text-red" : "text-primary"
+          }`}
+        >
+          {charactersLeft} characters left
+        </p>
+        {errors.title && <InputError>{errors.title.message}</InputError>}
       </InputContainer>
       <InputContainer>
         <Label>Target</Label>
         <Input
-          defaultValue={formDataExists(formData?.goal)}
           name="goal"
+          register={{
+            ...register("goal", {
+              required: "This field is required.",
+              min: { value: 0.1, message: "Target should be higher than 0." },
+            }),
+          }}
           type="text"
           prefix={<FaDollarSign className="text-border" />}
         />
+        {errors.goal && <InputError>{errors.goal.message}</InputError>}
       </InputContainer>
       <InputContainer>
         <Label>Theme</Label>
-        <Select name="color">
-          <SelectTrigger className="w-full bg-white text-navbar py-[22px] rounded-lg">
+        <Select
+          onValueChange={(value) => setValue("color", value)}
+          name="color"
+        >
+          <SelectTrigger
+            {...register("color", { required: "This field is required" })}
+            className="w-full bg-white text-navbar py-[22px] rounded-lg"
+          >
             <SelectValue placeholder="Theme" />
           </SelectTrigger>
           <SelectContent className="bg-white text-navbar">
@@ -92,12 +138,20 @@ export default function PotForm({
             ))}
           </SelectContent>
         </Select>
+        {errors.color && <InputError>{errors.color.message}</InputError>}
       </InputContainer>
       <Button
+        disabled={isSubmitting}
         type="submit"
         className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2"
       >
-        {formData ? "Update Pot" : "Create Pot"}
+        {formData && isSubmitting
+          ? "Updating..."
+          : formData
+          ? "Update Pot"
+          : !formData && isSubmitting
+          ? "Creating..."
+          : "Create Pot"}
       </Button>
     </form>
   );

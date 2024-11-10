@@ -6,3 +6,8 @@ export type TransactionFormInputs = {
 export type PotWithdrawFormInputs = {
   amount: number;
 };
+export type PotFormInput = {
+  title: string;
+  goal: number;
+  color: string;
+};

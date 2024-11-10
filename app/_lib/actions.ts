@@ -72,29 +72,29 @@ export async function DeleteBudget(budgetID: number) {
   }
 }
 
-export async function CreatePot(formData: FormData, userID: number) {
+export async function CreatePot(
+  title: string,
+  goal: number,
+  color: string,
+  userId: number
+) {
   //
   try {
-    await createPot(
-      userID,
-      formData.get("title"),
-      formData.get("color"),
-      formData.get("goal")
-    );
+    await createPot(userId, title, color, goal);
     revalidatePath("/pots");
   } catch (error: any) {
     return error.message;
   }
 }
 
-export async function UpdatePot(formData: FormData, potId: number) {
+export async function UpdatePot(
+  title: string,
+  goal: number,
+  color: string,
+  potId: number
+) {
   try {
-    await updatePot(
-      potId,
-      formData.get("title"),
-      formData.get("color"),
-      formData.get("goal")
-    );
+    await updatePot(potId, title, color, goal);
     revalidatePath("/pots");
   } catch (error: any) {
     return error.message;
