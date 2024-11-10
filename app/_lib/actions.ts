@@ -32,15 +32,15 @@ export async function SignInWithGithub() {
 export async function SignOutAction() {
   await signOut({ redirectTo: "/login" });
 }
-export async function CreateBudget(formData: FormData, userId: number) {
+export async function CreateBudget(
+  title: string,
+  amount: number,
+  color: string,
+  userId: number
+) {
   //create a budget
   try {
-    await createBudget(
-      userId,
-      formData.get("category"),
-      formData.get("color"),
-      formData.get("max")
-    );
+    await createBudget(userId, title, amount, color);
     revalidatePath("/budgets");
   } catch (error: any) {
     return error.message;
@@ -48,14 +48,14 @@ export async function CreateBudget(formData: FormData, userId: number) {
 }
 
 //Updating a budget using budget Id
-export async function UpdateBudget(formData: FormData, budgetId: number) {
+export async function UpdateBudget(
+  title: string,
+  amount: number,
+  color: string,
+  budgetId: number
+) {
   try {
-    await updateBudget(
-      budgetId,
-      formData.get("category"),
-      formData.get("color"),
-      formData.get("max")
-    );
+    await updateBudget(budgetId, title, amount, color);
     revalidatePath("/budgets");
   } catch (error: any) {
     return error.message;

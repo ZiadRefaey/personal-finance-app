@@ -15,7 +15,6 @@ export default async function page() {
     (a, b) =>
       new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
-  console.log(sortedPots);
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">

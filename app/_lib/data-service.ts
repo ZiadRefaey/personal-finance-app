@@ -36,20 +36,31 @@ async function getBudget(budgetId: number) {
   if (error) throw new Error(error.message);
   return data;
 }
-
+function serverSideValidateBudget(
+  name: string,
+  maximum: number,
+  color: string
+) {
+  if (name.length < 2)
+    throw new Error("Name must be atleast 2 characters long");
+  if (!name || name === "") throw new Error("Name field is required");
+  if (maximum < 1) throw new Error("Maximum must be larget than 1");
+  if (!color || color === "") throw new Error("Color field is required.");
+}
 export async function createBudget(
   userId: number | undefined,
-  budgetName: null | FormDataEntryValue,
-  color: null | FormDataEntryValue,
-  max: null | FormDataEntryValue
+  name: string,
+  maximum: number,
+  color: string
 ) {
   //Authentication
   //Make sure the user is logged in
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
+  serverSideValidateBudget(name, maximum, color);
   const userBudgets = await getBudgets(userId);
 
-  const budgetExists = userBudgets.some((budget) => budget.name === budgetName);
+  const budgetExists = userBudgets.some((budget) => budget.name === name);
   if (budgetExists) throw new Error("this budget already exists");
 
   const colorExists = userBudgets.some((budget) => budget.color === color);
@@ -57,7 +68,7 @@ export async function createBudget(
 
   const { data, error } = await supabase
     .from("budgets")
-    .insert([{ userId, name: budgetName, color, maximum: max }])
+    .insert([{ userId, name, color, maximum }])
     .select();
   if (error) {
     throw new Error(error.message);
@@ -68,12 +79,13 @@ export async function createBudget(
 //updating a budget based on its ID
 export async function updateBudget(
   budgetId: number,
-  name: null | FormDataEntryValue,
-  color: null | FormDataEntryValue,
-  maximum: null | FormDataEntryValue
+  name: string,
+  maximum: number,
+  color: string
 ) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
+  serverSideValidateBudget(name, maximum, color);
   const userBudgets = await getBudgets(Number(session.user?.id));
   const userBudget = await getBudget(budgetId);
   const exists = userBudgets.some((budget) => budget.id === budgetId);

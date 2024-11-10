@@ -11,3 +11,8 @@ export type PotFormInput = {
   goal: number;
   color: string;
 };
+export type BudgetFormInputs = {
+  title: string;
+  amount: number;
+  color: string;
+};
