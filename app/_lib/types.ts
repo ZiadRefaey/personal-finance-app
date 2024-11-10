@@ -3,7 +3,7 @@ export type TransactionFormInputs = {
   vendor: string;
   category: string;
 };
-export type PotWithdrawFormInputs = {
+export type PotOperationInput = {
   amount: number;
 };
 export type PotFormInput = {

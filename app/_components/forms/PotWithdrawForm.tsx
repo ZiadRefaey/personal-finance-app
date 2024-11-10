@@ -10,7 +10,7 @@ import { UpdatePotsSaved } from "@/app/_lib/actions";
 import { toast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import InputError from "../UI/InputError";
-import { PotWithdrawFormInputs } from "@/app/_lib/types";
+import { PotOperationInput } from "@/app/_lib/types";
 
 export default function PotWithdrawalForm({
   currentSaved,
@@ -24,7 +24,7 @@ export default function PotWithdrawalForm({
     reset,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<PotWithdrawFormInputs>();
+  } = useForm<PotOperationInput>();
   const { setOpenModal } = useModal();
   async function clientAction(data: any) {
     const amountToAdd = data.amount;
