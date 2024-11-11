@@ -16,3 +16,7 @@ export type BudgetFormInputs = {
   amount: number;
   color: string;
 };
+export type VendorFormInputs = {
+  name: string;
+  image: FileList;
+};
