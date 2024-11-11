@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { getTransactions } from "../_lib/data-service";
 import { FormatNumber } from "../_lib/helperFuncs";
 
@@ -26,7 +27,9 @@ export default async function OverviewStatsCardsList({
 }: {
   userData: any;
 }) {
-  const transactions = await getTransactions(userData.id);
+  const session = await auth();
+  const userId = Number(session?.user?.id);
+  const transactions = await getTransactions(userId);
   const expenses = transactions.reduce((acc, cur) => acc + cur.amount, 0);
   const stats = [
     {

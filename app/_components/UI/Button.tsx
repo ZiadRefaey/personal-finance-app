@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import React, { ReactNode } from "react";
 type buttonType = "button" | "submit" | "reset";
 type Button = {
@@ -21,13 +22,16 @@ export default function Button({
       disabled={disabled}
       type={type}
       onClick={onClick}
-      className={`rounded-lg p-4 transition-all duration-150 ${
-        disabled ? "opacity-50 cursor-not-allowed" : ""
-      } ${
-        primary
-          ? "bg-primary text-background hover:bg-secondary text-preset-4"
-          : "bg-background text-primary border-[1px] border-transparent hover:border-border hover:bg-inherit text-preset-4"
-      } ${className}`}
+      className={cn(
+        `rounded-lg p-4 transition-all duration-150 ${
+          disabled ? "opacity-50 cursor-not-allowed" : ""
+        } ${
+          primary
+            ? "bg-primary text-background hover:bg-secondary text-preset-4"
+            : "bg-background text-primary border-[1px] border-transparent hover:border-border hover:bg-inherit text-preset-4"
+        }`,
+        className
+      )}
     >
       {children}
     </button>

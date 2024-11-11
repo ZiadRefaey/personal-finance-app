@@ -8,7 +8,14 @@ export async function getUser(email: string) {
     .single();
   return data;
 }
-
+export async function getUserDetails(id: number) {
+  const { data } = await supabase
+    .from("users")
+    .select("income,balance,theme")
+    .eq("id", id)
+    .single();
+  return data;
+}
 export async function createUser(email: string, fullName: string) {
   const { data, error } = await supabase
     .from("users")
