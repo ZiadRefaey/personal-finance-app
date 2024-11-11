@@ -20,3 +20,8 @@ export type VendorFormInputs = {
   name: string;
   image: FileList;
 };
+export type UserDetailsForm = {
+  balance: number;
+  income: number;
+  incomeDay: number;
+};
