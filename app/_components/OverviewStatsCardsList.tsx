@@ -1,26 +1,12 @@
+import { getTransactions } from "../_lib/data-service";
+import { FormatNumber } from "../_lib/helperFuncs";
+
 interface CardType {
   featuredCard: boolean;
   title: string;
-  amount: string;
+  amount: number;
 }
-type stats = CardType[];
-const stats = [
-  {
-    featuredCard: true,
-    title: "Current Balance",
-    amount: "4,836.00",
-  },
-  {
-    featuredCard: false,
-    title: "Income",
-    amount: "3,814.25",
-  },
-  {
-    featuredCard: false,
-    title: "Expenses",
-    amount: "1,700.50",
-  },
-];
+
 function Card({ featuredCard, title, amount }: CardType) {
   return (
     <div
@@ -31,11 +17,34 @@ function Card({ featuredCard, title, amount }: CardType) {
       } rounded-xl`}
     >
       <p className={`text-preset-4`}>{title}</p>
-      <p className={`text-preset-1`}>${amount}</p>
+      <p className={`text-preset-1`}>${FormatNumber(amount)}</p>
     </div>
   );
 }
-export default function OverviewStatsCardsList() {
+export default async function OverviewStatsCardsList({
+  userData,
+}: {
+  userData: any;
+}) {
+  const transactions = await getTransactions(userData.id);
+  const expenses = transactions.reduce((acc, cur) => acc + cur.amount, 0);
+  const stats = [
+    {
+      featuredCard: true,
+      title: "Current Balance",
+      amount: userData.balance,
+    },
+    {
+      featuredCard: false,
+      title: "Income",
+      amount: userData.income,
+    },
+    {
+      featuredCard: false,
+      title: "Expenses",
+      amount: expenses,
+    },
+  ];
   return (
     <div className="grid grid-cols-1 gap-3 md:gap-6 md:grid-cols-3 mb-8">
       {stats.map((stat) => (
