@@ -11,7 +11,7 @@ export default async function TransactionsOverview() {
       (a: any, b: any) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
-    .slice(0, 5);
+    .slice(0, 8);
   return (
     <TransactionsTableSummary
       transactions={sortedTransactions}

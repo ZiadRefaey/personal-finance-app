@@ -10,6 +10,10 @@ import { getBudgets } from "../_lib/data-service";
 export default async function BudgetsOverview() {
   const session = await auth();
   const budgets = await getBudgets(Number(session?.user?.id));
+  //descending sorting based on budget spent. then displaying the top 4
+  const displayedBudgets = budgets
+    .toSorted((a, b) => b.spent - a.spent)
+    .slice(0, 4);
   return (
     <Card>
       <OverviewSectionHeader
@@ -32,8 +36,8 @@ export default async function BudgetsOverview() {
       )}
       {budgets.length > 0 && (
         <div className="flex items-center justify-center flex-col">
-          <PieChartShad data={budgets} />
-          <BudgetSpendingSummaryDetails data={budgets} />
+          <PieChartShad data={displayedBudgets} />
+          <BudgetSpendingSummaryDetails data={displayedBudgets} />
         </div>
       )}
     </Card>
