@@ -75,9 +75,9 @@ export default function TransactionsDashboard({
           </Modal>
         </div>
       </div>
-      {/* <Card className="w-full bg-card-back-ground min-h-[86vh] flex items-center justify-between flex-col">
+      <Card className="w-full bg-card-back-ground min-h-[86vh] flex items-center justify-between flex-col">
         <TransactionTable data={data} />
-      </Card> */}
+      </Card>
     </>
   );
 }
