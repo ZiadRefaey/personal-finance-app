@@ -65,8 +65,10 @@ export const TransactionTableContext = createContext<any>(null);
 export const FeaturesStatesContext = createContext<any>(null);
 export default function TransactionTable({ data }: { data: Transaction[] }) {
   const [globalFilter, setGlobalFilter] = useState<any>([]);
-  const [sorting, setSorting] = useState<SortingState>([]); // can set initial sorting state here
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]); // can set initial column filter state here
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "date", desc: true },
+  ]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -91,7 +93,6 @@ export default function TransactionTable({ data }: { data: Transaction[] }) {
     onGlobalFilterChange: setGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
   });
-
   return (
     <TransactionTableContext.Provider value={table}>
       <FeaturesStatesContext.Provider value={{ setSorting, setColumnFilters }}>
