@@ -1,5 +1,6 @@
 import { supabase } from "@/app/_lib/supabase";
 import { auth } from "@/auth";
+import { userEditableData } from "./types";
 export async function getUser(email: string) {
   const { data } = await supabase
     .from("users")
@@ -11,7 +12,7 @@ export async function getUser(email: string) {
 export async function getUserDetails(id: number) {
   const { data } = await supabase
     .from("users")
-    .select("income,balance,theme")
+    .select("income,balance,theme,incomeDay")
     .eq("id", id)
     .single();
   return data;
@@ -21,9 +22,17 @@ export async function createUser(email: string, fullName: string) {
     .from("users")
     .insert([{ email, fullName }])
     .select();
-  if (error) {
-    return false;
-  }
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+export async function updateUser(id: number, updatedData: userEditableData) {
+  const { data, error } = await supabase
+    .from("users")
+    .update({ ...updatedData })
+    .eq("id", id)
+    .select();
+  if (error) throw new Error(error.message);
   return data;
 }
 export async function getBudgets(userId: number | undefined) {

@@ -17,8 +17,10 @@ import {
   updatePotSaved,
   uploadFile,
   updateBudget,
+  updateUser,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
+import { userEditableData } from "./types";
 
 export async function SignInWithGoogle() {
   await signIn("google", { redirectTo: "/" });
@@ -32,13 +34,23 @@ export async function SignInWithGithub() {
 export async function SignOutAction() {
   await signOut({ redirectTo: "/login" });
 }
+
+export async function UpdateUser(id: number, updatedData: userEditableData) {
+  try {
+    await updateUser(id, updatedData);
+    revalidatePath("/");
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
+//create a budget
 export async function CreateBudget(
   title: string,
   amount: number,
   color: string,
   userId: number
 ) {
-  //create a budget
   try {
     await createBudget(userId, title, amount, color);
     revalidatePath("/budgets");
@@ -191,35 +203,3 @@ export async function CreateTransaction(
     throw new Error(error.message);
   }
 }
-
-// export async function CreateTransaction(formData: FormData) {
-//   try {
-//     const session = await auth();
-//     authenticatedUser(session);
-//     const userId = Number(session?.user?.id);
-//     const budgetName = formData.get("category");
-//     const userBudgets = await getBudgets(userId);
-//     const budgetObject = userBudgets.filter(
-//       (budget) => budgetName === budget.name
-//     );
-//     const newSpent =
-//       Number(budgetObject[0].spent) + Number(formData.get("amount"));
-//     const vendorName = formData.get("vendor");
-//     const userVendors = await getVendors(userId);
-//     const vendorObject = userVendors.filter(
-//       (vendor) => vendorName === vendor.name
-//     );
-//     const transactionData = await createTransaction(
-//       formData.get("amount"),
-//       budgetObject[0].id,
-//       vendorObject[0].id,
-//       userId,
-//       newSpent
-//     );
-//     revalidatePath("/transactions");
-//     revalidatePath("/budgets");
-//     return transactionData;
-//   } catch (error: any) {
-//     throw new Error(error.message);
-//   }
-// }

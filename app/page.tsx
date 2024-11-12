@@ -23,7 +23,7 @@ export default async function Home() {
             modalName="update-details"
             description="Set your monthly income to update your balance on each month at the specified day. You can also directly update the balance. "
           >
-            <OverviewForm />
+            <OverviewForm userId={userId} userData={userData} />
           </ModalWindow>
         </Modal>
       </div>

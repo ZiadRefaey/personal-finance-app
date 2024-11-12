@@ -25,3 +25,15 @@ export type UserDetailsForm = {
   income: number;
   incomeDay: number;
 };
+export type userData = {
+  balance: number;
+  income: number;
+  incomeDay: number;
+  theme: string;
+} | null;
+export type userEditableData = {
+  balance?: number;
+  income?: number;
+  incomeDay?: number;
+  theme?: string;
+};
