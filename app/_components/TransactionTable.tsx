@@ -121,34 +121,23 @@ export default function TransactionTable({ data }: { data: Transaction[] }) {
             <tbody className="divide-y divide-seperator">
               {table.getRowModel().rows.map((row) => (
                 <TR key={row.id}>
-                  {row.getVisibleCells().map((cell) => {
-                    if (cell.column.id === "name")
-                      return (
-                        <TD className="col-span-2" key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TD>
-                      );
-                    if (cell.column.id === "category")
-                      return (
-                        <TD className="hidden md:table-cell" key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TD>
-                      );
-                    return (
-                      <TD key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TD>
-                    );
-                  })}
+                  {row.getVisibleCells().map((cell) => (
+                    <TD
+                      className={`${
+                        cell.column.id === "name"
+                          ? "col-span-2"
+                          : cell.column.id === "category"
+                          ? "hidden md:table-cell"
+                          : ""
+                      }`}
+                      key={cell.id}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TD>
+                  ))}
                 </TR>
               ))}
             </tbody>

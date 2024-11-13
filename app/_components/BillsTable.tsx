@@ -28,15 +28,20 @@ export default function BillsTable() {
     <>
       <table className="w-full mt-6 divide-y divide-seperator">
         <thead className="hidden md:table-header-group mb-6 my-3">
-          {/* <TR className="text-start">
-            <TH>Bill Title</TH>
-            <TH>Due Date</TH>
-            <TH>Amount</TH>
-          </TR> */}
           {table.getHeaderGroups().map((headerGroup) => (
-            <TR key={headerGroup.id} className="text-start">
+            <TR
+              key={headerGroup.id}
+              className="flex items-center justify-between"
+            >
               {headerGroup.headers.map((header) => (
-                <TH key={header.id}>
+                <TH
+                  className={`${
+                    header.column.columnDef.header === "Amount"
+                      ? "text-end"
+                      : ""
+                  }`}
+                  key={header.id}
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
