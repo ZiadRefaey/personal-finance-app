@@ -37,3 +37,17 @@ export type userEditableData = {
   incomeDay?: number;
   theme?: string;
 };
+// Change after getting rid of static data
+export type Bills = {
+  // image: string;
+  // title: string;
+  // date: string;
+  // amount: number;
+  // status?: "paid" | "due" | "overdue";
+  deposite: boolean;
+  category: string;
+  name: string;
+  avatar: string;
+  date: string;
+  amount: number;
+};

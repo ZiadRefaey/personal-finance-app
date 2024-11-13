@@ -13,6 +13,9 @@ import { createContext, ReactNode, useState } from "react";
 import TablePagination from "./TablePagination";
 import TransactionsTableControls from "./TransactionsTableControls";
 import { FormatNumber } from "../_lib/helperFuncs";
+import TR from "./UI/TR";
+import TD from "./UI/TD";
+import TH from "./UI/TH";
 interface ColumnFilter {
   id: string;
   value: unknown;
@@ -36,7 +39,7 @@ type SortingState = ColumnSort[];
 const columnHelper = createColumnHelper<Transaction>();
 const columns = [
   columnHelper.accessor("name", {
-    header: "Recepient / Sender",
+    header: "Vendor",
     cell: (props) => (
       <RecepientReceiver
         image={props.row.original.avatar}
@@ -156,50 +159,7 @@ export default function TransactionTable({ data }: { data: Transaction[] }) {
     </TransactionTableContext.Provider>
   );
 }
-function TD({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return <td className={`${className} p-0 md:p-4 self-center`}>{children}</td>;
-}
 
-function TR({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <tr
-      className={`${className} grid grid-cols-[63%,1fr] grid-rows-2 md:table-row  text-secondary text-preset-5`}
-    >
-      {children}
-    </tr>
-  );
-}
-
-function TH({
-  children,
-  className,
-  onClick,
-}: {
-  children: ReactNode;
-  className?: string;
-  onClick?: () => void;
-}) {
-  return (
-    <th
-      onClick={onClick}
-      className={`${className} text-start text-preset-5 text-secondary p-4`}
-    >
-      {children}
-    </th>
-  );
-}
 function Amount({ amount }: { amount: number }) {
   return (
     <div className={`text-primary text-preset-4-bold`}>
