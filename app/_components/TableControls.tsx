@@ -7,16 +7,20 @@ type sort = {
 };
 type TableControls = {
   table?: any;
+  placeHolder: string;
   sortingOptions?: { display: string; value: sort }[];
   filterOptions?: { display: string; value: string }[];
+  setSorting?: any;
   hasSearch?: boolean;
   hasSort?: boolean;
   hasFilter?: boolean;
 };
 export default function TableControls({
+  placeHolder,
   table,
   sortingOptions,
   filterOptions,
+  setSorting,
   hasSearch = true,
   hasSort = true,
   hasFilter = true,
@@ -26,11 +30,13 @@ export default function TableControls({
       {hasSearch && (
         <TableSearch
           onChange={(e) => table.setGlobalFilter(String(e.target.value))}
-          placeHolder="Search Transactions"
+          placeHolder={placeHolder}
         />
       )}
       <div className="flex items-end justify-center gap-2 md:gap-6 flex-col md:flex-row ">
-        {hasSort && <TableSort sortingOptions={sortingOptions} />}
+        {hasSort && (
+          <TableSort setSorting={setSorting} sortingOptions={sortingOptions} />
+        )}
         {hasFilter && <TableFilter filterOptions={filterOptions} />}
       </div>
     </div>

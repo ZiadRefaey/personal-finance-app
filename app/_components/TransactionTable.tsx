@@ -100,7 +100,7 @@ export default function TransactionTable({ data }: { data: Transaction[] }) {
     <TransactionTableContext.Provider value={table}>
       <FeaturesStatesContext.Provider value={{ setSorting, setColumnFilters }}>
         <div className="w-full">
-          <TransactionsTableControls table={table} />
+          <TransactionsTableControls setSorting={setSorting} table={table} />
           <table className="w-full mt-6 divide-y divide-seperator ">
             <thead className="hidden md:table-header-group mb-6 my-3">
               {table.getHeaderGroups().map((headerGroup) => (

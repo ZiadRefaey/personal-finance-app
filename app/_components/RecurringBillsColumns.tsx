@@ -8,13 +8,16 @@ export const billsColumns = [
     cell: (props) => (
       <BillsTitle title={props.getValue()} image={props.row.original.avatar} />
     ),
+    sortingFn: "text",
   }),
   columnHelper.accessor("date", {
     header: "Due Date",
     cell: (props) => <DueDate date={props.getValue()} status="due" />,
+    sortingFn: "datetime",
   }),
   columnHelper.accessor("amount", {
     header: "Amount",
     cell: (props) => <Amount amount={props.getValue()} due={false} />,
+    sortingFn: "alphanumeric",
   }),
 ];

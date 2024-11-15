@@ -1,12 +1,5 @@
 import TableControls from "./TableControls";
-const sortingOptions = [
-  { display: "latest", value: { id: "date", desc: true } },
-  { display: "oldest", value: { id: "date", desc: false } },
-  { display: "A to Z", value: { id: "name", desc: false } },
-  { display: "Z to A", value: { id: "name", desc: true } },
-  { display: "highest", value: { id: "amount", desc: true } },
-  { display: "lowest", value: { id: "amount", desc: false } },
-];
+import { sortingOptions } from "../_lib/constants";
 const filterOptions = [
   {
     display: "all transactions",
@@ -37,9 +30,17 @@ const filterOptions = [
     value: "personal care",
   },
 ];
-export default function TransactionsTableControls({ table }: { table: any }) {
+export default function TransactionsTableControls({
+  table,
+  setSorting,
+}: {
+  table: any;
+  setSorting: any;
+}) {
   return (
     <TableControls
+      setSorting={setSorting}
+      placeHolder="Search Transactions"
       sortingOptions={sortingOptions}
       filterOptions={filterOptions}
       table={table}

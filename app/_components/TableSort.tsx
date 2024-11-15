@@ -1,6 +1,4 @@
-import { useContext } from "react";
 import Select from "./Select";
-import { FeaturesStatesContext } from "./TransactionTable";
 
 type sort = {
   id: string;
@@ -8,11 +6,10 @@ type sort = {
 };
 type TableSort = {
   sortingOptions?: { display: string; value: sort }[];
+  setSorting: any;
 };
 
-export default function TableSort({ sortingOptions }: TableSort) {
-  const { setSorting } = useContext(FeaturesStatesContext);
-
+export default function TableSort({ sortingOptions, setSorting }: TableSort) {
   function handleSortingChange(sortingOptions: sort) {
     setSorting([{ id: sortingOptions.id, desc: sortingOptions.desc }]);
   }

@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
-import React from "react";
-import avatar from "@/public/avatars/elevate-education.jpg";
+import React, { useContext, useState } from "react";
 import billPaid from "@/public/icon-bill-paid.svg";
 import billDue from "@/public/icon-bill-due.svg";
 import TR from "./UI/TR";
@@ -13,19 +12,48 @@ import { FormatNumber } from "../_lib/helperFuncs";
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-const data = transactionsData.filter(
+import { sortingOptions } from "../_lib/constants";
+import { SortingState } from "../_lib/types";
+import { createContext } from "react";
+import TableControls from "./TableControls";
+const billsTransactionsData = transactionsData.filter(
   (transaction) => transaction.category === "Bills"
 );
 export default function BillsTable() {
+  const [data, setData] = useState<any>(billsTransactionsData);
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "date", desc: true },
+  ]);
+  const [globalFilter, setGlobalFilter] = useState<any>([]);
+
   const table = useReactTable({
     columns,
     data,
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: "includesString",
+
     getCoreRowModel: getCoreRowModel(),
+    state: {
+      sorting,
+      globalFilter,
+    },
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
   });
   return (
     <>
+      <TableControls
+        table={table}
+        placeHolder="Search Bills"
+        sortingOptions={sortingOptions}
+        setSorting={setSorting}
+        hasFilter={false}
+      />
       <table className="w-full mt-6 divide-y divide-seperator">
         <thead className="hidden md:table-header-group mb-6 my-3">
           {table.getHeaderGroups().map((headerGroup) => (
