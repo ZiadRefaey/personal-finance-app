@@ -12,7 +12,9 @@ export const billsColumns = [
   }),
   columnHelper.accessor("date", {
     header: "Due Date",
-    cell: (props) => <DueDate date={props.getValue()} status="due" />,
+    cell: (props) => (
+      <DueDate date={new Date(props.getValue()).toDateString()} status="due" />
+    ),
     sortingFn: "datetime",
   }),
   columnHelper.accessor("amount", {

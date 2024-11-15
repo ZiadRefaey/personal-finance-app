@@ -18,7 +18,6 @@ import {
 } from "@tanstack/react-table";
 import { sortingOptions } from "../_lib/constants";
 import { SortingState } from "../_lib/types";
-import { createContext } from "react";
 import TableControls from "./TableControls";
 const billsTransactionsData = transactionsData.filter(
   (transaction) => transaction.category === "Bills"
