@@ -61,3 +61,8 @@ export type SortingState = ColumnSort[];
 export type SortingTableState = {
   sorting: SortingState;
 };
+export type NewBillForm = {
+  vendor: string;
+  amount: number;
+  date: number;
+};

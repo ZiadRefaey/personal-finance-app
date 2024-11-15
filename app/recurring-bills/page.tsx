@@ -3,7 +3,6 @@ import TotalBillsCard from "../_components/TotalBillsCard";
 import BillsSummaryCard from "../_components/BillsSummaryCard";
 import Card from "../_components/UI/Card";
 import BillsTable from "../_components/BillsTable";
-import TableControls from "../_components/TableControls";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import NewVendorForm from "../_components/forms/NewVendorForm";
 import { getVendors } from "../_lib/data-service";
