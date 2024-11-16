@@ -1,9 +1,24 @@
 import React, { ReactNode } from "react";
 
-export default function PopoverButton({ children }: { children: ReactNode }) {
+export default function PopoverButton({
+  children,
+  className,
+  hover,
+  onClick,
+}: {
+  children: ReactNode;
+  className?: string;
+  hover?: string;
+  onClick?: () => void;
+}) {
   return (
-    <div className="rounded-lg hover:bg-slate-300 transition-all duration-150">
+    <button
+      onClick={onClick}
+      className={`${className} rounded-lg ${
+        hover ? hover : "hover:bg-slate-300"
+      } transition-all duration-150 cursor-pointer`}
+    >
       {children}
-    </div>
+    </button>
   );
 }

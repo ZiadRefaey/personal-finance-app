@@ -18,6 +18,8 @@ import {
   uploadFile,
   updateBudget,
   updateUser,
+  createBill,
+  payBill,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
 import { userEditableData } from "./types";
@@ -199,6 +201,30 @@ export async function CreateTransaction(
 
     //returning the transaction data
     return transactionData;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+export async function CreateBill(
+  payDay: number,
+  amount: number,
+  vendor: string
+) {
+  const session = await auth();
+  //ensuring the user is logged in
+  authenticatedUser(session);
+  const userId = Number(session?.user?.id);
+  const vendorName = vendor;
+  const userVendors = await getVendors(userId);
+  const vendorObject = userVendors.filter(
+    (vendor) => vendorName === vendor.name
+  );
+  await createBill(userId, payDay, amount, vendorObject[0].id);
+  revalidatePath("/recurring-bills");
+}
+export async function PayBill(id: number) {
+  try {
+    await payBill(id);
   } catch (error: any) {
     throw new Error(error.message);
   }

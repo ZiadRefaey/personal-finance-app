@@ -39,17 +39,12 @@ export type userEditableData = {
 };
 // Change after getting rid of static data
 export type Bills = {
-  // image: string;
-  // title: string;
-  // date: string;
-  // amount: number;
-  // status?: "paid" | "due" | "overdue";
-  deposite: boolean;
-  category: string;
-  name: string;
-  avatar: string;
+  id: number;
+  image: string;
+  title: string;
   date: string;
   amount: number;
+  status?: "paid" | "due" | "upcoming";
 };
 export type SortDirection = "asc" | "desc";
 

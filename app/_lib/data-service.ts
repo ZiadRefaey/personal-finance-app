@@ -348,3 +348,63 @@ export async function updateBudgetSpent(budgetId: number, spent: number) {
   if (error) throw new Error(error.message);
   return data;
 }
+
+export async function getBills(userId: number) {
+  const { data, error } = await supabase
+    .from("bills")
+    .select("*,vendors(name,image)")
+    .eq("userId", userId);
+  if (error) throw new Error(error.message);
+  return data;
+}
+//function for determening the next monthly payment
+function getTargetDate(dayOfMonth: number) {
+  const today = new Date();
+  const currentDay = today.getDate();
+  const currentMonth = today.getMonth(); // Month is 0-based
+  const currentYear = today.getFullYear();
+
+  let targetMonth = currentMonth;
+  let targetYear = currentYear;
+
+  // If the given day is greater than today, move to the next month
+  if (dayOfMonth < currentDay) {
+    targetMonth += 1;
+    if (targetMonth > 11) {
+      targetMonth = 0; // Wrap to January
+      targetYear += 1;
+    }
+  }
+
+  const targetDate = new Date(targetYear, targetMonth, dayOfMonth);
+  return targetDate;
+}
+
+export async function createBill(
+  userId: number,
+  payDay: number,
+  amount: number,
+  vendorId: number
+) {
+  const due_date = getTargetDate(payDay);
+
+  const { data, error } = await supabase
+    .from("bills")
+    .insert([{ userId, pay_day: payDay, amount, vendorId, due_date }])
+    .select();
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function payBill(id: number) {
+  const { data, error } = await supabase
+    .from("bills")
+    .update({ status: "paid" })
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) throw new Error(error.message);
+  const userData = await getUserDetails(data.userId);
+  const updatedBalance = userData?.balance - data.amount;
+  await updateUser(data.userId, { balance: updatedBalance });
+}

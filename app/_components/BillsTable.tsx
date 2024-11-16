@@ -1,13 +1,12 @@
 "use client";
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import billPaid from "@/public/icon-bill-paid.svg";
 import billDue from "@/public/icon-bill-due.svg";
 import TR from "./UI/TR";
 import TH from "./UI/TH";
 import TD from "./UI/TD";
 import { billsColumns as columns } from "./RecurringBillsColumns";
-import transactionsData from "@/transactionsData.json";
 import { FormatNumber } from "../_lib/helperFuncs";
 import {
   flexRender,
@@ -17,13 +16,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { sortingOptions } from "../_lib/constants";
-import { SortingState } from "../_lib/types";
+import { Bills, SortingState } from "../_lib/types";
 import TableControls from "./TableControls";
-const billsTransactionsData = transactionsData.filter(
-  (transaction) => transaction.category === "Bills"
-);
-export default function BillsTable() {
-  const [data, setData] = useState<any>(billsTransactionsData);
+
+export default function BillsTable({ tableData }: { tableData: Bills[] }) {
+  const [data, setData] = useState<Bills[]>(tableData);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
   ]);
@@ -102,7 +99,7 @@ type TitleType = {
 };
 export function BillsTitle({ image, title }: TitleType) {
   return (
-    <div className="flex items-center justify-start gap-4 pb-2 pt-5 md:py-4 col-span-2 self-start">
+    <div className="flex items-center justify-start gap-4 col-span-2 self-start">
       <div className="relative size-10">
         <Image
           src={image}
@@ -121,7 +118,7 @@ export function Amount({ due, amount }: { due: boolean; amount: number }) {
     <div
       className={`${
         due === false ? "text-primary" : "text-red"
-      } text-preset-4-bold pb-5 md:pb-4 justify-self-end`}
+      } text-preset-4-bold justify-self-end`}
     >
       ${FormatNumber(amount)}
     </div>

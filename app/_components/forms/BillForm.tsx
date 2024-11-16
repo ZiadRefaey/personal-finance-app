@@ -15,6 +15,9 @@ import Button from "../UI/Button";
 import { useForm } from "react-hook-form";
 import { NewBillForm } from "@/app/_lib/types";
 import InputError from "../UI/InputError";
+import { CreateBill } from "@/app/_lib/actions";
+import { useModal } from "../Modal";
+import { useToast } from "@/hooks/use-toast";
 
 export default function BillForm({ vendorsNames }: { vendorsNames: string[] }) {
   const {
@@ -24,8 +27,17 @@ export default function BillForm({ vendorsNames }: { vendorsNames: string[] }) {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<NewBillForm>();
+  const { setOpenModal } = useModal();
+  const { toast } = useToast();
   async function clientAction(data: NewBillForm) {
-    console.log(data);
+    try {
+      await CreateBill(data.date, data.amount, data.vendor);
+      toast({ title: "Bill Added successfully" });
+      reset();
+      setOpenModal("");
+    } catch (error: any) {
+      toast({ title: "Something went wrong", description: error.message });
+    }
   }
   return (
     <form
