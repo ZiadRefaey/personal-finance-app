@@ -210,6 +210,8 @@ export async function CreateBill(
   amount: number,
   vendor: string
 ) {
+  if (!vendor) throw new Error("Service is required is required.");
+
   const session = await auth();
   //ensuring the user is logged in
   authenticatedUser(session);

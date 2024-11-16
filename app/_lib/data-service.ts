@@ -386,8 +386,14 @@ export async function createBill(
   amount: number,
   vendorId: number
 ) {
+  if (payDay < 1 || payDay > 28)
+    throw new Error("Salary day must be between the 1st and 28th");
+  if (!payDay) throw new Error("Salary day is required.");
+  if (!amount) throw new Error(`Bill's amount is required.`);
   const due_date = getTargetDate(payDay);
-
+  const userBills = await getBills(userId);
+  const billExists = userBills.some((bill) => bill.vendorId === vendorId);
+  if (billExists) throw new Error("This bill already exists");
   const { data, error } = await supabase
     .from("bills")
     .insert([{ userId, pay_day: payDay, amount, vendorId, due_date }])
