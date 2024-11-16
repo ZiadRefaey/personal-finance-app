@@ -72,7 +72,6 @@ function PotDetails({ title, amount, color }: PotDetailsType) {
           ${FormatNumber(amount)}
         </p>
       </div>
-      {}
     </div>
   );
 }

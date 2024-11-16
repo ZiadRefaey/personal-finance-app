@@ -21,6 +21,7 @@ export default async function page() {
     amount: bill.amount,
     status: bill.status,
     date: bill.due_date,
+    pay_day: bill.pay_day,
   }));
   const totalBills = bills.reduce((acc, cur) => cur.amount + acc, 0);
   const vendors = await getVendors(userId);
@@ -60,7 +61,7 @@ export default async function page() {
           <BillsSummaryCard />
         </div>
         <Card>
-          <BillsTable tableData={billsTableData} />
+          <BillsTable vendorsNames={vendorsNames} tableData={billsTableData} />
         </Card>
       </div>
     </>

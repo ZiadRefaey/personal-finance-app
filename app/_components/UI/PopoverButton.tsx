@@ -12,13 +12,13 @@ export default function PopoverButton({
   onClick?: () => void;
 }) {
   return (
-    <button
+    <div
       onClick={onClick}
       className={`${className} rounded-lg ${
         hover ? hover : "hover:bg-slate-300"
       } transition-all duration-150 cursor-pointer`}
     >
       {children}
-    </button>
+    </div>
   );
 }

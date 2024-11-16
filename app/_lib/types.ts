@@ -44,6 +44,7 @@ export type Bills = {
   title: string;
   date: string;
   amount: number;
+  pay_day: number;
   status?: "paid" | "due" | "upcoming";
 };
 export type SortDirection = "asc" | "desc";
@@ -56,8 +57,14 @@ export type SortingState = ColumnSort[];
 export type SortingTableState = {
   sorting: SortingState;
 };
-export type NewBillForm = {
+export type BillFormType = {
   vendor: string;
   amount: number;
   date: number;
+};
+export type BillEditableData = {
+  amount?: number;
+  pay_day?: number;
+  status?: "paid" | "upcoming" | "due";
+  vendorId?: number;
 };

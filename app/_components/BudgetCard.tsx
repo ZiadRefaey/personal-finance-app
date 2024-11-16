@@ -64,7 +64,7 @@ export default async function BudgetCard({
                   <ModalWindow
                     header="Edit Budget"
                     modalName="edit-budget"
-                    description="Edit your budget to choose a category to set a spending budget. These categories can help you monitor spending.."
+                    description="Edit your budget to choose a category to set a spending budget. These categories can help you monitor spending."
                   >
                     <BudgetForm
                       action={UpdateBudget}

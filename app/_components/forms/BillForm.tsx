@@ -13,26 +13,47 @@ import Input from "../UI/Input";
 import { FaCalendar, FaDollarSign } from "react-icons/fa6";
 import Button from "../UI/Button";
 import { useForm } from "react-hook-form";
-import { NewBillForm } from "@/app/_lib/types";
+import { BillFormType } from "@/app/_lib/types";
 import InputError from "../UI/InputError";
-import { CreateBill } from "@/app/_lib/actions";
+import { CreateBill, UpdateBill } from "@/app/_lib/actions";
 import { useModal } from "../Modal";
 import { useToast } from "@/hooks/use-toast";
 
-export default function BillForm({ vendorsNames }: { vendorsNames: string[] }) {
+export default function BillForm({
+  vendorsNames,
+  formData,
+  id,
+}: {
+  vendorsNames: string[];
+  formData?: BillFormType;
+  id?: number;
+}) {
   const {
     register,
     handleSubmit,
     setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<NewBillForm>();
+  } = useForm<BillFormType>({
+    defaultValues: {
+      amount: formData?.amount || undefined,
+      date: formData?.date || undefined,
+      vendor: formData?.vendor || undefined,
+    },
+  });
   const { setOpenModal } = useModal();
   const { toast } = useToast();
-  async function clientAction(data: NewBillForm) {
+  async function clientAction(data: BillFormType) {
     try {
-      await CreateBill(data.date, data.amount, data.vendor);
-      toast({ title: "Bill Added successfully" });
+      //if form data was passed to the component then it should update and if not then it should create a new one
+      if (formData && id) {
+        console.log(data);
+        await UpdateBill(id, data);
+        toast({ title: "Bill updated successfully" });
+      } else {
+        await CreateBill(data.date, data.amount, data.vendor);
+        toast({ title: "Bill added successfully" });
+      }
       reset();
       setOpenModal("");
     } catch (error: any) {
@@ -104,7 +125,13 @@ export default function BillForm({ vendorsNames }: { vendorsNames: string[] }) {
         type="submit"
         className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2"
       >
-        {isSubmitting ? "Adding..." : "Add Bill"}
+        {formData && isSubmitting
+          ? "Updating..."
+          : formData
+          ? "Update Bill"
+          : !formData && isSubmitting
+          ? "Adding..."
+          : "Add Bill"}
       </Button>
     </form>
   );

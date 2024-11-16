@@ -1,4 +1,10 @@
 "use client";
+import { createColumnHelper } from "@tanstack/react-table";
+import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
+import PopoverButton from "./UI/PopoverButton";
+import { Modal, ModalTrigger, ModalWindow } from "./Modal";
+import ConfirmForm from "./forms/ConfirmForm";
+import BillForm from "./forms/BillForm";
 import Image from "next/image";
 import React, { useState } from "react";
 import billPaid from "@/public/icon-bill-paid.svg";
@@ -6,7 +12,6 @@ import billDue from "@/public/icon-bill-due.svg";
 import TR from "./UI/TR";
 import TH from "./UI/TH";
 import TD from "./UI/TD";
-import { billsColumns as columns } from "./RecurringBillsColumns";
 import { FormatNumber } from "../_lib/helperFuncs";
 import {
   flexRender,
@@ -19,12 +24,92 @@ import { sortingOptions } from "../_lib/constants";
 import { Bills, SortingState } from "../_lib/types";
 import TableControls from "./TableControls";
 
-export default function BillsTable({ tableData }: { tableData: Bills[] }) {
+export default function BillsTable({
+  tableData,
+  vendorsNames,
+}: {
+  tableData: Bills[];
+  vendorsNames: string[];
+}) {
   const [data, setData] = useState<Bills[]>(tableData);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
   ]);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
+
+  const columnHelper = createColumnHelper<Bills>();
+  const columns = [
+    columnHelper.accessor("title", {
+      header: "Bill Title",
+      cell: (props) => (
+        <BillsTitle title={props.getValue()} image={props.row.original.image} />
+      ),
+      sortingFn: "text",
+    }),
+    columnHelper.accessor("date", {
+      header: "Due Date",
+      cell: (props) => (
+        <DueDate
+          date={new Date(props.getValue()).toDateString()}
+          status="due"
+        />
+      ),
+      sortingFn: "datetime",
+    }),
+    columnHelper.accessor("amount", {
+      header: "Amount",
+      cell: (props) => <Amount amount={props.getValue()} due={false} />,
+      sortingFn: "alphanumeric",
+    }),
+    columnHelper.display({
+      header: "Actions",
+      cell: (props) => (
+        <PopoverEllipsisTrigger
+          content={
+            <>
+              <PopoverButton>
+                <Modal>
+                  <ModalTrigger modalName="paybill" className="">
+                    Pay Bill
+                  </ModalTrigger>
+                  <ModalWindow
+                    header={`Pay ${props.row.original.title}'s Bill?`}
+                    modalName="paybill"
+                    description="Paying the current bill will subtract the value from your balance."
+                  >
+                    <ConfirmForm id={props.row.original.id} />
+                  </ModalWindow>
+                </Modal>
+              </PopoverButton>
+
+              <PopoverButton>
+                <Modal>
+                  <ModalTrigger modalName="edit-bill" className="">
+                    Edit Bill
+                  </ModalTrigger>
+                  <ModalWindow
+                    header={`Edit ${props.row.original.title}'s Bill?`}
+                    modalName="edit-bill"
+                    description="Edit your bill to track your monthly paid subsciptions. these will help calculate your fixed expenses each month."
+                  >
+                    <BillForm
+                      formData={{
+                        amount: props.row.original.amount,
+                        date: props.row.original.pay_day,
+                        vendor: props.row.original.title,
+                      }}
+                      vendorsNames={vendorsNames}
+                      id={props.row.original.id}
+                    />
+                  </ModalWindow>
+                </Modal>
+              </PopoverButton>
+            </>
+          }
+        />
+      ),
+    }),
+  ];
 
   const table = useReactTable({
     columns,

@@ -1,6 +1,6 @@
 import { supabase } from "@/app/_lib/supabase";
 import { auth } from "@/auth";
-import { userEditableData } from "./types";
+import { BillEditableData, userEditableData } from "./types";
 export async function getUser(email: string) {
   const { data } = await supabase
     .from("users")
@@ -105,7 +105,7 @@ export async function updateBudget(
   const userBudgets = await getBudgets(Number(session.user?.id));
   const userBudget = await getBudget(budgetId);
   const exists = userBudgets.some((budget) => budget.id === budgetId);
-  if (!exists) throw new Error("You are not authorized to delete this budget");
+  if (!exists) throw new Error("You are not authorized to edit this budget");
 
   //checks if the name exists in all budgets except for the current budget (if the user changes other values but leaves the budget name)
   const budgetExists = userBudgets.some(
@@ -379,17 +379,19 @@ function getTargetDate(dayOfMonth: number) {
   const targetDate = new Date(targetYear, targetMonth, dayOfMonth);
   return targetDate;
 }
-
+function BillsValidation(payDay: number, amount: number) {
+  if (payDay < 1 || payDay > 28)
+    throw new Error("Salary day must be between the 1st and 28th");
+  if (!payDay) throw new Error("Salary day is required.");
+  if (!amount) throw new Error(`Bill's amount is required.`);
+}
 export async function createBill(
   userId: number,
   payDay: number,
   amount: number,
   vendorId: number
 ) {
-  if (payDay < 1 || payDay > 28)
-    throw new Error("Salary day must be between the 1st and 28th");
-  if (!payDay) throw new Error("Salary day is required.");
-  if (!amount) throw new Error(`Bill's amount is required.`);
+  BillsValidation(payDay, amount);
   const due_date = getTargetDate(payDay);
   const userBills = await getBills(userId);
   const billExists = userBills.some((bill) => bill.vendorId === vendorId);
@@ -413,4 +415,26 @@ export async function payBill(id: number) {
   const userData = await getUserDetails(data.userId);
   const updatedBalance = userData?.balance - data.amount;
   await updateUser(data.userId, { balance: updatedBalance });
+}
+
+export async function updateBill(id: number, billData: BillEditableData) {
+  const session = await auth();
+  const userId = Number(session?.user?.id);
+  const userBills = await getBills(userId);
+  const exists = userBills.some((bill) => bill.id === id);
+  if (!exists) throw new Error("You are not authorized to edit this bill");
+  const billExists = userBills.some(
+    (bill) =>
+      bill.vendorId === billData.vendorId &&
+      userBills[0].vendorId !== billData.vendorId
+  );
+  if (billExists) throw new Error("this budget already exists");
+  let due_date;
+  if (billData.pay_day) due_date = getTargetDate(billData.pay_day);
+  const { error } = await supabase
+    .from("bills")
+    .update({ ...billData, due_date })
+    .eq("id", id)
+    .select();
+  if (error) throw new Error(error.message);
 }

@@ -20,9 +20,10 @@ import {
   updateUser,
   createBill,
   payBill,
+  updateBill,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
-import { userEditableData } from "./types";
+import { BillEditableData, BillFormType, userEditableData } from "./types";
 
 export async function SignInWithGoogle() {
   await signIn("google", { redirectTo: "/" });
@@ -210,23 +211,48 @@ export async function CreateBill(
   amount: number,
   vendor: string
 ) {
-  if (!vendor) throw new Error("Service is required is required.");
+  try {
+    if (!vendor) throw new Error("Service is required.");
 
-  const session = await auth();
-  //ensuring the user is logged in
-  authenticatedUser(session);
-  const userId = Number(session?.user?.id);
-  const vendorName = vendor;
-  const userVendors = await getVendors(userId);
-  const vendorObject = userVendors.filter(
-    (vendor) => vendorName === vendor.name
-  );
-  await createBill(userId, payDay, amount, vendorObject[0].id);
-  revalidatePath("/recurring-bills");
+    const session = await auth();
+    //ensuring the user is logged in
+    authenticatedUser(session);
+    const userId = Number(session?.user?.id);
+    const vendorName = vendor;
+    const userVendors = await getVendors(userId);
+    const vendorObject = userVendors.filter(
+      (vendor) => vendorName === vendor.name
+    );
+    await createBill(userId, payDay, amount, vendorObject[0].id);
+    revalidatePath("/recurring-bills");
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 }
 export async function PayBill(id: number) {
   try {
     await payBill(id);
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+export async function UpdateBill(id: number, billData: BillFormType) {
+  try {
+    const session = await auth();
+    //ensuring the user is logged in
+    authenticatedUser(session);
+    const userId = Number(session?.user?.id);
+    const vendorName = billData.vendor;
+    const userVendors = await getVendors(userId);
+    const vendorObject = userVendors.filter(
+      (vendor) => vendorName === vendor.name
+    );
+    updateBill(id, {
+      amount: billData.amount,
+      pay_day: billData.date,
+      vendorId: vendorObject[0].id,
+    });
+    revalidatePath("/recurring-bills");
   } catch (error: any) {
     throw new Error(error.message);
   }
