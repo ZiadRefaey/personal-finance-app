@@ -23,7 +23,7 @@ import {
   updateBill,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
-import { BillEditableData, BillFormType, userEditableData } from "./types";
+import { BillFormType, userEditableData } from "./types";
 
 export async function SignInWithGoogle() {
   await signIn("google", { redirectTo: "/" });

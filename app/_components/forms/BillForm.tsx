@@ -47,7 +47,6 @@ export default function BillForm({
     try {
       //if form data was passed to the component then it should update and if not then it should create a new one
       if (formData && id) {
-        console.log(data);
         await UpdateBill(id, data);
         toast({ title: "Bill updated successfully" });
       } else {

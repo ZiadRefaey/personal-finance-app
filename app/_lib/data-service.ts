@@ -1,6 +1,22 @@
 import { supabase } from "@/app/_lib/supabase";
 import { auth } from "@/auth";
 import { BillEditableData, userEditableData } from "./types";
+
+function validateEntry<T>(
+  existingData: T[],
+  isDuplicate: (entry: T) => boolean,
+  errorMessage: string
+): void {
+  const duplicateExists = existingData.some(isDuplicate);
+  if (duplicateExists) throw new Error(errorMessage);
+}
+
+async function authenticateAndGetUserId() {
+  const session = await auth();
+  if (!session) throw new Error("User must be authenticated");
+  const userId = Number(session?.user?.id);
+  return userId;
+}
 export async function getUser(email: string) {
   const { data } = await supabase
     .from("users")
@@ -48,15 +64,12 @@ async function getBudget(budgetId: number) {
   const { data, error } = await supabase
     .from("budgets")
     .select("*")
-    .eq("id", budgetId);
+    .eq("id", budgetId)
+    .single();
   if (error) throw new Error(error.message);
   return data;
 }
-function serverSideValidateBudget(
-  name: string,
-  maximum: number,
-  color: string
-) {
+function validateBudgetFields(name: string, maximum: number, color: string) {
   if (name.length < 2)
     throw new Error("Name must be atleast 2 characters long");
   if (!name || name === "") throw new Error("Name field is required");
@@ -71,16 +84,21 @@ export async function createBudget(
 ) {
   //Authentication
   //Make sure the user is logged in
-  const session = await auth();
-  if (!session) throw new Error("You must be logged in");
-  serverSideValidateBudget(name, maximum, color);
+  await authenticateAndGetUserId();
+  validateBudgetFields(name, maximum, color);
   const userBudgets = await getBudgets(userId);
-
-  const budgetExists = userBudgets.some((budget) => budget.name === name);
-  if (budgetExists) throw new Error("this budget already exists");
-
-  const colorExists = userBudgets.some((budget) => budget.color === color);
-  if (colorExists) throw new Error("This color already exists.");
+  //check if the user has a budget with the same name
+  validateEntry(
+    userBudgets,
+    (budget) => budget.name === name,
+    "This budget already exists"
+  );
+  //check if the user has a budget with the same color
+  validateEntry(
+    userBudgets,
+    (budget) => budget.color === color,
+    "This color already exists"
+  );
 
   const { data, error } = await supabase
     .from("budgets")
@@ -99,25 +117,30 @@ export async function updateBudget(
   maximum: number,
   color: string
 ) {
-  const session = await auth();
-  if (!session) throw new Error("You must be logged in");
-  serverSideValidateBudget(name, maximum, color);
-  const userBudgets = await getBudgets(Number(session.user?.id));
+  const userId = await authenticateAndGetUserId();
+  validateBudgetFields(name, maximum, color);
+  const userBudgets = await getBudgets(userId);
   const userBudget = await getBudget(budgetId);
-  const exists = userBudgets.some((budget) => budget.id === budgetId);
-  if (!exists) throw new Error("You are not authorized to edit this budget");
+  //check if the updated budget belongs to the user
+  validateEntry(
+    userBudgets,
+    (budget) => budget.id === budgetId,
+    "You are not authorized to edit this budget"
+  );
 
   //checks if the name exists in all budgets except for the current budget (if the user changes other values but leaves the budget name)
-  const budgetExists = userBudgets.some(
-    (budget) => budget.name === name && userBudget[0].name !== name
+  validateEntry(
+    userBudgets,
+    (budget) => budget.name === name && userBudget.name !== name,
+    "This budget already exists"
   );
-  if (budgetExists) throw new Error("this budget already exists");
 
   //checks if the color exists in all budgets except for the current budget (if the user changes other values but leaves the budget color)
-  const colorExists = userBudgets.some(
-    (budget) => budget.color === color && userBudget[0].color !== color
+  validateEntry(
+    userBudgets,
+    (budget) => budget.color === color && userBudget.color !== color,
+    "This color already exists"
   );
-  if (colorExists) throw new Error("This color already exists.");
 
   const { error } = await supabase
     .from("budgets")
@@ -127,11 +150,14 @@ export async function updateBudget(
 }
 
 export async function deleteBudget(budgetId: number) {
-  const session = await auth();
-  if (!session) throw new Error("You must be logged in");
-  const userBudgets = await getBudgets(Number(session.user?.id));
-  const exists = userBudgets.some((budget) => budget.id === budgetId);
-  if (!exists) throw new Error("You are not authorized to delete this budget");
+  const userId = await authenticateAndGetUserId();
+  const userBudgets = await getBudgets(userId);
+  //check if the updated budget belongs to the user
+  validateEntry(
+    userBudgets,
+    (budget) => budget.id === budgetId,
+    "You are not authorized to delete this budget"
+  );
 
   const { error: transactionsError } = await supabase
     .from("transactions")
@@ -140,6 +166,14 @@ export async function deleteBudget(budgetId: number) {
   const { error } = await supabase.from("budgets").delete().eq("id", budgetId);
   if (transactionsError) throw new Error(transactionsError.message);
   if (error) throw new Error(error.message);
+}
+
+function validatePotsFields(title: string, goal: number, color: string) {
+  if (title === "") throw new Error("Name cannot be empty");
+  if (title.length > 30)
+    throw new Error("Name cannot exceed 30 characters long.");
+  if (goal <= 0) throw new Error("Target should be higher than 0.");
+  if (color === "" || color.length === 0) throw new Error("Must have a color");
 }
 
 export async function getPots(userId: number) {
@@ -151,13 +185,16 @@ export async function getPots(userId: number) {
   if (error) throw new Error(error.message);
   return data;
 }
-function ServerSideValidatePot(title: string, goal: number, color: string) {
-  if (title === "") throw new Error("Name cannot be empty");
-  if (title.length > 30)
-    throw new Error("Name cannot exceed 30 characters long.");
-  if (goal <= 0) throw new Error("Target should be higher than 0.");
-  if (color === "" || color.length === 0) throw new Error("Must have a color");
+export async function getPot(potId: number) {
+  const { data, error } = await supabase
+    .from("pots")
+    .select("*")
+    .eq("id", potId)
+    .single();
+  if (error) throw new Error(error.message);
+  return data;
 }
+
 export async function createPot(
   userId: number,
   title: string,
@@ -166,21 +203,26 @@ export async function createPot(
 ) {
   //Authentication
   //getting the user ID
-  const session = await auth();
-  if (!session) throw new Error("You must be logged in");
+  await authenticateAndGetUserId();
 
   //retrieving all the users Pots for validation
-  const pots = await getPots(userId);
+  const userPots = await getPots(userId);
   // checking if the user has a pot with the same title
-  const potExists = pots.some((pot) => pot.title === title);
-  if (potExists) throw new Error("This pot already exists.");
+  validateEntry(
+    userPots,
+    (pot) => pot.title === title,
+    "This pot already exists"
+  );
 
   //checking if the user has a pot with the same color
-  const colorExists = pots.some((pot) => pot.color === color);
-  if (colorExists) throw new Error("This color already exists.");
+  validateEntry(
+    userPots,
+    (pot) => pot.color === color,
+    "This color already exists"
+  );
 
   //basic server side validaction
-  ServerSideValidatePot(title, goal, color);
+  validatePotsFields(title, goal, color);
 
   //creating a pot with the input data
   const { data, error } = await supabase
@@ -198,25 +240,53 @@ export async function updatePot(
   color: string,
   goal: number
 ) {
-  const session = await auth();
-  const userPots = await getPots(Number(session?.user?.id));
-  const exists = userPots.some((pot) => Number(pot.id) === Number(potId));
-  if (!exists) throw new Error("You are not authorized to update this pot");
+  try {
+    const userId = await authenticateAndGetUserId();
+    const userPots = await getPots(userId);
+    const currentPot = await getPot(potId);
 
-  ServerSideValidatePot(title, goal, color);
-  const { error } = await supabase
-    .from("pots")
-    .update({ title, color, goal })
-    .eq("id", potId);
-  if (error) throw new Error(error.message);
+    //check if the updated pot belongs to the user
+    validateEntry(
+      userPots,
+      (pot) => pot.id === potId,
+      "You are not authorized to edit this pot"
+    );
+
+    validatePotsFields(title, goal, color);
+    //checks if the title exists in all pots except for the current pot (if the user changes other values but leaves the pot title)
+    validateEntry(
+      userPots,
+      (pot) => pot.title === title && currentPot.title !== title,
+      "This pot already exists"
+    );
+
+    //checks if the pot color exists in all pots except for the current pot (if the user changes other values but leaves the pot color)
+    validateEntry(
+      userPots,
+      (pot) => pot.color === color && currentPot.color !== color,
+      "This color already exists"
+    );
+
+    const { error } = await supabase
+      .from("pots")
+      .update({ title, color, goal })
+      .eq("id", potId);
+    if (error) throw new Error(error.message);
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 }
 
 //deleting a pot using ID
 export async function deletePot(potId: number) {
-  const session = await auth();
-  const userPots = await getPots(Number(session?.user?.id));
-  const exists = userPots.some((pot) => Number(pot.id) === Number(potId));
-  if (!exists) throw new Error("You are not authorized to delete this pot");
+  const userId = await authenticateAndGetUserId();
+  const userPots = await getPots(userId);
+  //check if the updated pot belongs to the user
+  validateEntry(
+    userPots,
+    (pot) => pot.id === potId,
+    "You are not authorized to delete this pot"
+  );
 
   const { error } = await supabase.from("pots").delete().eq("id", potId);
   if (error) throw new Error(error.message);
@@ -394,8 +464,12 @@ export async function createBill(
   BillsValidation(payDay, amount);
   const due_date = getTargetDate(payDay);
   const userBills = await getBills(userId);
-  const billExists = userBills.some((bill) => bill.vendorId === vendorId);
-  if (billExists) throw new Error("This bill already exists");
+  validateEntry(
+    userBills,
+    (bill) => bill.vendorId === vendorId,
+    "This bill already exists"
+  );
+
   const { data, error } = await supabase
     .from("bills")
     .insert([{ userId, pay_day: payDay, amount, vendorId, due_date }])
@@ -418,11 +492,14 @@ export async function payBill(id: number) {
 }
 
 export async function updateBill(id: number, billData: BillEditableData) {
-  const session = await auth();
-  const userId = Number(session?.user?.id);
+  const userId = await authenticateAndGetUserId();
   const userBills = await getBills(userId);
-  const exists = userBills.some((bill) => bill.id === id);
-  if (!exists) throw new Error("You are not authorized to edit this bill");
+  //check if the updated bill belongs to the user
+  validateEntry(
+    userBills,
+    (bill) => bill.id === id,
+    "You are not authorized to edit this bill"
+  );
   const billExists = userBills.some(
     (bill) =>
       bill.vendorId === billData.vendorId &&
