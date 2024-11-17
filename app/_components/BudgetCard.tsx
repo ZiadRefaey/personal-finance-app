@@ -58,7 +58,7 @@ export default async function BudgetCard({
             <>
               <PopoverButton>
                 <Modal>
-                  <ModalTrigger modalName="edit-budget">
+                  <ModalTrigger variant="ellipses" modalName="edit-budget">
                     Edit Budget
                   </ModalTrigger>
                   <ModalWindow
@@ -77,7 +77,11 @@ export default async function BudgetCard({
               </PopoverButton>
               <PopoverButton>
                 <Modal>
-                  <ModalTrigger modalName="delete-budget">
+                  <ModalTrigger
+                    className="hover:bg-red hover:text-white"
+                    variant="ellipses"
+                    modalName="delete-budget"
+                  >
                     Delete Budget
                   </ModalTrigger>
                   <ModalWindow

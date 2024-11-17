@@ -43,10 +43,12 @@ export function ModalTrigger({
   children,
   modalName,
   className,
+  variant,
   primary = true,
 }: {
   children: ReactNode;
   modalName: string;
+  variant?: "ellipses";
   className?: string;
   primary?: boolean;
 }) {
@@ -57,7 +59,7 @@ export function ModalTrigger({
   return (
     <Button
       primary={primary}
-      className={`${className}`}
+      className={`${className} ${variant === "ellipses" ? "w-[140px]" : ""}`}
       onClick={handleOpenModal}
     >
       {children}

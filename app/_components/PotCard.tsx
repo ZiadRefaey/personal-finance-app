@@ -36,10 +36,14 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
         </div>
         <PopoverEllipsisTrigger
           content={
-            <div className="flex flex-col items-center justify-center gap-4">
+            <div>
               <PopoverButton>
                 <Modal>
-                  <ModalTrigger className="w-full" modalName="edit-pot">
+                  <ModalTrigger
+                    className="w-full"
+                    variant="ellipses"
+                    modalName="edit-pot"
+                  >
                     Edit Pot
                   </ModalTrigger>
                   <ModalWindow
@@ -58,7 +62,11 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
               </PopoverButton>
               <PopoverButton>
                 <Modal>
-                  <ModalTrigger className="hover:bg-red" modalName="delete-pot">
+                  <ModalTrigger
+                    className="hover:bg-green hover:text-white"
+                    variant="ellipses"
+                    modalName="delete-pot"
+                  >
                     Delete Pot
                   </ModalTrigger>
                   <ModalWindow
