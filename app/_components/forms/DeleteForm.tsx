@@ -10,15 +10,26 @@ export default function DeleteForm({
   action,
   id,
   deleteMessage,
+  tableData,
+  setTableData,
 }: {
   action: ActionFunction;
   id: number;
   deleteMessage: string;
+  tableData?: any;
+  setTableData?: any;
 }) {
   const { setOpenModal } = useModal();
   async function clientAction() {
     try {
       await action(id);
+      //if the delete form is in a table action. update the table's ui after deleting
+      if (tableData) {
+        const filteredTableData = tableData.filter(
+          (tableRow: any) => tableRow.id !== id
+        );
+        setTableData(filteredTableData);
+      }
       toast({ title: deleteMessage });
       setOpenModal("");
     } catch (error: any) {

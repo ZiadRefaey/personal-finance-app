@@ -121,6 +121,8 @@ export default function BillsTable({
                     description="Are you sure you want to delete this bill? This action cannot be reversed, and all the data inside it will be removed forever."
                   >
                     <DeleteForm
+                      tableData={data}
+                      setTableData={setData}
                       action={DeleteBill}
                       id={props.row.original.id}
                       deleteMessage="Bill was successfully deleted."
