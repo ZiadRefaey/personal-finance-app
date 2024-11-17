@@ -2,13 +2,21 @@ import { supabase } from "@/app/_lib/supabase";
 import { auth } from "@/auth";
 import { BillEditableData, userEditableData } from "./types";
 
-function validateEntry<T>(
+function validateDuplicateEntry<T>(
   existingData: T[],
   isDuplicate: (entry: T) => boolean,
   errorMessage: string
 ): void {
   const duplicateExists = existingData.some(isDuplicate);
   if (duplicateExists) throw new Error(errorMessage);
+}
+function checkOwnership<T>(
+  existingData: T[],
+  isOwned: (entry: T) => boolean,
+  errorMessage: string
+): void {
+  const exists = existingData.some(isOwned);
+  if (!exists) throw new Error(errorMessage);
 }
 
 async function authenticateAndGetUserId() {
@@ -88,13 +96,13 @@ export async function createBudget(
   validateBudgetFields(name, maximum, color);
   const userBudgets = await getBudgets(userId);
   //check if the user has a budget with the same name
-  validateEntry(
+  validateDuplicateEntry(
     userBudgets,
     (budget) => budget.name === name,
     "This budget already exists"
   );
   //check if the user has a budget with the same color
-  validateEntry(
+  validateDuplicateEntry(
     userBudgets,
     (budget) => budget.color === color,
     "This color already exists"
@@ -122,21 +130,21 @@ export async function updateBudget(
   const userBudgets = await getBudgets(userId);
   const userBudget = await getBudget(budgetId);
   //check if the updated budget belongs to the user
-  validateEntry(
+  checkOwnership(
     userBudgets,
     (budget) => budget.id === budgetId,
     "You are not authorized to edit this budget"
   );
 
   //checks if the name exists in all budgets except for the current budget (if the user changes other values but leaves the budget name)
-  validateEntry(
+  validateDuplicateEntry(
     userBudgets,
     (budget) => budget.name === name && userBudget.name !== name,
     "This budget already exists"
   );
 
   //checks if the color exists in all budgets except for the current budget (if the user changes other values but leaves the budget color)
-  validateEntry(
+  validateDuplicateEntry(
     userBudgets,
     (budget) => budget.color === color && userBudget.color !== color,
     "This color already exists"
@@ -153,7 +161,7 @@ export async function deleteBudget(budgetId: number) {
   const userId = await authenticateAndGetUserId();
   const userBudgets = await getBudgets(userId);
   //check if the updated budget belongs to the user
-  validateEntry(
+  checkOwnership(
     userBudgets,
     (budget) => budget.id === budgetId,
     "You are not authorized to delete this budget"
@@ -208,14 +216,14 @@ export async function createPot(
   //retrieving all the users Pots for validation
   const userPots = await getPots(userId);
   // checking if the user has a pot with the same title
-  validateEntry(
+  validateDuplicateEntry(
     userPots,
     (pot) => pot.title === title,
     "This pot already exists"
   );
 
   //checking if the user has a pot with the same color
-  validateEntry(
+  validateDuplicateEntry(
     userPots,
     (pot) => pot.color === color,
     "This color already exists"
@@ -246,7 +254,7 @@ export async function updatePot(
     const currentPot = await getPot(potId);
 
     //check if the updated pot belongs to the user
-    validateEntry(
+    checkOwnership(
       userPots,
       (pot) => pot.id === potId,
       "You are not authorized to edit this pot"
@@ -254,14 +262,14 @@ export async function updatePot(
 
     validatePotsFields(title, goal, color);
     //checks if the title exists in all pots except for the current pot (if the user changes other values but leaves the pot title)
-    validateEntry(
+    validateDuplicateEntry(
       userPots,
       (pot) => pot.title === title && currentPot.title !== title,
       "This pot already exists"
     );
 
     //checks if the pot color exists in all pots except for the current pot (if the user changes other values but leaves the pot color)
-    validateEntry(
+    validateDuplicateEntry(
       userPots,
       (pot) => pot.color === color && currentPot.color !== color,
       "This color already exists"
@@ -282,7 +290,7 @@ export async function deletePot(potId: number) {
   const userId = await authenticateAndGetUserId();
   const userPots = await getPots(userId);
   //check if the updated pot belongs to the user
-  validateEntry(
+  checkOwnership(
     userPots,
     (pot) => pot.id === potId,
     "You are not authorized to delete this pot"
@@ -464,7 +472,7 @@ export async function createBill(
   BillsValidation(payDay, amount);
   const due_date = getTargetDate(payDay);
   const userBills = await getBills(userId);
-  validateEntry(
+  validateDuplicateEntry(
     userBills,
     (bill) => bill.vendorId === vendorId,
     "This bill already exists"
@@ -495,13 +503,13 @@ export async function updateBill(id: number, billData: BillEditableData) {
   const userId = await authenticateAndGetUserId();
   const userBills = await getBills(userId);
   //checks if the updated bill belongs to the user
-  validateEntry(
+  checkOwnership(
     userBills,
     (bill) => bill.id === id,
     "You are not authorized to edit this bill"
   );
   //checks if there is another bill with the same name
-  validateEntry(
+  validateDuplicateEntry(
     userBills,
     (bill) =>
       bill.vendorId === billData.vendorId &&
@@ -524,7 +532,7 @@ export async function deleteBill(billId: number) {
     const userBills = await getBills(userId);
 
     //checks if the bill belongs to the user
-    validateEntry(
+    checkOwnership(
       userBills,
       (bill) => bill.id === billId,
       "You are not authorized to delete this bill"
