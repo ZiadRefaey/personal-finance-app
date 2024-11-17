@@ -21,6 +21,8 @@ import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
 import TransactionForm from "./forms/TransactionForm";
 import { Transaction } from "../_lib/types";
+import { DeleteTransaction } from "../_lib/actions";
+import DeleteForm from "./forms/DeleteForm";
 interface ColumnFilter {
   id: string;
   value: unknown;
@@ -113,23 +115,23 @@ export default function TransactionTable({
                 <Modal>
                   <ModalTrigger
                     variant="ellipses"
-                    modalName="delete-bill"
+                    modalName="delete-transaction"
                     className="hover:bg-red hover:text-white"
                   >
-                    Delete Bill
+                    Delete Transaction
                   </ModalTrigger>
                   <ModalWindow
                     header={`delete Transactions?`}
-                    modalName="delete-bill"
-                    description="Are you sure you want to delete this bill? This action cannot be reversed, and all the data inside it will be removed forever."
+                    modalName="delete-transaction"
+                    description="Are you sure you want to delete this transaction? This action cannot be reversed, and all the data inside it will be removed forever."
                   >
-                    {/* <DeleteForm
+                    <DeleteForm
                       tableData={data}
                       setTableData={setData}
-                      action={DeleteBill}
+                      action={DeleteTransaction}
                       id={props.row.original.id}
-                      deleteMessage="Bill was successfully deleted."
-                    /> */}
+                      deleteMessage="Transaction was successfully deleted."
+                    />
                     <></>
                   </ModalWindow>
                 </Modal>

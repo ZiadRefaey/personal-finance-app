@@ -68,7 +68,7 @@ export async function getBudgets(userId: number | undefined) {
   return data;
 }
 
-async function getBudget(budgetId: number) {
+export async function getBudget(budgetId: number) {
   const { data, error } = await supabase
     .from("budgets")
     .select("*")
@@ -426,6 +426,15 @@ export async function updateTransaction(
   if (budgetError) throw new Error(budgetError.message);
   return data;
 }
+
+export async function deleteTransaction(transactionId: number) {
+  const { error } = await supabase
+    .from("transactions")
+    .delete()
+    .eq("id", transactionId);
+  if (error) throw new Error(error.message);
+}
+
 export async function getBudgetTransactions(userId: number, budgetId: number) {
   const { data, error } = await supabase
     .from("transactions")

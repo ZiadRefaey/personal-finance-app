@@ -26,6 +26,8 @@ import {
   getTransaction,
   updateTransaction,
   updateBudgetSpent,
+  deleteTransaction,
+  getBudget,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
 import { BillFormType, userEditableData } from "./types";
@@ -246,11 +248,30 @@ export async function UpdateTransaction(
       budgetObject[0].id,
       newSpent
     );
+    revalidatePath("/transactions");
+    revalidatePath("/budgets");
+    revalidatePath("/");
     return result;
   } catch (error: any) {
     throw new Error(error.message);
   }
 }
+
+export async function DeleteTransaction(transactionId: number) {
+  try {
+    const transaction = await getTransaction(transactionId);
+    const budget = await getBudget(transaction.budgetId);
+    const newSpent = budget.spent - transaction.amount;
+    await updateBudgetSpent(transaction.budgetId, newSpent);
+    deleteTransaction(transactionId);
+    revalidatePath("/transactions");
+    revalidatePath("/budgets");
+    revalidatePath("/");
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
 export async function CreateBill(
   payDay: number,
   amount: number,
