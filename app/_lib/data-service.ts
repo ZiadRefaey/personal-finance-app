@@ -481,7 +481,7 @@ export async function createBill(
   const { data, error } = await supabase
     .from("bills")
     .insert([{ userId, pay_day: payDay, amount, vendorId, due_date }])
-    .select();
+    .select("*,vendors(name,image)");
   if (error) throw new Error(error.message);
   return data;
 }

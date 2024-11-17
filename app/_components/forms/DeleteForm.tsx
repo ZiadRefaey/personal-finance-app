@@ -3,7 +3,7 @@ import React from "react";
 import Button from "../UI/Button";
 import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 type ActionFunction = (id: number) => Promise<void | string>;
 
 export default function DeleteForm({

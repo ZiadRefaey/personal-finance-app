@@ -37,7 +37,6 @@ export type userEditableData = {
   incomeDay?: number;
   theme?: string;
 };
-// Change after getting rid of static data
 export type Bills = {
   id: number;
   image: string;

@@ -224,8 +224,9 @@ export async function CreateBill(
     const vendorObject = userVendors.filter(
       (vendor) => vendorName === vendor.name
     );
-    await createBill(userId, payDay, amount, vendorObject[0].id);
+    const result = await createBill(userId, payDay, amount, vendorObject[0].id);
     revalidatePath("/recurring-bills");
+    return result;
   } catch (error: any) {
     throw new Error(error.message);
   }

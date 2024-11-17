@@ -27,13 +27,12 @@ import DeleteForm from "./forms/DeleteForm";
 import { DeleteBill } from "../_lib/actions";
 
 export default function BillsTable({
-  tableData,
-  vendorsNames,
+  data,
+  vendorNames,
 }: {
-  tableData: Bills[];
-  vendorsNames: string[];
+  data: Bills[];
+  vendorNames: string[];
 }) {
-  const [data, setData] = useState<Bills[]>(tableData);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
   ]);
@@ -100,7 +99,7 @@ export default function BillsTable({
                         date: props.row.original.pay_day,
                         vendor: props.row.original.title,
                       }}
-                      vendorsNames={vendorsNames}
+                      vendorNames={vendorNames}
                       id={props.row.original.id}
                     />
                   </ModalWindow>

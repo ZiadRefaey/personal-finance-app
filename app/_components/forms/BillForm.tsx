@@ -13,18 +13,20 @@ import Input from "../UI/Input";
 import { FaCalendar, FaDollarSign } from "react-icons/fa6";
 import Button from "../UI/Button";
 import { useForm } from "react-hook-form";
-import { BillFormType } from "@/app/_lib/types";
+import { BillFormType, Bills } from "@/app/_lib/types";
 import InputError from "../UI/InputError";
 import { CreateBill, UpdateBill } from "@/app/_lib/actions";
 import { useModal } from "../Modal";
 import { useToast } from "@/hooks/use-toast";
 
 export default function BillForm({
-  vendorsNames,
+  setBillsTableData,
+  vendorNames,
   formData,
   id,
 }: {
-  vendorsNames: string[];
+  setBillsTableData: any;
+  vendorNames: string[];
   formData?: BillFormType;
   id?: number;
 }) {
@@ -50,7 +52,17 @@ export default function BillForm({
         await UpdateBill(id, data);
         toast({ title: "Bill updated successfully" });
       } else {
-        await CreateBill(data.date, data.amount, data.vendor);
+        const result = await CreateBill(data.date, data.amount, data.vendor);
+        const newBill: Bills = {
+          title: result[0].vendors.name,
+          amount: result[0].amount,
+          date: result[0].due_date,
+          id: result[0].id,
+          image: result[0].vendors.image,
+          pay_day: result[0].pay_day,
+          status: result[0].status,
+        };
+        setBillsTableData((prev: Bills[]) => [...prev, newBill]);
         toast({ title: "Bill added successfully" });
       }
       reset();
@@ -79,7 +91,7 @@ export default function BillForm({
             <SelectValue placeholder="Vendors" />
           </SelectTrigger>
           <SelectContent className="bg-white text-navbar">
-            {vendorsNames.map((vendorName) => (
+            {vendorNames.map((vendorName) => (
               <SelectItem value={vendorName} key={vendorName}>
                 <p className="text-preset-4 capitalize">{vendorName}</p>
               </SelectItem>
