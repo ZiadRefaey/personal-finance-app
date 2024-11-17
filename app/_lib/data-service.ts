@@ -519,12 +519,13 @@ export async function updateBill(id: number, billData: BillEditableData) {
 
   let due_date;
   if (billData.pay_day) due_date = getTargetDate(billData.pay_day);
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("bills")
     .update({ ...billData, due_date })
     .eq("id", id)
-    .select();
+    .select("*,vendors(name,image)");
   if (error) throw new Error(error.message);
+  return data;
 }
 export async function deleteBill(billId: number) {
   try {

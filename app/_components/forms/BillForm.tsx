@@ -20,11 +20,13 @@ import { useModal } from "../Modal";
 import { useToast } from "@/hooks/use-toast";
 
 export default function BillForm({
+  billsTableData,
   setBillsTableData,
   vendorNames,
   formData,
   id,
 }: {
+  billsTableData?: Bills[];
   setBillsTableData: any;
   vendorNames: string[];
   formData?: BillFormType;
@@ -49,7 +51,21 @@ export default function BillForm({
     try {
       //if form data was passed to the component then it should update and if not then it should create a new one
       if (formData && id) {
-        await UpdateBill(id, data);
+        const result = await UpdateBill(id, data);
+        const updatedBillsTableData = billsTableData?.map((tableRow) =>
+          tableRow.id !== id
+            ? tableRow
+            : {
+                title: result[0].vendors.name,
+                amount: result[0].amount,
+                date: result[0].due_date,
+                id: result[0].id,
+                image: result[0].vendors.image,
+                pay_day: result[0].pay_day,
+                status: result[0].status,
+              }
+        );
+        setBillsTableData(updatedBillsTableData);
         toast({ title: "Bill updated successfully" });
       } else {
         const result = await CreateBill(data.date, data.amount, data.vendor);

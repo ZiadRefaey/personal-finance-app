@@ -42,11 +42,7 @@ export default function BillsDashboard({
               modalName="add-bill"
               description="Add a new bill track your payments monthly. These will be available to pay and subtracted from your balance on the set date"
             >
-              <BillForm
-                billsTableData={data}
-                setBillsTableData={setData}
-                vendorNames={vendorNames}
-              />
+              <BillForm setBillsTableData={setData} vendorNames={vendorNames} />
             </ModalWindow>
           </Modal>
         </div>
@@ -57,7 +53,7 @@ export default function BillsDashboard({
           <BillsSummaryCard />
         </div>
         <Card>
-          <BillsTable vendorNames={vendorNames} data={data} />
+          <BillsTable setData={setData} vendorNames={vendorNames} data={data} />
         </Card>
       </div>
     </>

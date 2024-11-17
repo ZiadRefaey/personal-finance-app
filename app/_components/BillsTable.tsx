@@ -27,9 +27,11 @@ import DeleteForm from "./forms/DeleteForm";
 import { DeleteBill } from "../_lib/actions";
 
 export default function BillsTable({
+  setData,
   data,
   vendorNames,
 }: {
+  setData: any;
   data: Bills[];
   vendorNames: string[];
 }) {
@@ -94,6 +96,8 @@ export default function BillsTable({
                     description="Edit your bill to track your monthly paid subsciptions. these will help calculate your fixed expenses each month."
                   >
                     <BillForm
+                      billsTableData={data}
+                      setBillsTableData={setData}
                       formData={{
                         amount: props.row.original.amount,
                         date: props.row.original.pay_day,

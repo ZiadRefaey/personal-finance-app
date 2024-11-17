@@ -249,12 +249,13 @@ export async function UpdateBill(id: number, billData: BillFormType) {
     const vendorObject = userVendors.filter(
       (vendor) => vendorName === vendor.name
     );
-    updateBill(id, {
+    const result = await updateBill(id, {
       amount: billData.amount,
       pay_day: billData.date,
       vendorId: vendorObject[0].id,
     });
     revalidatePath("/recurring-bills");
+    return result;
   } catch (error: any) {
     throw new Error(error.message);
   }
