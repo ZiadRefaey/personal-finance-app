@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch } from "react";
+import React from "react";
 import Button from "../UI/Button";
 import { CreateNewVendor } from "@/app/_lib/actions";
 import { Input as ShadcnInput } from "@/components/ui/input";
@@ -9,10 +9,10 @@ import Input from "../UI/Input";
 import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
 import { useForm } from "react-hook-form";
-import { Bills, VendorFormInputs } from "@/app/_lib/types";
+import { VendorFormInputs } from "@/app/_lib/types";
 import InputError from "../UI/InputError";
 
-export default function NewVendorForm({ setTableData }: { setTableData: any }) {
+export default function NewVendorForm() {
   const {
     register,
     reset,

@@ -5,6 +5,7 @@ import NewVendorForm from "../_components/forms/NewVendorForm";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import TransactionTable from "../_components/TransactionTable";
 import TransactionForm from "../_components/forms/TransactionForm";
+import { Transaction } from "../_lib/types";
 
 type TransactionSupabase = {
   id: number;
@@ -16,21 +17,14 @@ type TransactionSupabase = {
   vendors: { name: string; image: string };
   budgets: { name: string };
 };
-type Transaction = {
-  avatar: string;
-  name: string;
-  category: string;
-  date: Date;
-  amount: number;
-  deposite: boolean;
-};
 
 export default function TransactionsDashboard({
   categories,
-  vendorsNames,
+  vendorNames,
   transactions,
 }: any) {
   const tableData = transactions.map((transaction: TransactionSupabase) => ({
+    id: transaction.id,
     avatar: transaction.vendors.image,
     name: transaction.vendors.name,
     category: transaction.budgets.name,
@@ -68,7 +62,7 @@ export default function TransactionsDashboard({
             >
               <TransactionForm
                 categories={categories}
-                vendorsNames={vendorsNames}
+                vendorNames={vendorNames}
                 setTransactionData={setData}
               />
             </ModalWindow>
@@ -76,7 +70,12 @@ export default function TransactionsDashboard({
         </div>
       </div>
       <Card className="w-full bg-card-back-ground min-h-[86vh] flex items-center justify-between flex-col">
-        <TransactionTable data={data} />
+        <TransactionTable
+          setData={setData}
+          categories={categories}
+          vendorNames={vendorNames}
+          data={data}
+        />
       </Card>
     </>
   );

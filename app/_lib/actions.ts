@@ -22,6 +22,10 @@ import {
   payBill,
   updateBill,
   deleteBill,
+  authenticateAndGetUserId,
+  getTransaction,
+  updateTransaction,
+  updateBudgetSpent,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
 import { BillFormType, userEditableData } from "./types";
@@ -203,6 +207,46 @@ export async function CreateTransaction(
 
     //returning the transaction data
     return transactionData;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+export async function UpdateTransaction(
+  vendor: string,
+  amount: number,
+  category: string,
+  transactionId: number
+) {
+  try {
+    const userId = await authenticateAndGetUserId();
+    const transactionData = await getTransaction(transactionId);
+    const budgetName = category;
+    const userBudgets = await getBudgets(userId);
+    //getting the budget to retrieve the budget Id with it
+    const budgetObject = userBudgets.filter(
+      (budget) => budgetName === budget.name
+    );
+    //if the updated transaction changed to another budget. we need to subtract the amount from the old one to update it
+    if (budgetObject[0].id !== transactionData.budgetId) {
+      const spent = budgetObject[0].spent - transactionData.amount;
+      await updateBudgetSpent(transactionData.budgetId, spent);
+    }
+    const newSpent = Number(budgetObject[0].spent) + Number(amount);
+
+    //getting the vendor to retrieve the ID
+    const vendorName = vendor;
+    const userVendors = await getVendors(userId);
+    const vendorObject = userVendors.filter(
+      (vendor) => vendorName === vendor.name
+    );
+    const result = await updateTransaction(
+      transactionId,
+      amount,
+      vendorObject[0].id,
+      budgetObject[0].id,
+      newSpent
+    );
+    return result;
   } catch (error: any) {
     throw new Error(error.message);
   }

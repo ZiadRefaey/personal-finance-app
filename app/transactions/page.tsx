@@ -9,13 +9,13 @@ export default async function page() {
   const budgets = await getBudgets(userId);
   const categories = budgets.map((budget) => budget.name);
   const vendors = await getVendors(userId);
-  const vendorsNames = vendors.map((vendor) => vendor.name);
+  const vendorNames = vendors.map((vendor) => vendor.name);
   const transactions = await getTransactions(userId);
   return (
     <>
       <TransactionsDashboard
         categories={categories}
-        vendorsNames={vendorsNames}
+        vendorNames={vendorNames}
         transactions={transactions}
       />
     </>

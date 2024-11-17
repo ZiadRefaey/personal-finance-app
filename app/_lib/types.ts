@@ -67,3 +67,12 @@ export type BillEditableData = {
   status?: "paid" | "upcoming" | "due";
   vendorId?: number;
 };
+export type Transaction = {
+  id: number;
+  avatar: string;
+  name: string;
+  category: string;
+  date: Date;
+  amount: number;
+  deposite: boolean;
+};

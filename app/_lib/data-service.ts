@@ -19,7 +19,7 @@ function checkOwnership<T>(
   if (!exists) throw new Error(errorMessage);
 }
 
-async function authenticateAndGetUserId() {
+export async function authenticateAndGetUserId() {
   const session = await auth();
   if (!session) throw new Error("User must be authenticated");
   const userId = Number(session?.user?.id);
@@ -360,6 +360,19 @@ export async function getTransactions(userId: number) {
   if (error) throw new Error(error.message);
   return data;
 }
+export async function getTransaction(transactionId: number) {
+  const { data, error } = await supabase
+    .from("transactions")
+    .select(
+      `*,
+      vendors (image,name),
+      budgets(name)`
+    )
+    .eq("id", transactionId)
+    .single();
+  if (error) throw new Error(error.message);
+  return data;
+}
 export async function getTransactionsWithVendors() {
   const { data, error } = await supabase.from("transactions").select(`
     *,
@@ -391,6 +404,28 @@ export async function createTransaction(
   return transactionData;
 }
 
+export async function updateTransaction(
+  transactionId: number,
+  amount: number,
+  vendorId: number,
+  budgetId: number,
+  spent: number
+) {
+  const { data, error: transactionError } = await supabase
+    .from("transactions")
+    .update({ amount, vendorId, budgetId })
+    .eq("id", transactionId)
+    .select("*,budgets(name),vendors(name,image)")
+    .single();
+  const { error: budgetError } = await supabase
+    .from("budgets")
+    .update({ spent })
+    .eq("id", budgetId)
+    .select();
+  if (transactionError) throw new Error(transactionError.message);
+  if (budgetError) throw new Error(budgetError.message);
+  return data;
+}
 export async function getBudgetTransactions(userId: number, budgetId: number) {
   const { data, error } = await supabase
     .from("transactions")

@@ -2,7 +2,7 @@
 import InputContainer from "../UI/InputContainer";
 import { useForm } from "react-hook-form";
 import Label from "../UI/Label";
-import { TransactionFormInputs } from "@/app/_lib/types";
+import { Transaction, TransactionFormInputs } from "@/app/_lib/types";
 import {
   Select,
   SelectContent,
@@ -13,19 +13,23 @@ import {
 import { FaDollarSign } from "react-icons/fa6";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
-import { CreateTransaction } from "@/app/_lib/actions";
+import { CreateTransaction, UpdateTransaction } from "@/app/_lib/actions";
 import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
 import InputError from "../UI/InputError";
 type namesType = string[];
 export default function TransactionForm({
+  transactionsData,
   categories,
-  vendorsNames,
+  vendorNames,
   setTransactionData,
+  formData,
 }: {
+  transactionsData?: Transaction[];
   categories: namesType;
-  vendorsNames: namesType;
+  vendorNames: namesType;
   setTransactionData: any;
+  formData?: { vendor: string; amount: number; budget: string; id: number };
 }) {
   const {
     register,
@@ -34,30 +38,59 @@ export default function TransactionForm({
     clearErrors,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<TransactionFormInputs>();
+  } = useForm<TransactionFormInputs>({
+    defaultValues: { amount: formData?.amount || undefined },
+  });
 
   async function onSubmit(data: any) {
     try {
-      const result = await CreateTransaction(
-        data.vendor,
-        data.amount,
-        data.category
-      );
-      const transaction = {
-        avatar: result[0].vendors.image,
-        name: result[0].vendors.name,
-        category: result[0].budgets.name,
-        date: new Date(result[0].created_at),
-        amount: result[0].amount,
-        deposite: false,
-      };
-      setTransactionData((prev: any) => [
-        ...prev,
-        {
-          ...transaction,
-        },
-      ]);
-      toast({ title: "Transaction created successfuly" });
+      if (formData) {
+        const updatedTransactionData = await UpdateTransaction(
+          data.vendor,
+          data.amount,
+          data.category,
+          formData.id
+        );
+
+        console.log(updatedTransactionData);
+        const updatedTransactionsData = transactionsData?.map(
+          (tableRow: Transaction) =>
+            tableRow.id !== formData.id
+              ? tableRow
+              : {
+                  id: updatedTransactionData.id,
+                  avatar: updatedTransactionData.vendors.image,
+                  name: updatedTransactionData.vendors.name,
+                  category: updatedTransactionData.budgets.name,
+                  date: new Date(updatedTransactionData.created_at),
+                  amount: updatedTransactionData.amount,
+                  deposite: false,
+                }
+        );
+        setTransactionData(updatedTransactionsData);
+        toast({ title: "Transaction updated successfuly" });
+      } else {
+        const result = await CreateTransaction(
+          data.vendor,
+          data.amount,
+          data.category
+        );
+        const transaction = {
+          avatar: result[0].vendors.image,
+          name: result[0].vendors.name,
+          category: result[0].budgets.name,
+          date: new Date(result[0].created_at),
+          amount: result[0].amount,
+          deposite: false,
+        };
+        setTransactionData((prev: any) => [
+          ...prev,
+          {
+            ...transaction,
+          },
+        ]);
+        toast({ title: "Transaction created successfuly" });
+      }
       reset();
       setOpenModal("");
     } catch (error: any) {
@@ -70,7 +103,6 @@ export default function TransactionForm({
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        // action={clientAction}
         className="w-full flex items-center justify-center gap-3 flex-col"
       >
         <InputContainer>
@@ -89,7 +121,7 @@ export default function TransactionForm({
               <SelectValue placeholder="Vendor" />
             </SelectTrigger>
             <SelectContent className="bg-white text-navbar">
-              {vendorsNames.map((vendorName) => (
+              {vendorNames.map((vendorName) => (
                 <SelectItem value={vendorName} key={vendorName}>
                   <p className="text-preset-4 capitalize">{vendorName}</p>
                 </SelectItem>
@@ -141,21 +173,20 @@ export default function TransactionForm({
           )}
         </InputContainer>
 
-        <Submit isSubmitting={isSubmitting} />
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2"
+        >
+          {formData && isSubmitting
+            ? "Updating..."
+            : formData
+            ? "Update Transaction"
+            : !formData && isSubmitting
+            ? "Submitting..."
+            : "Submit Transaction"}
+        </Button>
       </form>
-    </>
-  );
-}
-function Submit({ isSubmitting }: { isSubmitting: boolean }) {
-  return (
-    <>
-      <Button
-        disabled={isSubmitting}
-        type="submit"
-        className="w-full p-3 text-preset-4-bold text-card-back-ground mt-2"
-      >
-        {isSubmitting ? "Submitting..." : "Submit Transaction"}
-      </Button>
     </>
   );
 }

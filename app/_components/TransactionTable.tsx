@@ -16,57 +16,131 @@ import { FormatNumber } from "../_lib/helperFuncs";
 import TR from "./UI/TR";
 import TD from "./UI/TD";
 import TH from "./UI/TH";
+import PopoverButton from "./UI/PopoverButton";
+import { Modal, ModalTrigger, ModalWindow } from "./Modal";
+import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
+import TransactionForm from "./forms/TransactionForm";
+import { Transaction } from "../_lib/types";
 interface ColumnFilter {
   id: string;
   value: unknown;
 }
 type ColumnFiltersState = ColumnFilter[];
 
-type Transaction = {
-  avatar: string;
-  name: string;
-  category: string;
-  date: Date;
-  amount: number;
-  deposite: boolean;
-};
 type ColumnSort = {
   id: string;
   desc: boolean;
 };
 type SortingState = ColumnSort[];
 
-const columnHelper = createColumnHelper<Transaction>();
-const columns = [
-  columnHelper.accessor("name", {
-    header: "Vendor",
-    cell: (props) => (
-      <RecepientReceiver
-        image={props.row.original.avatar}
-        category={props.row.original.category}
-        name={props.getValue()}
-      />
-    ),
-  }),
-  columnHelper.accessor("category", {
-    header: "Category",
-    cell: (props) => <Category>{props.getValue()}</Category>,
-    sortingFn: "text",
-  }),
-  columnHelper.accessor("date", {
-    header: "Transaction Date",
-    cell: (props) => props.getValue().toDateString(),
-    sortingFn: "datetime",
-  }),
-  columnHelper.accessor("amount", {
-    header: "Amount",
-    cell: (props) => <Amount amount={props.getValue()} />,
-    sortingFn: "alphanumeric",
-  }),
-];
 export const TransactionTableContext = createContext<any>(null);
 export const FeaturesStatesContext = createContext<any>(null);
-export default function TransactionTable({ data }: { data: Transaction[] }) {
+export default function TransactionTable({
+  data,
+  setData,
+  categories,
+  vendorNames,
+}: {
+  data: Transaction[];
+  setData: any;
+  categories: string[];
+  vendorNames: string[];
+}) {
+  const columnHelper = createColumnHelper<Transaction>();
+  const columns = [
+    columnHelper.accessor("name", {
+      header: "Vendor",
+      cell: (props) => (
+        <RecepientReceiver
+          image={props.row.original.avatar}
+          category={props.row.original.category}
+          name={props.getValue()}
+        />
+      ),
+    }),
+    columnHelper.accessor("category", {
+      header: "Category",
+      cell: (props) => <Category>{props.getValue()}</Category>,
+      sortingFn: "text",
+    }),
+    columnHelper.accessor("date", {
+      header: "Transaction Date",
+      cell: (props) => props.getValue().toDateString(),
+      sortingFn: "datetime",
+    }),
+    columnHelper.accessor("amount", {
+      header: "Amount",
+      cell: (props) => <Amount amount={props.getValue()} />,
+      sortingFn: "alphanumeric",
+    }),
+    columnHelper.display({
+      header: "Actions",
+      cell: (props) => (
+        <PopoverEllipsisTrigger
+          content={
+            <>
+              <PopoverButton>
+                <Modal>
+                  <ModalTrigger
+                    variant="ellipses"
+                    modalName="edit-transaction"
+                    className=""
+                  >
+                    Edit Transaction
+                  </ModalTrigger>
+                  <ModalWindow
+                    header={`Edit transaction?`}
+                    modalName="edit-transaction"
+                    description="Edit your bill to track your monthly paid subsciptions. these will help calculate your fixed expenses each month."
+                  >
+                    <TransactionForm
+                      categories={categories}
+                      vendorNames={vendorNames}
+                      transactionsData={data}
+                      setTransactionData={setData}
+                      formData={{
+                        amount: props.row.original.amount,
+                        budget: props.row.original.category,
+                        vendor: props.row.original.name,
+                        id: props.row.original.id,
+                      }}
+                    />
+                  </ModalWindow>
+                </Modal>
+              </PopoverButton>
+
+              <PopoverButton>
+                <Modal>
+                  <ModalTrigger
+                    variant="ellipses"
+                    modalName="delete-bill"
+                    className="hover:bg-red hover:text-white"
+                  >
+                    Delete Bill
+                  </ModalTrigger>
+                  <ModalWindow
+                    header={`delete Transactions?`}
+                    modalName="delete-bill"
+                    description="Are you sure you want to delete this bill? This action cannot be reversed, and all the data inside it will be removed forever."
+                  >
+                    {/* <DeleteForm
+                      tableData={data}
+                      setTableData={setData}
+                      action={DeleteBill}
+                      id={props.row.original.id}
+                      deleteMessage="Bill was successfully deleted."
+                    /> */}
+                    <></>
+                  </ModalWindow>
+                </Modal>
+              </PopoverButton>
+            </>
+          }
+        />
+      ),
+    }),
+  ];
+
   const [globalFilter, setGlobalFilter] = useState<any>([]);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
