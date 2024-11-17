@@ -16,12 +16,12 @@ export default function DeleteForm({
 }) {
   const { setOpenModal } = useModal();
   async function clientAction() {
-    const result = await action(id);
-    if (result) {
-      toast({ title: "Sometihng went wrong", description: result });
-    } else {
+    try {
+      await action(id);
       toast({ title: deleteMessage });
       setOpenModal("");
+    } catch (error: any) {
+      toast({ title: "Sometihng went wrong", description: error.message });
     }
   }
   return (

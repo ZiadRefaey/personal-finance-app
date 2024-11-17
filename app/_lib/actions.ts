@@ -21,6 +21,7 @@ import {
   createBill,
   payBill,
   updateBill,
+  deleteBill,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
 import { BillFormType, userEditableData } from "./types";
@@ -112,7 +113,7 @@ export async function UpdatePot(
     await updatePot(potId, title, color, goal);
     revalidatePath("/pots");
   } catch (error: any) {
-    return error.message;
+    throw new Error(error.message);
   }
 }
 
@@ -121,7 +122,7 @@ export async function DeletePot(potID: number) {
     await deletePot(potID);
     revalidatePath("/pots");
   } catch (error: any) {
-    return error.message;
+    throw new Error(error.message);
   }
 }
 
@@ -252,6 +253,14 @@ export async function UpdateBill(id: number, billData: BillFormType) {
       pay_day: billData.date,
       vendorId: vendorObject[0].id,
     });
+    revalidatePath("/recurring-bills");
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+export async function DeleteBill(billId: number) {
+  try {
+    await deleteBill(billId);
     revalidatePath("/recurring-bills");
   } catch (error: any) {
     throw new Error(error.message);

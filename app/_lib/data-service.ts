@@ -494,18 +494,21 @@ export async function payBill(id: number) {
 export async function updateBill(id: number, billData: BillEditableData) {
   const userId = await authenticateAndGetUserId();
   const userBills = await getBills(userId);
-  //check if the updated bill belongs to the user
+  //checks if the updated bill belongs to the user
   validateEntry(
     userBills,
     (bill) => bill.id === id,
     "You are not authorized to edit this bill"
   );
-  const billExists = userBills.some(
+  //checks if there is another bill with the same name
+  validateEntry(
+    userBills,
     (bill) =>
       bill.vendorId === billData.vendorId &&
-      userBills[0].vendorId !== billData.vendorId
+      userBills[0].vendorId !== billData.vendorId,
+    "this bill already exists"
   );
-  if (billExists) throw new Error("this budget already exists");
+
   let due_date;
   if (billData.pay_day) due_date = getTargetDate(billData.pay_day);
   const { error } = await supabase
@@ -514,4 +517,22 @@ export async function updateBill(id: number, billData: BillEditableData) {
     .eq("id", id)
     .select();
   if (error) throw new Error(error.message);
+}
+export async function deleteBill(billId: number) {
+  try {
+    const userId = await authenticateAndGetUserId();
+    const userBills = await getBills(userId);
+
+    //checks if the bill belongs to the user
+    validateEntry(
+      userBills,
+      (bill) => bill.id === billId,
+      "You are not authorized to delete this bill"
+    );
+
+    const { error } = await supabase.from("bills").delete().eq("id", billId);
+    if (error) throw new Error(error.message);
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 }

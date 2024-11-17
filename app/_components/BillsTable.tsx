@@ -24,6 +24,7 @@ import { sortingOptions } from "../_lib/constants";
 import { Bills, SortingState } from "../_lib/types";
 import TableControls from "./TableControls";
 import DeleteForm from "./forms/DeleteForm";
+import { DeleteBill } from "../_lib/actions";
 
 export default function BillsTable({
   tableData,
@@ -106,7 +107,7 @@ export default function BillsTable({
                 </Modal>
               </PopoverButton>
 
-              {/* <PopoverButton>
+              <PopoverButton>
                 <Modal>
                   <ModalTrigger modalName="delete-bill" className="">
                     Delete Bill
@@ -116,10 +117,14 @@ export default function BillsTable({
                     modalName="delete-bill"
                     description="Are you sure you want to delete this bill? This action cannot be reversed, and all the data inside it will be removed forever."
                   >
-                    <DeleteForm  />
+                    <DeleteForm
+                      action={DeleteBill}
+                      id={props.row.original.id}
+                      deleteMessage="Bill was successfully deleted."
+                    />
                   </ModalWindow>
                 </Modal>
-              </PopoverButton> */}
+              </PopoverButton>
             </>
           }
         />
