@@ -322,6 +322,15 @@ export async function getVendors(userId: number) {
   if (error) throw new Error(error.message);
   return data;
 }
+export async function getVendor(vendorId: number) {
+  const { data, error } = await supabase
+    .from("vendors")
+    .select("*")
+    .eq("id", vendorId)
+    .single();
+  if (error) throw new Error(error.message);
+  return data;
+}
 export async function createVendor(
   userId: number,
   name: FormDataEntryValue | null,

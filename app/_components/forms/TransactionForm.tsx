@@ -52,7 +52,6 @@ export default function TransactionForm({
           formData.id
         );
 
-        console.log(updatedTransactionData);
         const updatedTransactionsData = transactionsData?.map(
           (tableRow: Transaction) =>
             tableRow.id !== formData.id
