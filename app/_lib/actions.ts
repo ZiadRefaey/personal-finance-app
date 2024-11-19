@@ -23,7 +23,6 @@ import {
   updateBill,
   deleteBill,
   authenticateAndGetUserId,
-  getTransaction,
   updateTransaction,
   deleteTransaction,
 } from "./data-service";

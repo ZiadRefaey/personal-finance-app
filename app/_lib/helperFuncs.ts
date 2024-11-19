@@ -1,5 +1,5 @@
 import { getTransactionsByBudgetId } from "./data-service";
-import { BudgetAPIType } from "./types";
+import { BillType, BudgetAPIType } from "./types";
 
 export function FormatNumber(number: number) {
   return number.toLocaleString("en-US", {
@@ -31,4 +31,38 @@ export async function getBudgetsWithSpent(budgets: BudgetAPIType[]) {
     })
   );
   return budgetsWithSpent;
+}
+export function getBillsSummaryDetails(bills: BillType[]) {
+  const NumberOfPaid = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "paid") return acc + 1;
+    return acc;
+  }, 0);
+  const totalPaid = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "paid") return acc + Number(cur.amount);
+    return acc;
+  }, 0);
+  const NumberOfUpcoming = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "upcoming") return acc + 1;
+    return acc;
+  }, 0);
+  const totalUpcoming = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "upcoming") return acc + Number(cur.amount);
+    return acc;
+  }, 0);
+  const NumberOfOverDue = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "over due") return acc + 1;
+    return acc;
+  }, 0);
+  const totalOverDue = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "over due") return acc + Number(cur.amount);
+    return acc;
+  }, 0);
+  return {
+    NumberOfPaid,
+    totalOverDue,
+    NumberOfOverDue,
+    totalUpcoming,
+    NumberOfUpcoming,
+    totalPaid,
+  };
 }

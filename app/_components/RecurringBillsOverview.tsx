@@ -1,29 +1,37 @@
 import Card from "./UI/Card";
 import OverviewSectionHeader from "./OverviewSectionHeader";
-type BillType = {
+import { authenticateAndGetUserId, getBills } from "../_lib/data-service";
+import { FormatNumber, getBillsSummaryDetails } from "../_lib/helperFuncs";
+import { BillType } from "../_lib/types";
+type BillCardType = {
   billTitle: string;
-  billAmount: string;
+  billAmount: number;
   borderColor: string;
 };
-type BillDataType = BillType[];
-const BillsData: BillDataType = [
-  {
-    billTitle: "Paid Bills",
-    billAmount: "190.00",
-    borderColor: "border-l-green",
-  },
-  {
-    billTitle: "Total Upcoming",
-    billAmount: "194.98",
-    borderColor: "border-l-yellow",
-  },
-  {
-    billTitle: "Due Soon",
-    billAmount: "59.98",
-    borderColor: "border-l-cyan",
-  },
-];
-export default function RecurringBillsOverview() {
+type BillDataType = BillCardType[];
+
+export default async function RecurringBillsOverview() {
+  const userId = await authenticateAndGetUserId();
+  const bills: BillType[] = await getBills(userId);
+  const { totalOverDue, totalPaid, totalUpcoming } =
+    getBillsSummaryDetails(bills);
+  const BillsData: BillDataType = [
+    {
+      billTitle: "Paid Bills",
+      billAmount: totalPaid,
+      borderColor: "border-l-green",
+    },
+    {
+      billTitle: "Total Upcoming",
+      billAmount: totalUpcoming,
+      borderColor: "border-l-yellow",
+    },
+    {
+      billTitle: "Over Due",
+      billAmount: totalOverDue,
+      borderColor: "border-l-red",
+    },
+  ];
   return (
     <Card className="mb-6 md:mb-8">
       <OverviewSectionHeader
@@ -51,13 +59,15 @@ export default function RecurringBillsOverview() {
     </Card>
   );
 }
-function BillCard({ borderColor, billTitle, billAmount }: BillType) {
+function BillCard({ borderColor, billTitle, billAmount }: BillCardType) {
   return (
     <div
       className={`flex items-center justify-between py-5 px-4 ${borderColor} border-l-4 bg-background rounded-lg`}
     >
       <p className="text-secondary text-preset-4">{billTitle}</p>
-      <p className="text-preset-4-bold text-primary">${billAmount}</p>
+      <p className="text-preset-4-bold text-primary">
+        ${FormatNumber(billAmount)}
+      </p>
     </div>
   );
 }
