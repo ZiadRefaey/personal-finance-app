@@ -1,20 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import NewVendorForm from "./forms/NewVendorForm";
 import BillForm from "./forms/BillForm";
-import TotalBillsCard from "./TotalBillsCard";
-import BillsSummaryCard from "./BillsSummaryCard";
+
 import BillsTable from "./BillsTable";
 import { Bills } from "@/app/_lib/types";
 import Card from "./UI/Card";
 export default function BillsDashboard({
   billsTableData,
-  totalBills,
+  children,
   vendorNames,
 }: {
   billsTableData: Bills[];
-  totalBills: number;
+  children: ReactNode;
   vendorNames: string[];
 }) {
   const [data, setData] = useState<Bills[]>(billsTableData);
@@ -48,10 +47,7 @@ export default function BillsDashboard({
         </div>
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-[337px,1fr] gap-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 xl:grid-cols-1 self-start">
-          <TotalBillsCard total={totalBills} />
-          <BillsSummaryCard />
-        </div>
+        {children}
         <Card>
           <BillsTable setData={setData} vendorNames={vendorNames} data={data} />
         </Card>

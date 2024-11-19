@@ -1,6 +1,8 @@
 import { auth } from "@/auth";
 import BillsDashboard from "../_components/BillsDashboard";
 import { getBills, getVendors } from "../_lib/data-service";
+import TotalBillsCard from "../_components/TotalBillsCard";
+import BillsSummaryCard from "../_components/BillsSummaryCard";
 
 export default async function page() {
   const session = await auth();
@@ -21,10 +23,11 @@ export default async function page() {
   const vendorNames = vendors.map((vendor) => vendor.name);
 
   return (
-    <BillsDashboard
-      totalBills={totalBills}
-      vendorNames={vendorNames}
-      billsTableData={billsTableData}
-    />
+    <BillsDashboard vendorNames={vendorNames} billsTableData={billsTableData}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 xl:grid-cols-1 self-start">
+        <TotalBillsCard total={totalBills} />
+        <BillsSummaryCard />
+      </div>
+    </BillsDashboard>
   );
 }
