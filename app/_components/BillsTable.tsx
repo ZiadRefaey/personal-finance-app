@@ -25,6 +25,7 @@ import { Bills, SortingState } from "../_lib/types";
 import TableControls from "./TableControls";
 import DeleteForm from "./forms/DeleteForm";
 import { DeleteBill } from "../_lib/actions";
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 
 export default function BillsTable({
   setData,
@@ -52,16 +53,15 @@ export default function BillsTable({
     columnHelper.accessor("date", {
       header: "Due Date",
       cell: (props) => (
-        <DueDate
-          date={new Date(props.getValue()).toDateString()}
-          status="due"
-        />
+        <DueDate date={new Date(props.getValue()).toDateString()} />
       ),
       sortingFn: "datetime",
     }),
     columnHelper.accessor("amount", {
       header: "Amount",
-      cell: (props) => <Amount amount={props.getValue()} due={false} />,
+      cell: (props) => (
+        <Amount amount={props.getValue()} status={props.row.original.status} />
+      ),
       sortingFn: "alphanumeric",
     }),
     columnHelper.display({
@@ -181,14 +181,7 @@ export default function BillsTable({
               className="flex items-center justify-between"
             >
               {headerGroup.headers.map((header) => (
-                <TH
-                  className={`${
-                    header.column.columnDef.header === "Amount"
-                      ? "text-end"
-                      : ""
-                  }`}
-                  key={header.id}
-                >
+                <TH key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -222,7 +215,7 @@ type TitleType = {
 };
 export function BillsTitle({ image, title }: TitleType) {
   return (
-    <div className="flex items-center justify-start gap-4 col-span-2 self-start">
+    <div className="flex items-center justify-start gap-4 col-span-2 ">
       <div className="relative size-10">
         <Image
           src={image}
@@ -236,46 +229,32 @@ export function BillsTitle({ image, title }: TitleType) {
     </div>
   );
 }
-export function Amount({ due, amount }: { due: boolean; amount: number }) {
-  return (
-    <div
-      className={`${
-        due === false ? "text-primary" : "text-red"
-      } text-preset-4-bold justify-self-end`}
-    >
-      ${FormatNumber(amount)}
-    </div>
-  );
-}
-export function DueDate({
-  date,
+export function Amount({
   status,
+  amount,
 }: {
-  date: string;
-  status: "paid" | "due" | "overdue";
+  status: "upcoming" | "paid" | "over due";
+  amount: number;
 }) {
   return (
     <div
-      className={`text-preset-5 flex items-center justify-start ${
-        status === "paid"
-          ? "text-green"
-          : status === "overdue"
-          ? "text-red"
-          : "text-primary"
-      }`}
+      className={`text-preset-4-bold flex items-center justify-start gap-2 self-start`}
     >
-      {date}
+      ${FormatNumber(amount)}
       {status === "paid" ? (
-        <span className="inline-flex ml-2">
-          <Image src={billPaid} alt="Bill paid icon" />
-        </span>
-      ) : status === "overdue" ? (
-        <span className="inline-flex ml-2">
-          <Image src={billDue} alt="Bill due icon" />
-        </span>
+        <FaCheckCircle className="text-green inline-flex" />
+      ) : status === "upcoming" ? (
+        <FaExclamationCircle className="text-yellow" />
       ) : (
-        <></>
+        <FaExclamationCircle className="text-red" />
       )}
+    </div>
+  );
+}
+export function DueDate({ date }: { date: string }) {
+  return (
+    <div className={`text-preset-5 flex items-center justify-start `}>
+      {date}
     </div>
   );
 }

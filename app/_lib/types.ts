@@ -44,7 +44,7 @@ export type Bills = {
   date: string;
   amount: number;
   pay_day: number;
-  status?: "paid" | "due" | "upcoming";
+  status: "paid" | "over due" | "upcoming";
 };
 export type SortDirection = "asc" | "desc";
 
