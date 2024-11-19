@@ -1,17 +1,10 @@
+import { BudgetType } from "../_lib/types";
 import BudgetCard from "./BudgetCard";
 
-type BudgetDataType = {
-  id: number;
-  created_at: Date;
-  userID: number;
-  name: string;
-  maximum: number;
-  color: string;
-}[];
 export default async function BudgetCardsList({
   data,
 }: {
-  data: BudgetDataType;
+  data: BudgetType[];
 }) {
   return (
     <div className="flex flex-col items-center justify-start gap-6 w-full">

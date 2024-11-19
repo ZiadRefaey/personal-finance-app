@@ -86,3 +86,14 @@ export type BillType = {
   due_date: string;
   status: "paid" | "upcoming" | "over due";
 };
+export type BudgetAPIType = {
+  id: number;
+  created_at: string;
+  name: string;
+  color: string;
+  maximum: number;
+  userId: number;
+};
+export type BudgetType = BudgetAPIType & {
+  spent: number;
+};

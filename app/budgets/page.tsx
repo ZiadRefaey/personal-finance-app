@@ -6,7 +6,8 @@ import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import BudgetForm from "../_components/forms/BudgetForm";
 import { CreateBudget } from "../_lib/actions";
 import { auth } from "@/auth";
-import { getBudgets, getTransactionsByBudgetId } from "../_lib/data-service";
+import { getBudgets } from "../_lib/data-service";
+import { getBudgetsWithSpent } from "../_lib/helperFuncs";
 
 export const revalidate = 0;
 export default async function page() {
@@ -14,20 +15,7 @@ export default async function page() {
   const userId = Number(session?.user?.id);
   const budgets = await getBudgets(userId);
 
-  const budgetsWithSpent = await Promise.all(
-    budgets.map(async (budget) => {
-      const transactions = await getTransactionsByBudgetId(budget.id);
-      const totalTransactions = transactions.reduce(
-        (acc, cur) => acc + cur.amount,
-        0
-      );
-
-      return {
-        ...budget, // spread the existing properties
-        spent: totalTransactions, // add the new total property
-      };
-    })
-  );
+  const budgetsWithSpent = await getBudgetsWithSpent(budgets);
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
