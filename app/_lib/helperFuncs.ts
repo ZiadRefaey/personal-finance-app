@@ -4,7 +4,7 @@ export function FormatNumber(number: number) {
     maximumFractionDigits: 2,
   });
 }
-export function getDaysUntil(date: string): number {
+export function getDaysUntil(date: string | number | Date): number {
   const today: any = new Date();
   const dueDate: any = new Date(date);
   const timeDiff = dueDate - today;

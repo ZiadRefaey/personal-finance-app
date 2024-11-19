@@ -1,6 +1,7 @@
 import { supabase } from "@/app/_lib/supabase";
 import { auth } from "@/auth";
 import { BillEditableData, userEditableData } from "./types";
+import { getDaysUntil } from "./helperFuncs";
 
 function validateDuplicateEntry<T>(
   existingData: T[],
@@ -524,6 +525,10 @@ export async function createBill(
 ) {
   BillsValidation(payDay, amount);
   const due_date = getTargetDate(payDay);
+  const daysUntil = getDaysUntil(due_date);
+  console.log(daysUntil);
+  let status = "paid";
+  if (daysUntil < 4) status = "upcoming";
   const userBills = await getBills(userId);
   validateDuplicateEntry(
     userBills,
@@ -533,7 +538,7 @@ export async function createBill(
 
   const { data, error } = await supabase
     .from("bills")
-    .insert([{ userId, pay_day: payDay, amount, vendorId, due_date }])
+    .insert([{ userId, pay_day: payDay, amount, vendorId, due_date, status }])
     .select("*,vendors(name,image)");
   if (error) throw new Error(error.message);
   return data;

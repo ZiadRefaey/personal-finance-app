@@ -20,7 +20,7 @@ async function getBills() {
 }
 async function updateBillStatus(
   billId: number,
-  status: "paid" | "upcoming" | "due" | "over due"
+  status: "paid" | "upcoming" | "over due"
 ) {
   const { error } = await supabase
     .from("bills")
@@ -56,7 +56,7 @@ export async function handleCronJob() {
     const daysUntil = getDaysUntil(bill.due_date);
     //if the the days on the upcoming bill is 3 or less change it to due
     if (daysUntil < 4) {
-      const errorStatusUpdate = await updateBillStatus(bill.id, "due");
+      const errorStatusUpdate = await updateBillStatus(bill.id, "upcoming");
       if (errorStatusUpdate)
         return new Response("Error updating status", { status: 500 });
     }
