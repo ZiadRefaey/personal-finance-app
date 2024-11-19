@@ -76,3 +76,13 @@ export type Transaction = {
   amount: number;
   deposite: boolean;
 };
+export type BillType = {
+  id: number;
+  created_at: string;
+  amount: number;
+  userId: number;
+  pay_day: number;
+  vendorId: number;
+  due_date: string;
+  status: "paid" | "upcoming" | "over due";
+};

@@ -1,57 +1,61 @@
 import React from "react";
 import Card from "./UI/Card";
+import { authenticateAndGetUserId, getBills } from "../_lib/data-service";
+import { BillType } from "../_lib/types";
+import SummaryRow from "./SummaryRow";
 
-export default function BillsSummaryCard() {
+export default async function BillsSummaryCard() {
+  const userId = await authenticateAndGetUserId();
+  const bills: BillType[] = await getBills(userId);
+  // console.log(bills);
+  const NumberOfPaid = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "paid") return acc + 1;
+    return acc;
+  }, 0);
+  const totalPaid = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "paid") return acc + Number(cur.amount);
+    return acc;
+  }, 0);
+  const NumberOfUpcoming = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "upcoming") return acc + 1;
+    return acc;
+  }, 0);
+  const totalUpcoming = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "upcoming") return acc + Number(cur.amount);
+    return acc;
+  }, 0);
+  const NumberOfOverDue = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "over due") return acc + 1;
+    return acc;
+  }, 0);
+  const totalOverDue = bills.reduce((acc: any, cur: BillType) => {
+    if (cur.status === "over due") return acc + Number(cur.amount);
+    return acc;
+  }, 0);
   return (
     <Card className="p-5 bg-card-back-ground">
       <h3 className="text-primary text-preset-3 mb-5">Summary</h3>
       <div className="divide-y divide-seperator flex flex-col">
         <SummaryRow
           className="pb-4"
-          BillsAmount={320}
-          numberOfBills={2}
+          BillsAmount={totalPaid}
+          numberOfBills={NumberOfPaid}
           title="Paid Bills"
         />
         <SummaryRow
           className="py-4"
-          BillsAmount={1230}
-          numberOfBills={6}
+          BillsAmount={totalUpcoming}
+          numberOfBills={NumberOfUpcoming}
           title="Total Upcoming"
         />
         <SummaryRow
           className="pt-4"
-          BillsAmount={320}
-          numberOfBills={2}
-          title="Paid Bills"
+          BillsAmount={totalOverDue}
+          numberOfBills={NumberOfOverDue}
+          title="Over Due Bills"
           due={true}
         />
       </div>
     </Card>
-  );
-}
-function SummaryRow({
-  due = false,
-  numberOfBills,
-  BillsAmount,
-  title,
-  className,
-}: {
-  className: string;
-  due?: boolean;
-  title: string;
-  numberOfBills: number;
-  BillsAmount: number;
-}) {
-  return (
-    <div className={`${className} flex items-center justify-between w-full`}>
-      <p className={`${due ? "text-red" : "text-secondary"} text-preset-5`}>
-        {title}
-      </p>
-      <span
-        className={`${due ? "text-red" : "text-primary"} text-preset-5-bold`}
-      >
-        {numberOfBills} (${BillsAmount.toFixed(2)})
-      </span>
-    </div>
   );
 }

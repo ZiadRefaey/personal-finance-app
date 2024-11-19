@@ -1,14 +1,6 @@
-import React from "react";
-import TotalBillsCard from "../_components/TotalBillsCard";
-import BillsSummaryCard from "../_components/BillsSummaryCard";
-import Card from "../_components/UI/Card";
-import BillsTable from "../_components/BillsTable";
-import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
-import NewVendorForm from "../_components/forms/NewVendorForm";
-import { getBills, getVendors } from "../_lib/data-service";
 import { auth } from "@/auth";
-import BillForm from "../_components/forms/BillForm";
 import BillsDashboard from "../_components/BillsDashboard";
+import { getBills, getVendors } from "../_lib/data-service";
 
 export default async function page() {
   const session = await auth();

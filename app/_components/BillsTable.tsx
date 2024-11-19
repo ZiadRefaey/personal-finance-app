@@ -7,8 +7,6 @@ import ConfirmForm from "./forms/ConfirmForm";
 import BillForm from "./forms/BillForm";
 import Image from "next/image";
 import React, { useState } from "react";
-import billPaid from "@/public/icon-bill-paid.svg";
-import billDue from "@/public/icon-bill-due.svg";
 import TR from "./UI/TR";
 import TH from "./UI/TH";
 import TD from "./UI/TD";
