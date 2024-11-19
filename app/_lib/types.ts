@@ -64,7 +64,7 @@ export type BillFormType = {
 export type BillEditableData = {
   amount?: number;
   pay_day?: number;
-  status?: "paid" | "upcoming" | "due";
+  status?: "paid" | "upcoming" | "due" | "over due";
   vendorId?: number;
 };
 export type Transaction = {

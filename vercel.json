@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron",
-      "schedule": "0 9 * * *" // Runs every day at 9 AM UTC
+      "schedule": "0 0 * * *"
     }
   ]
 }
