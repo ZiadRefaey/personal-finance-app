@@ -25,9 +25,7 @@ import {
   authenticateAndGetUserId,
   getTransaction,
   updateTransaction,
-  updateBudgetSpent,
   deleteTransaction,
-  getBudget,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
 import { BillFormType, userEditableData } from "./types";
@@ -187,7 +185,6 @@ export async function CreateTransaction(
     const budgetObject = userBudgets.filter(
       (budget) => budgetName === budget.name
     );
-    const newSpent = Number(budgetObject[0].spent) + Number(amount);
     //getting the vendor to retrieve the ID
     const vendorName = vendor;
     const userVendors = await getVendors(userId);
@@ -199,8 +196,7 @@ export async function CreateTransaction(
       amount,
       budgetObject[0].id,
       vendorObject[0].id,
-      userId,
-      newSpent
+      userId
     );
 
     //updating the data displayed after successful operation
@@ -221,20 +217,12 @@ export async function UpdateTransaction(
 ) {
   try {
     const userId = await authenticateAndGetUserId();
-    const transactionData = await getTransaction(transactionId);
     const budgetName = category;
     const userBudgets = await getBudgets(userId);
     //getting the budget to retrieve the budget Id with it
     const budgetObject = userBudgets.filter(
       (budget) => budgetName === budget.name
     );
-    //if the updated transaction changed to another budget. we need to subtract the amount from the old one to update it
-    if (budgetObject[0].id !== transactionData.budgetId) {
-      const spent = budgetObject[0].spent - transactionData.amount;
-      await updateBudgetSpent(transactionData.budgetId, spent);
-    }
-    const newSpent = Number(budgetObject[0].spent) + Number(amount);
-
     //getting the vendor to retrieve the ID
     const vendorName = vendor;
     const userVendors = await getVendors(userId);
@@ -245,8 +233,7 @@ export async function UpdateTransaction(
       transactionId,
       amount,
       vendorObject[0].id,
-      budgetObject[0].id,
-      newSpent
+      budgetObject[0].id
     );
     revalidatePath("/transactions");
     revalidatePath("/budgets");
@@ -259,10 +246,6 @@ export async function UpdateTransaction(
 
 export async function DeleteTransaction(transactionId: number) {
   try {
-    const transaction = await getTransaction(transactionId);
-    const budget = await getBudget(transaction.budgetId);
-    const newSpent = budget.spent - transaction.amount;
-    await updateBudgetSpent(transaction.budgetId, newSpent);
     deleteTransaction(transactionId);
     revalidatePath("/transactions");
     revalidatePath("/budgets");

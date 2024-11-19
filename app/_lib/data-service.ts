@@ -409,43 +409,31 @@ export async function createTransaction(
   amount: number,
   budgetId: number,
   vendorId: number,
-  userId: number,
-  spent: number
+  userId: number
 ): Promise<any> {
-  const { data: transactionData, error: transactionError } = await supabase
+  const { data, error } = await supabase
     .from("transactions")
     .insert([{ amount, budgetId, vendorId, userId }])
     .select(`amount,created_at,budgets(name),vendors(name,image)`);
-  const { error: budgetError } = await supabase
-    .from("budgets")
-    .update({ spent })
-    .eq("id", budgetId)
-    .select();
-  if (transactionError) throw new Error(transactionError.message);
-  if (budgetError) throw new Error(budgetError.message);
-  return transactionData;
+
+  if (error) throw new Error(error.message);
+  return data;
 }
 
 export async function updateTransaction(
   transactionId: number,
   amount: number,
   vendorId: number,
-  budgetId: number,
-  spent: number
+  budgetId: number
 ) {
-  const { data, error: transactionError } = await supabase
+  const { data, error } = await supabase
     .from("transactions")
     .update({ amount, vendorId, budgetId })
     .eq("id", transactionId)
     .select("*,budgets(name),vendors(name,image)")
     .single();
-  const { error: budgetError } = await supabase
-    .from("budgets")
-    .update({ spent })
-    .eq("id", budgetId)
-    .select();
-  if (transactionError) throw new Error(transactionError.message);
-  if (budgetError) throw new Error(budgetError.message);
+
+  if (error) throw new Error(error.message);
   return data;
 }
 
@@ -480,15 +468,6 @@ export async function getBudgetsTransactions(userId: number) {
     `
     )
     .eq("userId", userId);
-  if (error) throw new Error(error.message);
-  return data;
-}
-export async function updateBudgetSpent(budgetId: number, spent: number) {
-  const { data, error } = await supabase
-    .from("budgets")
-    .update({ spent })
-    .eq("id", budgetId)
-    .select();
   if (error) throw new Error(error.message);
   return data;
 }
