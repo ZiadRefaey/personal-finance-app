@@ -383,6 +383,18 @@ export async function getTransaction(transactionId: number) {
   if (error) throw new Error(error.message);
   return data;
 }
+export async function getTransactionsByBudgetId(budgetId: number) {
+  const { data, error } = await supabase
+    .from("transactions")
+    .select(
+      `*,
+    vendors (image,name),
+    budgets(name)`
+    )
+    .eq("budgetId", budgetId);
+  if (error) throw new Error(error.message);
+  return data;
+}
 export async function getTransactionsWithVendors() {
   const { data, error } = await supabase.from("transactions").select(`
     *,
@@ -535,7 +547,6 @@ export async function createBill(
   BillsValidation(payDay, amount);
   const due_date = getTargetDate(payDay);
   const daysUntil = getDaysUntil(due_date);
-  console.log(daysUntil);
   let status = "paid";
   if (daysUntil < 4) status = "upcoming";
   const userBills = await getBills(userId);

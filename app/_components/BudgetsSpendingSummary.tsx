@@ -10,7 +10,7 @@ type BudgetDataType = {
   maximum: number;
   spent: number;
 }[];
-export default function BudgetsSpendingSummary({
+export default async function BudgetsSpendingSummary({
   data,
 }: {
   data: BudgetDataType;
