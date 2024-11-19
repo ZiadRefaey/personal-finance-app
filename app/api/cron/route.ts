@@ -29,13 +29,6 @@ async function updateBillStatus(
   return error;
 }
 export async function POST() {
-  return await handleCronJob();
-}
-
-export async function GET() {
-  return await handleCronJob(); // Allow GET for testing
-}
-export async function handleCronJob() {
   const { users, usersError } = await getUsers();
   if (usersError) {
     return new Response("Error fetching users", { status: 500 });
@@ -69,5 +62,4 @@ export async function handleCronJob() {
     }
   });
   return new Response("Cron job executed", { status: 200 });
-  // return new Response("No users to update today", { status: 200 });
 }
