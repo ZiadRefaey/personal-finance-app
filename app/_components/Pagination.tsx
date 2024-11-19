@@ -45,7 +45,7 @@ export function PaginationItem({
 }
 export function PaginationNext() {
   return (
-    <div className="flex items-center justify-center gap-1">
+    <div className="flex items-center justify-center gap-1 min-w-10">
       <span className="hidden md:inline-flex">Next</span>
       <FaCaretRight className="inline-flex size-4" />
     </div>
@@ -53,7 +53,7 @@ export function PaginationNext() {
 }
 export function PaginationPrev() {
   return (
-    <div className="flex items-center justify-center gap-1">
+    <div className="flex items-center justify-center gap-1 min-w-10">
       <FaCaretLeft className="inline-flex size-4" />
       <span className="hidden md:inline-flex">Left</span>
     </div>
