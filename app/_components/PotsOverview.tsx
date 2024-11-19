@@ -26,12 +26,8 @@ export default async function PotsOverview() {
     <Card>
       <OverviewSectionHeader
         title="Pots"
-        popoverTitle="See Details"
-        popoverContent={
-          <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-            Click me
-          </button>
-        }
+        buttonContent="See Details"
+        href="/pots"
       />
 
       <div className=" gap-5 grid grid-cols-1 md:grid-cols-[247px,1fr]">

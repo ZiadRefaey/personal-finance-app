@@ -16,15 +16,8 @@ export default function TransactionsTableSummary({
     <Card bg={`${bg}`}>
       <OverviewSectionHeader
         title={title}
-        popoverTitle="View All"
-        // Dummy Popover content
-        popoverContent={
-          <div className="flex flex-col items-center justify-center gap-1">
-            <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-              Click me
-            </button>
-          </div>
-        }
+        buttonContent="View All"
+        href="/transactions"
       />
       {transactions?.length === 0 && (
         <div className="w-full flex items-center justify-center p-10">

@@ -36,14 +36,8 @@ export default async function RecurringBillsOverview() {
     <Card className="mb-6 md:mb-8">
       <OverviewSectionHeader
         title="Recurring Bills"
-        popoverTitle="See Details"
-        popoverContent={
-          <div className="flex flex-col items-center justify-center gap-1">
-            <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-              Click me
-            </button>
-          </div>
-        }
+        buttonContent="See Details"
+        href="/recurring-bills"
       />
 
       <div className="flex flex-col gap-3 mt-8">

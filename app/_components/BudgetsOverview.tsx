@@ -20,14 +20,8 @@ export default async function BudgetsOverview() {
     <Card>
       <OverviewSectionHeader
         title="Budgets"
-        popoverTitle="See Details"
-        popoverContent={
-          <div className="flex flex-col items-center justify-center gap-1">
-            <button className="py-2 px-4 cursor-pointer hover:bg-slate-200">
-              Click me
-            </button>
-          </div>
-        }
+        buttonContent="See Details"
+        href="/budgets"
       />
       {budgetsWithSpent.length === 0 && (
         <div className="w-full items-center justify-center">
