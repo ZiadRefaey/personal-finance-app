@@ -2,7 +2,7 @@ import { supabase } from "@/app/_lib/supabase";
 import { auth } from "@/auth";
 import { BillEditableData, userEditableData } from "./types";
 import { getDaysUntil } from "./helperFuncs";
-
+import { add } from "date-fns";
 function validateDuplicateEntry<T>(
   existingData: T[],
   isDuplicate: (entry: T) => boolean,
@@ -511,6 +511,15 @@ function getTargetDate(dayOfMonth: number) {
   const targetDate = new Date(targetYear, targetMonth, dayOfMonth);
   return targetDate;
 }
+export async function getBill(billId: number) {
+  const { data, error } = await supabase
+    .from("bills")
+    .select("*")
+    .eq("id", billId)
+    .single();
+  if (error) throw new Error(error.message);
+  return data;
+}
 function BillsValidation(payDay: number, amount: number) {
   if (payDay < 1 || payDay > 28)
     throw new Error("Salary day must be between the 1st and 28th");
@@ -544,11 +553,16 @@ export async function createBill(
   return data;
 }
 
-export async function payBill(id: number) {
+export async function payBill(billId: number) {
+  const currentBill = await getBill(billId);
+
+  const oldDueDate = currentBill.due_date;
+  const dueDate = add(oldDueDate, { months: 1 });
+
   const { data, error } = await supabase
     .from("bills")
-    .update({ status: "paid" })
-    .eq("id", id)
+    .update({ status: "paid", due_date: dueDate })
+    .eq("id", billId)
     .select()
     .single();
   if (error) throw new Error(error.message);
