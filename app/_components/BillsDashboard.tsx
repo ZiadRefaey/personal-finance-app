@@ -31,7 +31,7 @@ export default function BillsDashboard({
               modalName="add-vendor"
               description="Add a vendor where you make transactions with. These will show up to be picked from when creating a new transaction"
             >
-              <NewVendorForm setTableData={setData} />
+              <NewVendorForm />
             </ModalWindow>
           </Modal>
 
