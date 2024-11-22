@@ -30,7 +30,9 @@ export default async function page() {
           </ModalWindow>
         </Modal>
       </div>
-      <PotsCardsList />
+      <Suspense fallback={<PotCardsListSkeleton />}>
+        <PotsCardsList />
+      </Suspense>
     </>
   );
 }
