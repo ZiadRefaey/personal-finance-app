@@ -12,7 +12,7 @@ export default async function BudgetCardsList() {
     return (
       <div className="w-full items-center justify-center">
         <p className="text-center text-primary text-preset-2">
-          Please Create a new budget
+          No budgets created yet.
         </p>
       </div>
     );

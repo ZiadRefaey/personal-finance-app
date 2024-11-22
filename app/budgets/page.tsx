@@ -6,8 +6,7 @@ import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import BudgetForm from "../_components/forms/BudgetForm";
 import { CreateBudget } from "../_lib/actions";
 import { auth } from "@/auth";
-import { getBudgets } from "../_lib/data-service";
-import { getBudgetsWithSpent } from "../_lib/helperFuncs";
+
 import BudgetsSummarySkeleton from "../_components/UI/BudgetsSummarySkeleton";
 import BudgetsCardsListSkeleton from "../_components/UI/BudgetsCardsListSkeleton";
 
@@ -15,9 +14,6 @@ export const revalidate = 0;
 export default async function page() {
   const session = await auth();
   const userId = Number(session?.user?.id);
-  // const budgets = await getBudgets(userId);
-
-  // const budgetsWithSpent = await getBudgetsWithSpent(budgets);
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
@@ -37,7 +33,6 @@ export default async function page() {
           </ModalWindow>
         </Modal>
       </div>
-
 
       <div className="flex items-start justify-center flex-col xl:flex-row gap-6">
         <Suspense fallback={<BudgetsSummarySkeleton />}>
