@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import BudgetCardsList from "../_components/BudgetCardsList";
 import BudgetsSpendingSummary from "../_components/BudgetsSpendingSummary";
 
@@ -8,14 +8,16 @@ import { CreateBudget } from "../_lib/actions";
 import { auth } from "@/auth";
 import { getBudgets } from "../_lib/data-service";
 import { getBudgetsWithSpent } from "../_lib/helperFuncs";
+import BudgetsSummarySkeleton from "../_components/UI/BudgetsSummarySkeleton";
+import BudgetsCardsListSkeleton from "../_components/UI/BudgetsCardsListSkeleton";
 
 export const revalidate = 0;
 export default async function page() {
   const session = await auth();
   const userId = Number(session?.user?.id);
-  const budgets = await getBudgets(userId);
+  // const budgets = await getBudgets(userId);
 
-  const budgetsWithSpent = await getBudgetsWithSpent(budgets);
+  // const budgetsWithSpent = await getBudgetsWithSpent(budgets);
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
@@ -35,19 +37,16 @@ export default async function page() {
           </ModalWindow>
         </Modal>
       </div>
-      {budgetsWithSpent.length === 0 && (
-        <div className="w-full items-center justify-center">
-          <p className="text-center text-primary text-preset-2">
-            Please Create a new budget
-          </p>
-        </div>
-      )}
-      {budgetsWithSpent.length > 0 && (
-        <div className="flex items-start justify-center flex-col xl:flex-row gap-6">
-          <BudgetsSpendingSummary data={budgetsWithSpent} />
-          <BudgetCardsList data={budgetsWithSpent} />
-        </div>
-      )}
+
+
+      <div className="flex items-start justify-center flex-col xl:flex-row gap-6">
+        <Suspense fallback={<BudgetsSummarySkeleton />}>
+          <BudgetsSpendingSummary />
+        </Suspense>
+        <Suspense fallback={<BudgetsCardsListSkeleton />}>
+          <BudgetCardsList />
+        </Suspense>
+      </div>
     </>
   );
 }

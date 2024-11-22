@@ -1,9 +1,9 @@
-import { ClipLoader } from "react-spinners";
-export default function Loading() {
-  // You can add any UI inside Loading, including a Skeleton.
+import React from "react";
+
+export default function loading() {
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <ClipLoader size={50} color="#fff" loading={true} />
+    <div className="w-full h-full items-center justify-center flex">
+      <span className="loader "></span>
     </div>
   );
 }

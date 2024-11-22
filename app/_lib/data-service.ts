@@ -66,6 +66,8 @@ export async function getBudgets(userId: number | undefined) {
     .select("*")
     .eq("userId", userId);
   if (error) throw new Error(error.message);
+  // for testing
+  await new Promise((res) => setTimeout(res, 15000));
   return data;
 }
 
