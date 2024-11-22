@@ -10,7 +10,6 @@ import { auth } from "@/auth";
 import BudgetsSummarySkeleton from "../_components/UI/BudgetsSummarySkeleton";
 import BudgetsCardsListSkeleton from "../_components/UI/BudgetsCardsListSkeleton";
 
-export const revalidate = 0;
 export default async function page() {
   const session = await auth();
   const userId = Number(session?.user?.id);

@@ -66,8 +66,6 @@ export async function getBudgets(userId: number | undefined) {
     .select("*")
     .eq("userId", userId);
   if (error) throw new Error(error.message);
-  // for testing
-  await new Promise((res) => setTimeout(res, 15000));
   return data;
 }
 
@@ -192,7 +190,8 @@ export async function getPots(userId: number) {
     .from("pots")
     .select("*")
     .eq("userId", userId);
-
+  // for testing
+  await new Promise((res) => setTimeout(res, 15000));
   if (error) throw new Error(error.message);
   return data;
 }

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
 
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import PotForm from "../_components/forms/PotForm";
 import { CreatePot } from "../_lib/actions";
 import { auth } from "@/auth";
 import PotsCardsList from "../_components/PotsCardsList";
+import PotCardsListSkeleton from "../_components/UI/PotCardsListSkeleton";
 
 export default async function page() {
   const session = await auth();
