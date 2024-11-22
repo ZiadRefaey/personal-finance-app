@@ -190,8 +190,7 @@ export async function getPots(userId: number) {
     .from("pots")
     .select("*")
     .eq("userId", userId);
-  // for testing
-  await new Promise((res) => setTimeout(res, 15000));
+
   if (error) throw new Error(error.message);
   return data;
 }
@@ -368,6 +367,8 @@ export async function getTransactions(userId: number) {
       budgets(name)`
     )
     .eq("userId", userId);
+  // for testing
+  await new Promise((res) => setTimeout(res, 15000));
   if (error) throw new Error(error.message);
   return data;
 }
