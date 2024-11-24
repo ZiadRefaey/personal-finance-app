@@ -20,7 +20,7 @@ import PopoverButton from "./UI/PopoverButton";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
 import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
 import TransactionForm from "./forms/TransactionForm";
-import { Transaction } from "../_lib/types";
+import { SearchParamsType, Transaction } from "../_lib/types";
 import { DeleteTransaction } from "../_lib/actions";
 import DeleteForm from "./forms/DeleteForm";
 interface ColumnFilter {
@@ -42,7 +42,9 @@ export default function TransactionTable({
   setData,
   categories,
   vendorNames,
+  searchParams,
 }: {
+  searchParams: SearchParamsType;
   data: Transaction[];
   setData: any;
   categories: string[];
@@ -143,7 +145,7 @@ export default function TransactionTable({
     }),
   ];
 
-  const [globalFilter, setGlobalFilter] = useState<any>([]);
+  const [globalFilter, setGlobalFilter] = useState<any>([searchParams.filter]);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
   ]);

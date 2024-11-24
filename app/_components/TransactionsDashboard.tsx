@@ -22,6 +22,7 @@ export default function TransactionsDashboard({
   categories,
   vendorNames,
   transactions,
+  searchParams,
 }: any) {
   const tableData = transactions.map((transaction: TransactionSupabase) => ({
     id: transaction.id,
@@ -72,6 +73,7 @@ export default function TransactionsDashboard({
       <Card className="w-full bg-card-back-ground min-h-[86vh] flex items-center justify-between flex-col">
         <TransactionTable
           setData={setData}
+          searchParams={searchParams}
           categories={categories}
           vendorNames={vendorNames}
           data={data}

@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import Select from "./Select";
 import { TransactionTableContext } from "./TransactionTable";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSetParams } from "../_lib/hooks";
 
 export default function TableFilter({
   filterOptions,
@@ -8,8 +10,10 @@ export default function TableFilter({
   filterOptions?: { display: string; value: string }[];
 }) {
   const table = useContext(TransactionTableContext);
+  const setParams = useSetParams();
   function handleFilter(value: string) {
     table.getColumn("category")?.setFilterValue(value);
+    setParams("filter", value);
   }
   return (
     <div className="flex items-center justify-center gap-2">
