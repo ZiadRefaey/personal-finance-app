@@ -1,4 +1,3 @@
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { IoIosSearch } from "react-icons/io";
 

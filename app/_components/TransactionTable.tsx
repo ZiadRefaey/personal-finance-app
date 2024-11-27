@@ -134,7 +134,6 @@ export default function TransactionTable({
                       id={props.row.original.id}
                       deleteMessage="Transaction was successfully deleted."
                     />
-                    <></>
                   </ModalWindow>
                 </Modal>
               </PopoverButton>
@@ -144,8 +143,12 @@ export default function TransactionTable({
       ),
     }),
   ];
-
-  const [globalFilter, setGlobalFilter] = useState<any>([searchParams.filter]);
+  //if the search params is all transactions then we assign the initial state to empty string to show all transactions
+  const globalFilterInitialState =
+    searchParams.filter === "all transactions" ? "" : searchParams.filter;
+  const [globalFilter, setGlobalFilter] = useState<any>([
+    globalFilterInitialState,
+  ]);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "date", desc: true },
   ]);
@@ -178,7 +181,11 @@ export default function TransactionTable({
     <TransactionTableContext.Provider value={table}>
       <FeaturesStatesContext.Provider value={{ setSorting, setColumnFilters }}>
         <div className="w-full">
-          <TransactionsTableControls setSorting={setSorting} table={table} />
+          <TransactionsTableControls
+            filters={categories}
+            setSorting={setSorting}
+            table={table}
+          />
           <table className="w-full mt-6 divide-y divide-seperator ">
             <thead className="hidden md:table-header-group mb-6 my-3">
               {table.getHeaderGroups().map((headerGroup) => (

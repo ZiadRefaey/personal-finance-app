@@ -1,42 +1,26 @@
 import TableControls from "./TableControls";
 import { sortingOptions } from "../_lib/constants";
-const filterOptions = [
-  {
-    display: "all transactions",
-    value: "all transactions",
-  },
-  {
-    display: "entertainment",
-    value: "entertainment",
-  },
-  {
-    display: "bills",
-    value: "bills",
-  },
-  {
-    display: "groceries",
-    value: "groceries",
-  },
-  {
-    display: "dining out",
-    value: "dining out",
-  },
-  {
-    display: "transportation",
-    value: "transportation",
-  },
-  {
-    display: "personal care",
-    value: "personal care",
-  },
-];
+
 export default function TransactionsTableControls({
   table,
   setSorting,
+  filters = [],
 }: {
+  filters: string[];
   table: any;
   setSorting: any;
 }) {
+  const filtersArray = filters?.map((filter) => ({
+    display: filter,
+    value: filter.toLowerCase(),
+  }));
+  const filterOptions = [
+    {
+      display: "all transactions",
+      value: "all transactions",
+    },
+    ...filtersArray,
+  ];
   return (
     <TableControls
       setSorting={setSorting}

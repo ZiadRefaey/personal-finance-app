@@ -13,7 +13,12 @@ type Select = {
 };
 export default function Select({ placeholder, items, valueChange }: Select) {
   return (
-    <SelectContainer onValueChange={(value) => valueChange(value)}>
+    <SelectContainer
+      onValueChange={(value) => {
+        if (value === "all transactions") valueChange("");
+        valueChange(value);
+      }}
+    >
       <SelectTrigger className="max-w-[100px] w-auto md:max-w-auto bg-card-back-ground capitalize">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import Select from "./Select";
 import { TransactionTableContext } from "./TransactionTable";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSetParams } from "../_lib/hooks";
 
 export default function TableFilter({
@@ -12,7 +11,9 @@ export default function TableFilter({
   const table = useContext(TransactionTableContext);
   const setParams = useSetParams();
   function handleFilter(value: string) {
-    table.getColumn("category")?.setFilterValue(value);
+    if (value === "all transactions")
+      table.getColumn("category")?.setFilterValue("");
+    else table.getColumn("category")?.setFilterValue(value);
     setParams("filter", value);
   }
   return (
