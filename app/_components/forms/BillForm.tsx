@@ -95,6 +95,7 @@ export default function BillForm({
       <InputContainer>
         <Label>Vendor</Label>
         <Select
+          defaultValue={formData ? formData.vendor : undefined}
           onValueChange={(value) => {
             setValue("vendor", value);
           }}

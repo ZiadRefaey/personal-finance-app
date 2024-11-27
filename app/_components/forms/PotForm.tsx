@@ -115,6 +115,7 @@ export default function PotForm({
       <InputContainer>
         <Label>Theme</Label>
         <Select
+          defaultValue={formData ? formData.color : undefined}
           onValueChange={(value) => setValue("color", value)}
           name="color"
         >

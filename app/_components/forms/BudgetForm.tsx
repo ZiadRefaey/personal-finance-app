@@ -114,6 +114,7 @@ export default function BudgetForm({
       <InputContainer>
         <Label>Theme</Label>
         <Select
+          defaultValue={formData ? formData.color : undefined}
           onValueChange={(value) => setValue("color", value)}
           name="color"
         >

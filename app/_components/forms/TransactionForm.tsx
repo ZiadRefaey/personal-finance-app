@@ -107,6 +107,7 @@ export default function TransactionForm({
         <InputContainer>
           <Label>Vendors</Label>
           <Select
+            defaultValue={formData ? formData.vendor : undefined}
             onValueChange={(value) => {
               setValue("vendor", value);
               clearErrors("vendor");
@@ -147,6 +148,7 @@ export default function TransactionForm({
         <InputContainer>
           <Label>Category</Label>
           <Select
+            defaultValue={formData ? formData.budget : undefined}
             onValueChange={(value) => {
               setValue("category", value);
               clearErrors("category");
