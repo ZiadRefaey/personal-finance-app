@@ -118,7 +118,6 @@ export default function TransactionTable({
                   <ModalTrigger
                     variant="ellipses"
                     modalName="delete-transaction"
-                    className="hover:bg-red hover:text-white"
                   >
                     Delete Transaction
                   </ModalTrigger>

@@ -70,11 +70,7 @@ export default function BillsTable({
             <>
               <PopoverButton>
                 <Modal>
-                  <ModalTrigger
-                    modalName="paybill"
-                    variant="ellipses"
-                    className="hover:bg-green hover:text-white"
-                  >
+                  <ModalTrigger modalName="paybill" variant="ellipses">
                     Pay Bill
                   </ModalTrigger>
                   <ModalWindow
@@ -118,11 +114,7 @@ export default function BillsTable({
 
               <PopoverButton>
                 <Modal>
-                  <ModalTrigger
-                    variant="ellipses"
-                    modalName="delete-bill"
-                    className="hover:bg-red hover:text-white"
-                  >
+                  <ModalTrigger variant="ellipses" modalName="delete-bill">
                     Delete Bill
                   </ModalTrigger>
                   <ModalWindow
