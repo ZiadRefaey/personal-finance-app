@@ -32,6 +32,7 @@ export async function getBudgetsWithSpent(budgets: BudgetAPIType[]) {
   );
   return budgetsWithSpent;
 }
+//return details about bills
 export function getBillsSummaryDetails(bills: BillType[]) {
   const NumberOfPaid = bills.reduce((acc: any, cur: BillType) => {
     if (cur.status === "paid") return acc + 1;
@@ -65,4 +66,11 @@ export function getBillsSummaryDetails(bills: BillType[]) {
     NumberOfUpcoming,
     totalPaid,
   };
+}
+export function setLocalStorage(key: string, value: unknown) {
+  window.localStorage.setItem(key, JSON.stringify(value));
+}
+export function getLocalStorage(key: string) {
+  const item = window.localStorage.getItem(key);
+  return item ? JSON.parse(item) : null;
 }

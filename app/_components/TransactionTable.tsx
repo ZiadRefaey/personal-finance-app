@@ -208,9 +208,7 @@ export default function TransactionTable({
                   {row.getVisibleCells().map((cell) => (
                     <TD
                       className={`${
-                        cell.column.id === "name"
-                          ? "col-span-2"
-                          : cell.column.id === "category"
+                        cell.column.id === "category"
                           ? "hidden md:table-cell"
                           : ""
                       }`}
@@ -257,7 +255,7 @@ function RecepientReceiver({ image, name, category }: TitleType) {
           className="rounded-full object-cover"
         />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col">
         <p className="text-primary text-preset-4-bold">{name}</p>
         <p className="text-preset-5 text-secondary md:hidden">{category}</p>
       </div>

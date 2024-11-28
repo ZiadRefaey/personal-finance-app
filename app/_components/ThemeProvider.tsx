@@ -7,6 +7,7 @@ import React, {
   SetStateAction,
   useContext,
 } from "react";
+import { getLocalStorage, setLocalStorage } from "../_lib/helperFuncs";
 
 // Define the type for the context
 interface ThemeContextType {
@@ -23,7 +24,13 @@ interface ThemeContextProps {
 }
 
 export function ThemeProvider({ children }: ThemeContextProps) {
-  const [theme, setTheme] = useState<string>("dark");
+  let LocalStorageTheme = getLocalStorage("theme");
+  //local storage will be empty on first log in, it sets the default to dark and read it again
+  if (!LocalStorageTheme) {
+    setLocalStorage("theme", "dark");
+    LocalStorageTheme = getLocalStorage("theme");
+  }
+  const [theme, setTheme] = useState<string>(LocalStorageTheme);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

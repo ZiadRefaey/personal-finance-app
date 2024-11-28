@@ -36,10 +36,8 @@ export default function TransactionsDashboard({
   const [data, setData] = useState<Transaction[]>(tableData);
   return (
     <>
-      <div className="w-full flex flex-col items-start justify-center md:flex-row md:justify-between gap-10 mb-[42px]">
-        <h1 className="text-preset-2 md:text-preset-1 text-primary">
-          Transactions
-        </h1>
+      <div className="w-full gap-5 flex flex-col items-start justify-center md:flex-row md:justify-between mb-[42px]">
+        <h1 className="text-preset-1 text-primary">Transactions</h1>
         <div className="flex items-center justify-center self-end gap-4">
           <Modal>
             <ModalTrigger modalName="add-vendor">+Add New Vendor</ModalTrigger>

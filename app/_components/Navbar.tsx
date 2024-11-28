@@ -16,6 +16,7 @@ import UserAvatar from "./UserAvatar";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { SignOutAction } from "../_lib/actions";
+import { getLocalStorage, setLocalStorage } from "../_lib/helperFuncs";
 
 export default function Navbar({ session }: { session: any }) {
   const pathname = usePathname();
@@ -107,6 +108,9 @@ export default function Navbar({ session }: { session: any }) {
         <div
           onClick={() => {
             setTheme(theme === "dark" ? "light" : "dark");
+            const localStorageTheme = getLocalStorage("theme");
+            if (localStorageTheme === "dark") setLocalStorage("theme", "light");
+            else setLocalStorage("theme", "dark");
           }}
           className="cursor-pointer transition-all duration-150 hover:text-seperator flex gap-4"
         >

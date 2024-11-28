@@ -185,9 +185,9 @@ export default function BillsTable({
         </thead>
         <tbody className="divide-y divide-seperator">
           {table.getRowModel().rows.map((row) => (
-            <TR key={row.id}>
+            <TR className="pt-[10px]" key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <TD className="col-span-2" key={cell.id}>
+                <TD key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TD>
               ))}

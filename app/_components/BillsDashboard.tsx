@@ -20,7 +20,7 @@ export default function BillsDashboard({
 
   return (
     <>
-      <div className="w-full flex items-center justify-between mb-[42px]">
+      <div className="w-full gap-5 flex flex-col items-start justify-center md:flex-row md:justify-between mb-[42px]">
         <h1 className="text-preset-1 text-primary">Recurring Bills</h1>
         <div className="flex items-center justify-center self-end gap-4">
           <Modal>
