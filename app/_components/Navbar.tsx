@@ -3,7 +3,7 @@ import NavItem from "./NavItem";
 import { GoHomeFill } from "react-icons/go";
 import { LuArrowUpDown } from "react-icons/lu";
 import { BiSolidPieChartAlt2, BiArrowFromRight } from "react-icons/bi";
-import { FaSackDollar } from "react-icons/fa6";
+import { FaSackDollar, FaStore } from "react-icons/fa6";
 import { PiReceiptFill } from "react-icons/pi";
 import { usePathname } from "next/navigation";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
@@ -48,6 +48,11 @@ export default function Navbar({ session }: { session: any }) {
       label: "Recurring bills",
       href: "/recurring-bills",
     },
+    {
+      icon: <FaStore className={NavIconStyling} />,
+      label: "Vendors",
+      href: "/vendors",
+    },
   ];
   const { isRetracted, setIsRetracted } = useRetractable();
   if (pathname === "/login") return;
@@ -78,11 +83,6 @@ export default function Navbar({ session }: { session: any }) {
         <Tooltip>
           <TooltipTrigger className=" w-full xl:flex items-center gap-4 py-2 cursor-default hidden px-8 text-preset-3 text-icon">
             <UserAvatar session={session} />
-            {/* <img
-              src={session?.user?.image}
-              alt="asd"
-              className="size-7 -mr-[2px] rounded-full"
-            /> */}
             {!isRetracted && (
               <motion.span
                 layout
@@ -108,9 +108,9 @@ export default function Navbar({ session }: { session: any }) {
         <div
           onClick={() => {
             setTheme(theme === "dark" ? "light" : "dark");
-            const localStorageTheme = getLocalStorage("theme");
-            if (localStorageTheme === "dark") setLocalStorage("theme", "light");
-            else setLocalStorage("theme", "dark");
+            // const localStorageTheme = getLocalStorage("theme");
+            // if (localStorageTheme === "dark") setLocalStorage("theme", "light");
+            // else setLocalStorage("theme", "dark");
           }}
           className="cursor-pointer transition-all duration-150 hover:text-seperator flex gap-4"
         >

@@ -12,13 +12,17 @@ import { useForm } from "react-hook-form";
 import { VendorFormInputs } from "@/app/_lib/types";
 import InputError from "../UI/InputError";
 
-export default function NewVendorForm() {
+export default function NewVendorForm({ formData }: { formData?: string }) {
   const {
     register,
     reset,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<VendorFormInputs>();
+  } = useForm<VendorFormInputs>({
+    defaultValues: {
+      name: formData ? formData : "",
+    },
+  });
   const { setOpenModal } = useModal();
   async function clientAction(data: VendorFormInputs) {
     const formData = new FormData();

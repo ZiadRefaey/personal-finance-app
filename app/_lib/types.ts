@@ -98,3 +98,11 @@ export type BudgetType = BudgetAPIType & {
   spent: number;
 };
 export type SearchParamsType = { [key: string]: string | string[] | undefined };
+export type VendorType = {
+  id: number;
+  created_at: string;
+  userId: number;
+  name: string;
+  image: string;
+};
+export type VendorsType = VendorType[];

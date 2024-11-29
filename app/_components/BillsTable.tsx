@@ -200,7 +200,7 @@ export default function BillsTable({
 }
 
 type TitleType = {
-  image: any;
+  image: string;
   title: string;
 };
 export function BillsTitle({ image, title }: TitleType) {

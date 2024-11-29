@@ -24,13 +24,13 @@ interface ThemeContextProps {
 }
 
 export function ThemeProvider({ children }: ThemeContextProps) {
-  let LocalStorageTheme = getLocalStorage("theme");
+  // let LocalStorageTheme = getLocalStorage("theme");
   //local storage will be empty on first log in, it sets the default to dark and read it again
-  if (!LocalStorageTheme) {
-    setLocalStorage("theme", "dark");
-    LocalStorageTheme = getLocalStorage("theme");
-  }
-  const [theme, setTheme] = useState<string>(LocalStorageTheme);
+  // if (!LocalStorageTheme) {
+  //   setLocalStorage("theme", "dark");
+  //   LocalStorageTheme = getLocalStorage("theme");
+  // }
+  const [theme, setTheme] = useState<string>("dark");
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
