@@ -25,6 +25,7 @@ import {
   authenticateAndGetUserId,
   updateTransaction,
   deleteTransaction,
+  deleteVendor,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
 import { BillFormType, userEditableData } from "./types";
@@ -166,7 +167,13 @@ export async function CreateNewVendor(formData: FormData) {
     return error.message;
   }
 }
-
+export async function DeleteVendor(vendorId: number) {
+  try {
+    await deleteVendor(vendorId);
+  } catch (error: any) {
+    return error.message;
+  }
+}
 export async function CreateTransaction(
   vendor: string,
   amount: number,

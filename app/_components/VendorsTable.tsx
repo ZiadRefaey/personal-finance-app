@@ -16,8 +16,16 @@ import TD from "./UI/TD";
 import TableControls from "./TableControls";
 import TH from "./UI/TH";
 import TablePagination from "./TablePagination";
+import { DeleteVendor } from "../_lib/actions";
+import DeleteForm from "./forms/DeleteForm";
 
-export default function VendorsTable({ data }: { data: VendorType[] }) {
+export default function VendorsTable({
+  data,
+  setData,
+}: {
+  data: VendorType[];
+  setData: any;
+}) {
   const columnHelper = createColumnHelper<VendorType>();
   const columns = [
     columnHelper.accessor("name", {
@@ -61,17 +69,17 @@ export default function VendorsTable({ data }: { data: VendorType[] }) {
                     Delete Vendor
                   </ModalTrigger>
                   <ModalWindow
-                    header={`delete Vendor?`}
+                    header={`Delete Vendor?`}
                     modalName="delete-vendor"
-                    description="Are you sure you want to delete this vendor? This action cannot be reversed, and all the data inside it will be removed forever."
+                    description="Are you sure you want to delete this vendor? This action cannot be reversed, All transactions and bills associated with that vendor will be deleted. are you sure you want to continue?"
                   >
-                    {/* <DeleteForm
+                    <DeleteForm
                       tableData={data}
                       setTableData={setData}
-                      action={DeleteTransaction}
+                      action={DeleteVendor}
                       id={props.row.original.id}
-                      deleteMessage="Transaction was successfully deleted."
-                    /> */}
+                      deleteMessage="Vendor was successfully deleted along with the associated transactions and bills."
+                    />
                     <></>
                   </ModalWindow>
                 </Modal>

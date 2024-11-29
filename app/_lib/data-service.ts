@@ -344,6 +344,33 @@ export async function createVendor(
   if (error) throw new Error(error.message);
   return data;
 }
+export async function deleteTransactionByVendorId(vendorId: number) {
+  const { error } = await supabase
+    .from("transactions")
+    .delete()
+    .eq("vendorId", vendorId);
+  if (error) throw new Error(error.message);
+}
+export async function deleteBillByVendorId(vendorId: number) {
+  const { error } = await supabase
+    .from("bills")
+    .delete()
+    .eq("vendorId", vendorId);
+  if (error) throw new Error(error.message);
+}
+export async function deleteVendor(vendorId: number) {
+  try {
+    await deleteTransactionByVendorId(vendorId);
+    await deleteBillByVendorId(vendorId);
+    const { error } = await supabase
+      .from("vendors")
+      .delete()
+      .eq("id", vendorId);
+    if (error) throw new Error(error.message);
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
 
 export async function uploadFile(path: string, fileName: string, file: File) {
   const { data, error } = await supabase.storage

@@ -29,7 +29,7 @@ export default function VendorsDashboard({
         </Modal>
       </div>
       <Card className="w-full bg-card-back-ground min-h-[86vh] flex items-center justify-between flex-col">
-        <VendorsTable data={data} />
+        <VendorsTable setData={setData} data={data} />
       </Card>
     </>
   );
