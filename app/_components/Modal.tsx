@@ -12,6 +12,7 @@ import Button from "./UI/Button";
 import Card from "./UI/Card";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ModalContextType {
   openModal: string;
@@ -92,28 +93,36 @@ export function ModalWindow({
   if (!container) return null;
 
   return createPortal(
-    <div
-      className={`${
-        openModal === modalName ? "block" : "hidden"
-      } fixed w-full h-full flex items-center justify-center top-0 left-0 px-5 z-[100]`}
-    >
-      <Card className="bg-card-back-ground z-[1000] w-full max-w-[560px] flex flex-col items-center justify-center gap-5">
-        <div className="flex items-center justify-between w-full">
-          <p className="text-preset-2 text-primary">{header}</p>
-          <IoIosCloseCircleOutline
-            className="size-[25.5px] text-secondary cursor-pointer hover:text-primary duration-150 transition-all"
-            onClick={handleCloseModal}
-          />
-        </div>
-        <p className="text-secondary text-preset-4">{description}</p>
+    <AnimatePresence>
+      {openModal === modalName && (
+        <div
+          className={`fixed w-full h-full flex items-center justify-center top-0 left-0 px-5 z-[100]`}
+        >
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0.1 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.7, opacity: 0.1 }}
+            transition={{ duration: 0.1 }}
+            className="rounded-xl py-6 px-5 md:p-8 bg-card-back-ground  z-[1000] w-full max-w-[560px] flex flex-col items-center justify-center gap-5"
+          >
+            <div className="flex items-center justify-between w-full">
+              <p className="text-preset-2 text-primary">{header}</p>
+              <IoIosCloseCircleOutline
+                className="size-[25.5px] text-secondary cursor-pointer hover:text-primary duration-150 transition-all"
+                onClick={handleCloseModal}
+              />
+            </div>
+            <p className="text-secondary text-preset-4">{description}</p>
 
-        {children}
-      </Card>
-      <div
-        onClick={handleCloseModal}
-        className={`w-full h-full bg-black/50 flex items-center justify-center z-[999] absolute`}
-      ></div>
-    </div>,
+            {children}
+          </motion.div>
+          <div
+            onClick={handleCloseModal}
+            className={`w-full h-full bg-black/50 flex items-center justify-center z-[999] absolute`}
+          ></div>
+        </div>
+      )}
+    </AnimatePresence>,
     container
   );
 }
