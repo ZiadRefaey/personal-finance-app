@@ -141,7 +141,6 @@ export async function UpdatePotsSaved(potId: number, saved: number) {
 }
 export async function CreateNewVendor(formData: FormData) {
   try {
-    console.log("creating");
     //authenticate the user
     const session = await auth();
     authenticatedUser(session);

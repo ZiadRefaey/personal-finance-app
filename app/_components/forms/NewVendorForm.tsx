@@ -39,7 +39,6 @@ export default function NewVendorForm({
     if (existingFormData && id) {
       await UpdateVendor(id, formData);
     } else {
-      console.log("create");
       await CreateNewVendor(formData);
     }
     toast({ title: "Vendor created successfully" });
@@ -77,11 +76,13 @@ export default function NewVendorForm({
         <Label>Avatar</Label>
         <ShadcnInput
           {...register("image", {
-            // validate: {
-            //   required: (value) =>
-            //     (value instanceof FileList && value.length > 0) ||
-            //     "This field is required",
-            // },
+            validate: id
+              ? undefined
+              : {
+                  required: (value) =>
+                    (value instanceof FileList && value.length > 0) ||
+                    "This field is required",
+                },
           })}
           type="file"
           name="image"
@@ -90,7 +91,13 @@ export default function NewVendorForm({
       </InputContainer>
 
       <Button className="w-full mt-5" type="submit">
-        {isSubmitting ? "Adding" : "Add New Vendor"}
+        {existingFormData && isSubmitting
+          ? "Editing..."
+          : existingFormData
+          ? "Edit Vendor"
+          : !existingFormData && isSubmitting
+          ? "Adding..."
+          : "Add Vendor"}
       </Button>
     </form>
   );
