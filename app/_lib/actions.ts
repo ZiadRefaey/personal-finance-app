@@ -26,6 +26,7 @@ import {
   updateTransaction,
   deleteTransaction,
   deleteVendor,
+  updateVendor,
 } from "./data-service";
 import { revalidatePath } from "next/cache";
 import { BillFormType, userEditableData } from "./types";
@@ -140,6 +141,7 @@ export async function UpdatePotsSaved(potId: number, saved: number) {
 }
 export async function CreateNewVendor(formData: FormData) {
   try {
+    console.log("creating");
     //authenticate the user
     const session = await auth();
     authenticatedUser(session);
@@ -164,7 +166,31 @@ export async function CreateNewVendor(formData: FormData) {
     );
     revalidatePath("/transactions");
   } catch (error: any) {
-    return error.message;
+    throw new Error(error.message);
+  }
+}
+export async function UpdateVendor(id: number, formData: FormData) {
+  try {
+    const image = formData.get("image");
+    //im not sure why when no image is passed it is undefined as a string
+    if (image === "undefined") {
+      await updateVendor(id, { name: formData.get("name") });
+    } else {
+      const userId = await authenticateAndGetUserId();
+      const image = formData.get("image") as File;
+
+      //create a unique name for each image according to user ID
+      const imageName = `${String(userId)} - ${image.name}`;
+
+      //upload the image to supabase's bucket
+      await uploadFile("vendors", imageName, image);
+
+      //retrieve the url of the uploaded image to store it in the database
+      const imageUrl = await getFileUrl(`vendors/${imageName}`);
+      await updateVendor(id, { name: formData.get("name"), image: imageUrl });
+    }
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 }
 export async function DeleteVendor(vendorId: number) {

@@ -58,7 +58,10 @@ export default function VendorsTable({
                     modalName="edit-vendor"
                     description="Edit your vendor to modify there details. edited vendors will be updated all across your existing transactions and bills."
                   >
-                    <NewVendorForm formData={props.row.original.name} />
+                    <NewVendorForm
+                      id={props.row.original.id}
+                      existingFormData={props.row.original.name}
+                    />
                   </ModalWindow>
                 </Modal>
               </PopoverButton>
@@ -80,7 +83,6 @@ export default function VendorsTable({
                       id={props.row.original.id}
                       deleteMessage="Vendor was successfully deleted along with the associated transactions and bills."
                     />
-                    <></>
                   </ModalWindow>
                 </Modal>
               </PopoverButton>

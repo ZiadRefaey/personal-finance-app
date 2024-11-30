@@ -344,6 +344,16 @@ export async function createVendor(
   if (error) throw new Error(error.message);
   return data;
 }
+export async function updateVendor(
+  vendorId: number,
+  updatedData: { name?: FormDataEntryValue | null; image?: string }
+) {
+  const { error } = await supabase
+    .from("vendors")
+    .update({ ...updatedData })
+    .eq("id", vendorId);
+  if (error) throw new Error(error.message);
+}
 export async function deleteTransactionByVendorId(vendorId: number) {
   const { error } = await supabase
     .from("transactions")

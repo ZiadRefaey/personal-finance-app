@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Button from "../UI/Button";
-import { CreateNewVendor } from "@/app/_lib/actions";
+import { CreateNewVendor, UpdateVendor } from "@/app/_lib/actions";
 import { Input as ShadcnInput } from "@/components/ui/input";
 import InputContainer from "../UI/InputContainer";
 import Label from "../UI/Label";
@@ -12,7 +12,13 @@ import { useForm } from "react-hook-form";
 import { VendorFormInputs } from "@/app/_lib/types";
 import InputError from "../UI/InputError";
 
-export default function NewVendorForm({ formData }: { formData?: string }) {
+export default function NewVendorForm({
+  existingFormData,
+  id,
+}: {
+  existingFormData?: string;
+  id?: number;
+}) {
   const {
     register,
     reset,
@@ -20,22 +26,28 @@ export default function NewVendorForm({ formData }: { formData?: string }) {
     formState: { errors, isSubmitting },
   } = useForm<VendorFormInputs>({
     defaultValues: {
-      name: formData ? formData : "",
+      name: existingFormData ? existingFormData : "",
     },
   });
   const { setOpenModal } = useModal();
   async function clientAction(data: VendorFormInputs) {
+    // try {
     const formData = new FormData();
     formData.append("name", data.name);
-    formData.append("image", data.image[0]);
-    const result = await CreateNewVendor(formData);
-    if (result) {
-      toast({ title: "Something went wrong.", description: result });
+    formData.append("image", data?.image[0]);
+    //if there are existing data then its an edit form
+    if (existingFormData && id) {
+      await UpdateVendor(id, formData);
     } else {
-      toast({ title: "Vendor created successfully" });
-      reset();
-      setOpenModal("");
+      console.log("create");
+      await CreateNewVendor(formData);
     }
+    toast({ title: "Vendor created successfully" });
+    reset();
+    setOpenModal("");
+    // } catch (error: any) {
+    //   toast({ title: "Something went wrong.", description: error.message });
+    // }
   }
 
   return (
@@ -65,11 +77,11 @@ export default function NewVendorForm({ formData }: { formData?: string }) {
         <Label>Avatar</Label>
         <ShadcnInput
           {...register("image", {
-            validate: {
-              required: (value) =>
-                (value instanceof FileList && value.length > 0) ||
-                "This field is required",
-            },
+            // validate: {
+            //   required: (value) =>
+            //     (value instanceof FileList && value.length > 0) ||
+            //     "This field is required",
+            // },
           })}
           type="file"
           name="image"
