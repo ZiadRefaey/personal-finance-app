@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import VendorsTable from "../_components/VendorsTable";
 import { VendorsType } from "../_lib/types";
-import NewVendorForm from "./forms/NewVendorForm";
+import VendorForm from "./forms/VendorForm";
 import Card from "./UI/Card";
 
 export default function VendorsDashboard({
@@ -24,7 +24,7 @@ export default function VendorsDashboard({
             modalName="add-pot"
             description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
           >
-            <NewVendorForm />
+            <VendorForm />
           </ModalWindow>
         </Modal>
       </div>

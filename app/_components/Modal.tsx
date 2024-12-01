@@ -9,7 +9,6 @@ import React, {
   useState,
 } from "react";
 import Button from "./UI/Button";
-import Card from "./UI/Card";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";

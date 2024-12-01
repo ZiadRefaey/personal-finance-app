@@ -10,7 +10,7 @@ import Image from "next/image";
 import PopoverEllipsisTrigger from "./PopoverEllipsisTrigger";
 import PopoverButton from "./UI/PopoverButton";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
-import NewVendorForm from "./forms/NewVendorForm";
+import VendorForm from "./forms/VendorForm";
 import TR from "./UI/TR";
 import TD from "./UI/TD";
 import TableControls from "./TableControls";
@@ -58,7 +58,7 @@ export default function VendorsTable({
                     modalName="edit-vendor"
                     description="Edit your vendor to modify there details. edited vendors will be updated all across your existing transactions and bills."
                   >
-                    <NewVendorForm
+                    <VendorForm
                       id={props.row.original.id}
                       existingFormData={props.row.original.name}
                     />

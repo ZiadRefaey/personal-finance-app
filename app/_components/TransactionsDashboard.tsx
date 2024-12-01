@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Card from "../_components/UI/Card";
-import NewVendorForm from "../_components/forms/NewVendorForm";
+import VendorForm from "./forms/VendorForm";
 import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import TransactionTable from "../_components/TransactionTable";
 import TransactionForm from "../_components/forms/TransactionForm";
@@ -46,7 +46,7 @@ export default function TransactionsDashboard({
               modalName="add-vendor"
               description="Add a vendor where you make transactions with. These will show up to be picked from when creating a new transaction"
             >
-              <NewVendorForm />
+              <VendorForm />
             </ModalWindow>
           </Modal>
 

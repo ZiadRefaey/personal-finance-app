@@ -1,12 +1,12 @@
 "use client";
 import React, { ReactNode, useState } from "react";
 import { Modal, ModalTrigger, ModalWindow } from "./Modal";
-import NewVendorForm from "./forms/NewVendorForm";
+import VendorForm from "./forms/VendorForm";
 import BillForm from "./forms/BillForm";
-
 import BillsTable from "./BillsTable";
 import { Bills } from "@/app/_lib/types";
 import Card from "./UI/Card";
+
 export default function BillsDashboard({
   billsTableData,
   children,
@@ -30,7 +30,7 @@ export default function BillsDashboard({
               modalName="add-vendor"
               description="Add a vendor where you make transactions with. These will show up to be picked from when creating a new transaction"
             >
-              <NewVendorForm />
+              <VendorForm />
             </ModalWindow>
           </Modal>
 

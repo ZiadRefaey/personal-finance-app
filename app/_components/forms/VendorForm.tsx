@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { VendorFormInputs } from "@/app/_lib/types";
 import InputError from "../UI/InputError";
 
-export default function NewVendorForm({
+export default function VendorForm({
   existingFormData,
   id,
 }: {
