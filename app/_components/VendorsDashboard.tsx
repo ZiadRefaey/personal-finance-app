@@ -24,7 +24,7 @@ export default function VendorsDashboard({
             modalName="add-pot"
             description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
           >
-            <VendorForm />
+            <VendorForm vendors={data} setVendors={setData} />
           </ModalWindow>
         </Modal>
       </div>

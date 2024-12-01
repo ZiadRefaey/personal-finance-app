@@ -340,7 +340,8 @@ export async function createVendor(
   const { data, error } = await supabase
     .from("vendors")
     .insert([{ userId, name, image }])
-    .select();
+    .select()
+    .single();
   if (error) throw new Error(error.message);
   return data;
 }
@@ -348,11 +349,14 @@ export async function updateVendor(
   vendorId: number,
   updatedData: { name?: FormDataEntryValue | null; image?: string }
 ) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("vendors")
     .update({ ...updatedData })
-    .eq("id", vendorId);
+    .eq("id", vendorId)
+    .select()
+    .single();
   if (error) throw new Error(error.message);
+  return data;
 }
 export async function deleteTransactionByVendorId(vendorId: number) {
   const { error } = await supabase

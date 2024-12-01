@@ -9,15 +9,19 @@ import Input from "../UI/Input";
 import { toast } from "@/hooks/use-toast";
 import { useModal } from "../Modal";
 import { useForm } from "react-hook-form";
-import { VendorFormInputs } from "@/app/_lib/types";
+import { VendorFormInputs, VendorsType } from "@/app/_lib/types";
 import InputError from "../UI/InputError";
 
 export default function VendorForm({
   existingFormData,
   id,
+  vendors,
+  setVendors,
 }: {
   existingFormData?: string;
   id?: number;
+  vendors?: VendorsType;
+  setVendors?: any;
 }) {
   const {
     register,
@@ -31,22 +35,33 @@ export default function VendorForm({
   });
   const { setOpenModal } = useModal();
   async function clientAction(data: VendorFormInputs) {
-    // try {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("image", data?.image[0]);
-    //if there are existing data then its an edit form
-    if (existingFormData && id) {
-      await UpdateVendor(id, formData);
-    } else {
-      await CreateNewVendor(formData);
+    try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("image", data?.image[0]);
+      //if there are existing data then its an edit form
+      if (existingFormData && id) {
+        const { name, image } = await UpdateVendor(id, formData);
+        if (setVendors) {
+          const updatedVendors = vendors?.map((vendor) =>
+            vendor.id === id ? { name, image } : vendor
+          );
+          setVendors(updatedVendors);
+        }
+        toast({ title: "Vendor edited successfully" });
+      } else {
+        const { name, image } = await CreateNewVendor(formData);
+        toast({ title: "Vendor created successfully" });
+        //to only run on the vendors page
+        if (setVendors) {
+          setVendors((prev: any) => [...prev, { name, image }]);
+        }
+      }
+      reset();
+      setOpenModal("");
+    } catch (error: any) {
+      toast({ title: "Something went wrong", description: error.message });
     }
-    toast({ title: "Vendor created successfully" });
-    reset();
-    setOpenModal("");
-    // } catch (error: any) {
-    //   toast({ title: "Something went wrong.", description: error.message });
-    // }
   }
 
   return (

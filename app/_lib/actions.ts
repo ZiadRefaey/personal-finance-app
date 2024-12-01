@@ -158,12 +158,15 @@ export async function CreateNewVendor(formData: FormData) {
     const imageUrl = await getFileUrl(`vendors/${imageName}`);
 
     //create a new record with the image's id and name from the form submission
-    await createVendor(
+    const vendor = await createVendor(
       Number(session?.user?.id),
       formData.get("name"),
       imageUrl
     );
     revalidatePath("/transactions");
+    revalidatePath("/bills");
+    revalidatePath("/vendors");
+    return vendor;
   } catch (error: any) {
     throw new Error(error.message);
   }
@@ -173,20 +176,29 @@ export async function UpdateVendor(id: number, formData: FormData) {
     const image = formData.get("image");
     //im not sure why when no image is passed it is undefined as a string
     if (image === "undefined") {
-      await updateVendor(id, { name: formData.get("name") });
+      const updatedVendor = await updateVendor(id, {
+        name: formData.get("name"),
+      });
+      revalidatePath("/vendors");
+      console.log(updatedVendor);
+      return updatedVendor;
     } else {
       const userId = await authenticateAndGetUserId();
       const image = formData.get("image") as File;
-
       //create a unique name for each image according to user ID
-      const imageName = `${String(userId)} - ${image.name}`;
+      const imageName = `${String(userId)} - ${image.name} - ${Math.random()}`;
 
       //upload the image to supabase's bucket
       await uploadFile("vendors", imageName, image);
-
       //retrieve the url of the uploaded image to store it in the database
       const imageUrl = await getFileUrl(`vendors/${imageName}`);
-      await updateVendor(id, { name: formData.get("name"), image: imageUrl });
+      const updatedVendor = await updateVendor(id, {
+        name: formData.get("name"),
+        image: imageUrl,
+      });
+      revalidatePath("/vendors");
+      console.log(updatedVendor);
+      return updatedVendor;
     }
   } catch (error: any) {
     throw new Error(error.message);
