@@ -68,9 +68,15 @@ export function getBillsSummaryDetails(bills: BillType[]) {
   };
 }
 export function setLocalStorage(key: string, value: unknown) {
+  if (typeof window === "undefined") {
+    return null; // Return a default value when running on the server
+  }
   window.localStorage.setItem(key, JSON.stringify(value));
 }
 export function getLocalStorage(key: string) {
+  if (typeof window === "undefined") {
+    return null; // Return a default value when running on the server
+  }
   const item = window.localStorage.getItem(key);
   return item ? JSON.parse(item) : null;
 }

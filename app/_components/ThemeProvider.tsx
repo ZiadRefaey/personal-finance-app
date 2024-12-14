@@ -6,6 +6,7 @@ import React, {
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
 } from "react";
 import { getLocalStorage, setLocalStorage } from "../_lib/helperFuncs";
 
@@ -24,13 +25,21 @@ interface ThemeContextProps {
 }
 
 export function ThemeProvider({ children }: ThemeContextProps) {
-  // let LocalStorageTheme = getLocalStorage("theme");
+  const [theme, setTheme] = useState<string>("dark");
+  useEffect(() => {
+    let localStorageTheme = getLocalStorage("theme");
+    //on first log in the theme will be null
+    if (!localStorageTheme) {
+      setLocalStorage("theme", "dark");
+      localStorageTheme = getLocalStorage("theme");
+    }
+    setTheme(localStorageTheme);
+  }, []);
   //local storage will be empty on first log in, it sets the default to dark and read it again
   // if (!LocalStorageTheme) {
   //   setLocalStorage("theme", "dark");
   //   LocalStorageTheme = getLocalStorage("theme");
   // }
-  const [theme, setTheme] = useState<string>("dark");
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

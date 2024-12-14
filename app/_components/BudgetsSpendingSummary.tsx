@@ -1,6 +1,5 @@
 import { authenticateAndGetUserId, getBudgets } from "../_lib/data-service";
 import { getBudgetsWithSpent } from "../_lib/helperFuncs";
-import { BudgetType } from "../_lib/types";
 import BudgetSpendingSummaryDetails from "./BudgetSpendingSummaryDetails";
 import { PieChartShad } from "./PieChartShad";
 

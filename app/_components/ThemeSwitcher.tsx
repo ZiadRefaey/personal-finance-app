@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "./ThemeProvider";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { getLocalStorage, setLocalStorage } from "../_lib/helperFuncs";
 
 export default function ThemeSwitcher({
   isRetracted,
@@ -13,9 +14,10 @@ export default function ThemeSwitcher({
     <div
       onClick={() => {
         setTheme(theme === "dark" ? "light" : "dark");
-        // const localStorageTheme = getLocalStorage("theme");
-        // if (localStorageTheme === "dark") setLocalStorage("theme", "light");
-        // else setLocalStorage("theme", "dark");
+        const localStorageTheme = getLocalStorage("theme");
+
+        if (localStorageTheme === "dark") setLocalStorage("theme", "light");
+        else setLocalStorage("theme", "dark");
       }}
       className="cursor-pointer transition-all duration-150 hover:text-seperator flex gap-4"
     >

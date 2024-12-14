@@ -10,7 +10,6 @@ import MobileNav from "./MobileNav";
 import NavbarAvatar from "./NavbarAvatar";
 import { useRetractable } from "./RetractableProvider";
 import ThemeSwitcher from "./ThemeSwitcher";
-import { SessionType } from "../_lib/types";
 export default function Navbar({ session }: { session: any }) {
   const pathname = usePathname();
 
