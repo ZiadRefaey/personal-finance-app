@@ -11,7 +11,7 @@ import NavbarAvatar from "./NavbarAvatar";
 import { useRetractable } from "./RetractableProvider";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { SessionType } from "../_lib/types";
-export default function Navbar({ session }: { session: SessionType }) {
+export default function Navbar({ session }: { session: any }) {
   const pathname = usePathname();
 
   const { isRetracted, setIsRetracted } = useRetractable();

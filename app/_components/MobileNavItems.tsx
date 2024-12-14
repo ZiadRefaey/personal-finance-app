@@ -3,6 +3,7 @@ import MobileNavItemsList from "./MobileNavItemsList";
 import NavbarAvatar from "./NavbarAvatar";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { motion } from "framer-motion";
+import { SessionType } from "../_lib/types";
 export default function MobileNavItems({
   isOpen,
   pathname,
@@ -12,7 +13,7 @@ export default function MobileNavItems({
   setIsOpen: any;
   isOpen: boolean;
   pathname: string;
-  session: any;
+  session: SessionType;
 }) {
   const variants = {
     open: {

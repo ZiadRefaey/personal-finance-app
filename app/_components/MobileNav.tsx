@@ -3,13 +3,14 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { MenuToggle } from "./MenuToggle";
 import MobileNavItems from "./MobileNavItems";
+import { SessionType } from "../_lib/types";
 
 export default function MobileNav({
   pathname,
   session,
 }: {
   pathname: string;
-  session: any;
+  session: SessionType;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 

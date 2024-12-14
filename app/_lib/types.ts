@@ -1,12 +1,12 @@
 export type SessionType = {
-  user: {
-    name: string;
-    email: string;
-    image: string;
-    id: number;
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    id?: number | null;
   };
   expires: string;
-};
+} | null;
 export type TransactionFormInputs = {
   amount: number;
   vendor: string;
