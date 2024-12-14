@@ -29,29 +29,34 @@ export default async function PotsOverview() {
         buttonContent="See Details"
         href="/pots"
       />
+      {pots.length === 0 ? (
+        <div className="w-full h-[130px] flex items-center justify-center">
+          <p className="text-preset-2 text-primary">No pots created yet.</p>
+        </div>
+      ) : (
+        <div className=" gap-5 grid grid-cols-1 md:grid-cols-[247px,1fr]">
+          <div className="rounded-xl bg-background flex items-center justify-start p-4 gap-4">
+            <Image src={Pot} alt="Pot Icon" />
+            <div className="">
+              <p className="text-secondary text-preset-4 mb-3">Total Saved</p>
+              <p className="text-primary text-preset-1">
+                ${totalSaved.toLocaleString()}
+              </p>
+            </div>
+          </div>
 
-      <div className=" gap-5 grid grid-cols-1 md:grid-cols-[247px,1fr]">
-        <div className="rounded-xl bg-background flex items-center justify-start p-4 gap-4">
-          <Image src={Pot} alt="Pot Icon" />
-          <div className="">
-            <p className="text-secondary text-preset-4 mb-3">Total Saved</p>
-            <p className="text-primary text-preset-1">
-              ${totalSaved.toLocaleString()}
-            </p>
+          <div className="grid grid-cols-2 grid-rows-2 gap-4">
+            {HighestSavedPots.map((pot) => (
+              <PotDetails
+                amount={pot.saved}
+                key={pot.id}
+                color={pot.color}
+                title={pot.title}
+              />
+            ))}
           </div>
         </div>
-
-        <div className="grid grid-cols-2 grid-rows-2 gap-4">
-          {HighestSavedPots.map((pot) => (
-            <PotDetails
-              amount={pot.saved}
-              key={pot.id}
-              color={pot.color}
-              title={pot.title}
-            />
-          ))}
-        </div>
-      </div>
+      )}
     </Card>
   );
 }
