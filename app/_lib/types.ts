@@ -1,9 +1,9 @@
 export type SessionType = {
   user?: {
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
-    id?: number | null;
+    name?: string;
+    email?: string;
+    image?: string;
+    id?: number;
   };
   expires: string;
 } | null;

@@ -35,11 +35,6 @@ export function ThemeProvider({ children }: ThemeContextProps) {
     }
     setTheme(localStorageTheme);
   }, []);
-  //local storage will be empty on first log in, it sets the default to dark and read it again
-  // if (!LocalStorageTheme) {
-  //   setLocalStorage("theme", "dark");
-  //   LocalStorageTheme = getLocalStorage("theme");
-  // }
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
