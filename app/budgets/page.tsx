@@ -9,10 +9,13 @@ import { auth } from "@/auth";
 
 import BudgetsSummarySkeleton from "../_components/UI/BudgetsSummarySkeleton";
 import BudgetsCardsListSkeleton from "../_components/UI/BudgetsCardsListSkeleton";
+import { getBudgets } from "../_lib/data-service";
 
 export default async function page() {
   const session = await auth();
   const userId = Number(session?.user?.id);
+  const budgets = await getBudgets(userId);
+
   return (
     <>
       <div className="w-full flex items-center justify-between mb-[42px]">
@@ -32,14 +35,20 @@ export default async function page() {
           </ModalWindow>
         </Modal>
       </div>
-
       <div className="flex items-start justify-center flex-col xl:flex-row gap-6">
-        <Suspense fallback={<BudgetsSummarySkeleton />}>
-          <BudgetsSpendingSummary />
-        </Suspense>
-        <Suspense fallback={<BudgetsCardsListSkeleton />}>
-          <BudgetCardsList />
-        </Suspense>
+        {/* if there are no budgets created by the user yet, notify the user and hide budgets UI */}
+        {budgets.length === 0 ? (
+          <p className="text-preset-2 text-primary">No budgets created yet.</p>
+        ) : (
+          <>
+            <Suspense fallback={<BudgetsSummarySkeleton />}>
+              <BudgetsSpendingSummary />
+            </Suspense>
+            <Suspense fallback={<BudgetsCardsListSkeleton />}>
+              <BudgetCardsList />
+            </Suspense>
+          </>
+        )}
       </div>
     </>
   );
