@@ -1,3 +1,12 @@
+export type SessionType = {
+  user: {
+    name: string;
+    email: string;
+    image: string;
+    id: number;
+  };
+  expires: string;
+};
 export type TransactionFormInputs = {
   amount: number;
   vendor: string;

@@ -99,7 +99,6 @@ export async function CreatePot(
   color: string,
   userId: number
 ) {
-  //
   try {
     await createPot(userId, title, color, goal);
     revalidatePath("/pots");
@@ -180,7 +179,6 @@ export async function UpdateVendor(id: number, formData: FormData) {
         name: formData.get("name"),
       });
       revalidatePath("/vendors");
-      console.log(updatedVendor);
       return updatedVendor;
     } else {
       const userId = await authenticateAndGetUserId();
@@ -197,7 +195,6 @@ export async function UpdateVendor(id: number, formData: FormData) {
         image: imageUrl,
       });
       revalidatePath("/vendors");
-      console.log(updatedVendor);
       return updatedVendor;
     }
   } catch (error: any) {

@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 export default function UserAvatar({ session }: { session: any }) {
   return (
-    <Avatar className="size-7 -mr-[2px]">
+    <Avatar className="size-[50px] xl:size-7 -mr-[2px]">
       <motion.div layout>
         <AvatarImage src={session?.user?.image} />
       </motion.div>

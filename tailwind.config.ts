@@ -74,6 +74,7 @@ const config: Config = {
         secondary: "rgba(var(--secondary-text))",
         "card-back-ground": "rgba(var(--card-back-ground))",
         navbar: "rgba(var(--navbar))",
+        navhover: "rgba(var(--navhover))",
         "highlighted-card": "rgba(var(--highlighted-card))",
         seperator: "rgba(var(--seperator))",
         green: "var(--green)",
