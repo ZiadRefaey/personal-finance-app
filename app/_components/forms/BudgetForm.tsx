@@ -50,6 +50,7 @@ export default function BudgetForm({
     defaultValues: {
       title: formData?.title || "",
       amount: formData?.total || undefined,
+      color: formData?.color || undefined,
     },
   });
 
@@ -119,7 +120,7 @@ export default function BudgetForm({
           name="color"
         >
           <SelectTrigger
-            {...register("color", { required: "This field is required" })}
+            // {...register("color", { required: "This field is required" })}
             className="w-full bg-white text-navbar py-[22px] rounded-lg"
           >
             <SelectValue placeholder="Theme" />
