@@ -43,6 +43,7 @@ export default function DeleteForm({
     >
       <Submit />
       <button
+        onClick={() => setOpenModal("")}
         type="reset"
         className="py-2 text-secondary hover:text-primary duration-150 transition-all w-full"
       >
