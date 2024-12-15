@@ -70,7 +70,13 @@ export default function BillsTable({
             <>
               <PopoverButton>
                 <Modal>
-                  <ModalTrigger modalName="paybill" variant="ellipses">
+                  <ModalTrigger
+                    disabled={
+                      props.row.original.status === "paid" ? true : false
+                    }
+                    modalName="paybill"
+                    variant="ellipses"
+                  >
                     Pay Bill
                   </ModalTrigger>
                   <ModalWindow
