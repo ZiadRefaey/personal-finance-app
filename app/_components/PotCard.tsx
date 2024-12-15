@@ -62,11 +62,7 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
               </PopoverButton>
               <PopoverButton>
                 <Modal>
-                  <ModalTrigger
-                    className="hover:bg-green hover:text-white"
-                    variant="ellipses"
-                    modalName="delete-pot"
-                  >
+                  <ModalTrigger variant="ellipses" modalName="delete-pot">
                     Delete Pot
                   </ModalTrigger>
                   <ModalWindow
