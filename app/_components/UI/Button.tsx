@@ -7,12 +7,13 @@ type Button = {
   className?: string;
   type?: buttonType;
   disabled?: boolean;
+  variant?: "primary" | "secondary" | "danger";
 };
 export default function Button({
   onClick,
   children,
   className,
-  primary = true,
+  variant = "primary",
   type = "button",
   disabled,
 }: Button) {
@@ -24,9 +25,13 @@ export default function Button({
       className={`${className} rounded-lg p-4 transition-all duration-150 ${
         disabled ? "opacity-50 cursor-not-allowed" : ""
       } ${
-        primary
+        variant == "primary"
           ? "bg-primary text-background hover:bg-secondary text-preset-4"
-          : "bg-background text-primary border-[1px] border-transparent hover:border-border hover:bg-inherit text-preset-4"
+          : variant === "secondary"
+          ? "bg-background text-primary border-[1px] border-transparent hover:border-border hover:bg-inherit text-preset-4"
+          : variant === "danger"
+          ? "bg-red text-white w-full hover:opacity-70"
+          : ""
       }`}
     >
       {children}

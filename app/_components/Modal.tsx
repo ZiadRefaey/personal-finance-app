@@ -46,7 +46,9 @@ export function ModalTrigger({
   variant,
   primary = true,
   disabled,
+  type = "primary",
 }: {
+  type?: "primary" | "secondary" | "danger";
   children: ReactNode;
   modalName: string;
   variant?: "ellipses";
@@ -61,6 +63,7 @@ export function ModalTrigger({
   return (
     <Button
       disabled={disabled}
+      variant={type}
       primary={primary}
       className={`${className} ${variant === "ellipses" ? "w-[140px]" : ""}`}
       onClick={handleOpenModal}

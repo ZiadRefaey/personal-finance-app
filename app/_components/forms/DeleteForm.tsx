@@ -55,10 +55,7 @@ export default function DeleteForm({
 function Submit() {
   const { pending } = useFormStatus();
   return (
-    <Button
-      className="bg-red text-white hover:opacity-70 mb-3 w-full hover:bg-red"
-      type="submit"
-    >
+    <Button variant="danger" className="mb-3" type="submit">
       {pending ? "Deleting..." : "Yes, Confirm Deletion"}
     </Button>
   );

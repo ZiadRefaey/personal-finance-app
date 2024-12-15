@@ -104,7 +104,7 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
       </div>
       <div className="mt-8 grid grid-cols-2 w-full gap-3">
         <Modal>
-          <ModalTrigger primary={false} className="w-full" modalName="add-pot">
+          <ModalTrigger type="secondary" className="w-full" modalName="add-pot">
             + Add Money
           </ModalTrigger>
           <ModalWindow
@@ -118,7 +118,7 @@ export default function PotCard({ title, saved, goal, color, id }: PotType) {
 
         <Modal>
           <ModalTrigger
-            primary={false}
+            type="secondary"
             className="w-full"
             modalName="withdraw-pot"
           >
