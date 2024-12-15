@@ -39,7 +39,11 @@ export default function TransactionForm({
     reset,
     formState: { errors, isSubmitting },
   } = useForm<TransactionFormInputs>({
-    defaultValues: { amount: formData?.amount || undefined },
+    defaultValues: {
+      amount: formData?.amount || undefined,
+      vendor: formData?.vendor || undefined,
+      category: formData?.budget || undefined,
+    },
   });
 
   async function onSubmit(data: any) {
