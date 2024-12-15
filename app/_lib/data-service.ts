@@ -586,7 +586,8 @@ export async function createBill(
 
 export async function payBill(billId: number) {
   const currentBill = await getBill(billId);
-
+  if (currentBill.status === "paid")
+    throw new Error("You cannot pay the bill if it's already paid");
   const oldDueDate = currentBill.due_date;
   const dueDate = add(oldDueDate, { months: 1 });
 
