@@ -6,7 +6,11 @@ import { CreatePot } from "../_lib/actions";
 import { auth } from "@/auth";
 import PotsCardsList from "../_components/PotsCardsList";
 import PotCardsListSkeleton from "../_components/UI/PotCardsListSkeleton";
-
+export const metadata = {
+  title: "Pots",
+  description:
+    "Pots page where you can create a new pot with a set goal. you can deposite and withdraw money towards that goal",
+};
 export default async function page() {
   const session = await auth();
   const userId = Number(session?.user?.id);

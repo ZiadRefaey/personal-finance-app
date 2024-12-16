@@ -2,7 +2,11 @@ import { getBudgets, getTransactions, getVendors } from "../_lib/data-service";
 import { auth } from "@/auth";
 import TransactionsDashboard from "../_components/TransactionsDashboard";
 import { SearchParamsType } from "../_lib/types";
-
+export const metadata = {
+  title: "Transactions",
+  description:
+    "Transactions page where you view all previously made transactions, create new transactions ,edit and delete previous transactions. you can also filter and sort them out based on different categories.",
+};
 export default async function page({
   searchParams,
 }: {

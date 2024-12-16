@@ -7,7 +7,11 @@ import TransactionsOverview from "./_components/TransactionsOverview";
 import { Modal, ModalTrigger, ModalWindow } from "./_components/Modal";
 import OverviewForm from "./_components/forms/OverviewForm";
 import { getUserDetails } from "./_lib/data-service";
-
+export const metadata = {
+  title: "Overview",
+  description:
+    "Overview page where you check all the stats about your account. such as budgets transactions pots and bills",
+};
 export default async function Home() {
   const session = await auth();
   const userId = Number(session?.user?.id);

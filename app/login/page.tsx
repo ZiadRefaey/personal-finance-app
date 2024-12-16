@@ -8,7 +8,11 @@ import {
 } from "../_lib/actions";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaSpotify } from "react-icons/fa";
-
+export const metadata = {
+  title: "Login",
+  description:
+    "Login page where you can login with a google, spotify or github account.",
+};
 export default function page() {
   return (
     <div className="w-full h-full grid grid-rows-[70px,1fr] xl:grid-rows-1 xl:grid-cols-[540px,1fr] gap-5 ">

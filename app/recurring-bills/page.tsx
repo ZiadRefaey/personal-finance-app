@@ -3,7 +3,10 @@ import BillsDashboard from "../_components/BillsDashboard";
 import { getBills, getVendors } from "../_lib/data-service";
 import TotalBillsCard from "../_components/TotalBillsCard";
 import BillsSummaryCard from "../_components/BillsSummaryCard";
-
+export const metadata = {
+  title: "Recurring Bills",
+  description:"Recurring bills page where you can view all your reucrring bills, check when they have to be paid and pay them once they are upcoming or overdue, you can also add new bills with specific dates."
+};
 export default async function page() {
   const session = await auth();
   const userId = Number(session?.user?.id);

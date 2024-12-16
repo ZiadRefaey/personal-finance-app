@@ -10,7 +10,11 @@ import { auth } from "@/auth";
 import BudgetsSummarySkeleton from "../_components/UI/BudgetsSummarySkeleton";
 import BudgetsCardsListSkeleton from "../_components/UI/BudgetsCardsListSkeleton";
 import { getBudgets } from "../_lib/data-service";
-
+export const metadata = {
+  title: "Budgets",
+  description:
+    "Budgets page where you create budgets of your expenses. view all of the created budgets and their recent transactions. edit and delete budgets.",
+};
 export default async function page() {
   const session = await auth();
   const userId = Number(session?.user?.id);
