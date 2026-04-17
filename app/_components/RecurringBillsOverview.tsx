@@ -3,6 +3,8 @@ import OverviewSectionHeader from "./OverviewSectionHeader";
 import { authenticateAndGetUserId, getBills } from "../_lib/data-service";
 import { FormatNumber, getBillsSummaryDetails } from "../_lib/helperFuncs";
 import { BillType } from "../_lib/types";
+import EmptyState from "./EmptyState";
+import { PiReceiptFill } from "react-icons/pi";
 type BillCardType = {
   billTitle: string;
   billAmount: number;
@@ -40,16 +42,25 @@ export default async function RecurringBillsOverview() {
         href="/recurring-bills"
       />
 
-      <div className="flex flex-col gap-3 mt-8">
-        {BillsData.map((bill) => (
-          <BillCard
-            billAmount={bill.billAmount}
-            billTitle={bill.billTitle}
-            borderColor={bill.borderColor}
-            key={bill.billTitle}
-          />
-        ))}
-      </div>
+      {bills.length === 0 ? (
+        <EmptyState
+          title="No recurring bills yet"
+          message="Add recurring bills to keep monthly payments visible."
+          icon={<PiReceiptFill className="size-7" />}
+          className="min-h-[220px]"
+        />
+      ) : (
+        <div className="flex flex-col gap-3 mt-8">
+          {BillsData.map((bill) => (
+            <BillCard
+              billAmount={bill.billAmount}
+              billTitle={bill.billTitle}
+              borderColor={bill.borderColor}
+              key={bill.billTitle}
+            />
+          ))}
+        </div>
+      )}
     </Card>
   );
 }

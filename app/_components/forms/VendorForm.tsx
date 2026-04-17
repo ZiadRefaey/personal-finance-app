@@ -41,20 +41,20 @@ export default function VendorForm({
       formData.append("image", data?.image[0]);
       //if there are existing data then its an edit form
       if (existingFormData && id) {
-        const { name, image } = await UpdateVendor(id, formData);
+        const updatedVendor = await UpdateVendor(id, formData);
         if (setVendors) {
           const updatedVendors = vendors?.map((vendor) =>
-            vendor.id === id ? { name, image } : vendor
+            vendor.id === id ? updatedVendor : vendor
           );
           setVendors(updatedVendors);
         }
         toast({ title: "Vendor edited successfully" });
       } else {
-        const { name, image } = await CreateNewVendor(formData);
+        const createdVendor = await CreateNewVendor(formData);
         toast({ title: "Vendor created successfully" });
         //to only run on the vendors page
         if (setVendors) {
-          setVendors((prev: any) => [...prev, { name, image }]);
+          setVendors((prev: any) => [...prev, createdVendor]);
         }
       }
       reset();

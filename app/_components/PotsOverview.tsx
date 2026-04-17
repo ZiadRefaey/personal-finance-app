@@ -6,6 +6,8 @@ import OverviewSectionHeader from "./OverviewSectionHeader";
 import { getPots } from "../_lib/data-service";
 import { auth } from "@/auth";
 import { FormatNumber } from "../_lib/helperFuncs";
+import EmptyState from "./EmptyState";
+import { FaSackDollar } from "react-icons/fa6";
 
 type PotDetailsType = {
   title: string;
@@ -30,9 +32,12 @@ export default async function PotsOverview() {
         href="/pots"
       />
       {pots.length === 0 ? (
-        <div className="w-full h-[130px] flex items-center justify-center">
-          <p className="text-preset-2 text-primary">No pots created yet.</p>
-        </div>
+        <EmptyState
+          title="No pots created yet"
+          message="Add pots to start saving toward your goals."
+          icon={<FaSackDollar className="size-7" />}
+          className="min-h-[160px] py-6"
+        />
       ) : (
         <div className=" gap-5 grid grid-cols-1 md:grid-cols-[247px,1fr]">
           <div className="rounded-xl bg-background flex items-center justify-start p-4 gap-4">

@@ -2,6 +2,8 @@ import React from "react";
 import TransactionRow from "./TransactionRow";
 import Card from "./UI/Card";
 import OverviewSectionHeader from "./OverviewSectionHeader";
+import EmptyState from "./EmptyState";
+import { LuArrowUpDown } from "react-icons/lu";
 
 export default function TransactionsTableSummary({
   transactions,
@@ -20,11 +22,12 @@ export default function TransactionsTableSummary({
         href="/transactions"
       />
       {transactions?.length === 0 && (
-        <div className="w-full flex items-center justify-center p-10">
-          <p className="text-primary text-preset-2">
-            No transactions made yet.
-          </p>
-        </div>
+        <EmptyState
+          title="No transactions yet"
+          message="Make a transaction to start seeing recent activity here."
+          icon={<LuArrowUpDown className="size-7" />}
+          className="min-h-[180px]"
+        />
       )}
       {transactions?.length > 0 && (
         <div className="flex flex-col divide-y-[1px] -my-6 divide-seperator">

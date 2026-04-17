@@ -6,6 +6,8 @@ import { Modal, ModalTrigger, ModalWindow } from "../_components/Modal";
 import TransactionTable from "../_components/TransactionTable";
 import TransactionForm from "../_components/forms/TransactionForm";
 import { Transaction } from "../_lib/types";
+import EmptyState from "./EmptyState";
+import { LuArrowUpDown } from "react-icons/lu";
 
 type TransactionSupabase = {
   id: number;
@@ -69,13 +71,26 @@ export default function TransactionsDashboard({
         </div>
       </div>
       <Card className="w-full bg-card-back-ground min-h-[86vh] flex items-center justify-between flex-col">
-        <TransactionTable
-          setData={setData}
-          searchParams={searchParams}
-          categories={categories}
-          vendorNames={vendorNames}
-          data={data}
-        />
+        {data.length === 0 ? (
+          <EmptyState
+            title="No transactions yet"
+            message={
+              categories.length === 0 || vendorNames.length === 0
+                ? "Add at least one budget and one vendor before recording your first transaction."
+                : "Make a transaction to start tracking your spending by vendor and category."
+            }
+            icon={<LuArrowUpDown className="size-7" />}
+            className="min-h-[64vh]"
+          />
+        ) : (
+          <TransactionTable
+            setData={setData}
+            searchParams={searchParams}
+            categories={categories}
+            vendorNames={vendorNames}
+            data={data}
+          />
+        )}
       </Card>
     </>
   );

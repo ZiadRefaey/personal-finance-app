@@ -10,6 +10,8 @@ import { auth } from "@/auth";
 import BudgetsSummarySkeleton from "../_components/UI/BudgetsSummarySkeleton";
 import BudgetsCardsListSkeleton from "../_components/UI/BudgetsCardsListSkeleton";
 import { getBudgets } from "../_lib/data-service";
+import EmptyState from "../_components/EmptyState";
+import { BiSolidPieChartAlt2 } from "react-icons/bi";
 export const metadata = {
   title: "Budgets",
   description:
@@ -42,7 +44,11 @@ export default async function page() {
       <div className="flex items-start justify-center flex-col xl:flex-row gap-6">
         {/* if there are no budgets created by the user yet, notify the user and hide budgets UI */}
         {budgets.length === 0 ? (
-          <p className="text-preset-2 text-primary">No budgets created yet.</p>
+          <EmptyState
+            title="No budgets created yet"
+            message="Add a budget to set spending limits and start tracking where your money is going."
+            icon={<BiSolidPieChartAlt2 className="size-7" />}
+          />
         ) : (
           <>
             <Suspense fallback={<BudgetsSummarySkeleton />}>

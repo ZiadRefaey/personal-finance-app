@@ -7,6 +7,8 @@ import { PieChartShad } from "./PieChartShad";
 import { auth } from "@/auth";
 import { getBudgets } from "../_lib/data-service";
 import { getBudgetsWithSpent } from "../_lib/helperFuncs";
+import EmptyState from "./EmptyState";
+import { BiSolidPieChartAlt2 } from "react-icons/bi";
 
 export default async function BudgetsOverview() {
   const session = await auth();
@@ -26,20 +28,22 @@ export default async function BudgetsOverview() {
         href="/budgets"
       />
       {budgetsWithSpent.length === 0 && (
-        <div className="w-full items-center justify-center">
-          <p className="text-center text-primary text-preset-2">
-            No budgets created yet.
-          </p>
-        </div>
+        <EmptyState
+          title="No budgets created yet"
+          message="Add a budget to start tracking spending by category."
+          icon={<BiSolidPieChartAlt2 className="size-7" />}
+          className="min-h-[240px]"
+        />
       )}
       {budgetsWithSpent.length > 0 && (
         <div className="flex items-center justify-center flex-col">
           {totalSpent == 0 ? (
-            <div className="w-full items-center justify-center flex h-[290px] 2xl:h-[340px]">
-              <p className="text-preset-2 text-primary">
-                No transactions made yet.
-              </p>
-            </div>
+            <EmptyState
+              title="No spending tracked yet"
+              message="Make a transaction to see your budget chart come to life."
+              icon={<BiSolidPieChartAlt2 className="size-7" />}
+              className="min-h-[290px] 2xl:min-h-[340px]"
+            />
           ) : (
             <PieChartShad data={displayedBudgets} />
           )}

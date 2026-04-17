@@ -6,6 +6,8 @@ import BillForm from "./forms/BillForm";
 import BillsTable from "./BillsTable";
 import { Bills } from "@/app/_lib/types";
 import Card from "./UI/Card";
+import EmptyState from "./EmptyState";
+import { PiReceiptFill } from "react-icons/pi";
 
 export default function BillsDashboard({
   billsTableData,
@@ -49,7 +51,24 @@ export default function BillsDashboard({
       <div className="grid grid-cols-1 xl:grid-cols-[337px,1fr] gap-6">
         {children}
         <Card>
-          <BillsTable setData={setData} vendorNames={vendorNames} data={data} />
+          {data.length === 0 ? (
+            <EmptyState
+              title="No recurring bills yet"
+              message={
+                vendorNames.length === 0
+                  ? "Add a vendor first, then create a recurring bill to keep monthly payments on your radar."
+                  : "Add a recurring bill to track due dates, upcoming payments, and overdue balances."
+              }
+              icon={<PiReceiptFill className="size-7" />}
+              className="min-h-[520px]"
+            />
+          ) : (
+            <BillsTable
+              setData={setData}
+              vendorNames={vendorNames}
+              data={data}
+            />
+          )}
         </Card>
       </div>
     </>
