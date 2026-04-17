@@ -18,6 +18,31 @@ import InputError from "../UI/InputError";
 import { CreateBill, UpdateBill } from "@/app/_lib/actions";
 import { useModal } from "../Modal";
 import { useToast } from "@/hooks/use-toast";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+
+function getPaymentDate(day: number | undefined) {
+  const date = new Date();
+  date.setDate(day || 1);
+  return date;
+}
+
+function getOrdinalDay(day: number) {
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? "st"
+      : day % 10 === 2 && day !== 12
+      ? "nd"
+      : day % 10 === 3 && day !== 13
+      ? "rd"
+      : "th";
+  return `${day}${suffix}`;
+}
 
 export default function BillForm({
   billsTableData,
@@ -36,6 +61,7 @@ export default function BillForm({
     register,
     handleSubmit,
     setValue,
+    watch,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<BillFormType>({
@@ -45,6 +71,8 @@ export default function BillForm({
       vendor: formData?.vendor || undefined,
     },
   });
+  const paymentDay = watch("date");
+  const selectedPaymentDate = getPaymentDate(paymentDay);
   const { setOpenModal } = useModal();
   const { toast } = useToast();
   async function clientAction(data: BillFormType) {
@@ -135,18 +163,54 @@ export default function BillForm({
       </InputContainer>
       <InputContainer>
         <Label>Day of payment</Label>
-        <Input
-          register={{
-            ...register("date", {
-              required: "This field is required",
-              min: { value: 1, message: "Day must be between 1 and 28" },
-              max: { value: 28, message: "Day must be between 1 and 28" },
-            }),
-          }}
-          name="date"
-          type="number"
-          prefix={<FaCalendar className="text-border" />}
+        <input
+          type="hidden"
+          {...register("date", {
+            required: "This field is required",
+            min: { value: 1, message: "Day must be between 1 and 28" },
+            max: { value: 28, message: "Day must be between 1 and 28" },
+          })}
         />
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              className="w-full flex items-center justify-start gap-4 rounded-lg border border-border bg-white px-5 py-[14px] text-left text-navbar outline-none transition-colors duration-150 hover:border-primary"
+            >
+              <FaCalendar className="text-border" />
+              <span className="text-preset-4">
+                {paymentDay
+                  ? `Every month on the ${getOrdinalDay(Number(paymentDay))}`
+                  : "Pick payment day"}
+              </span>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent align="start" className="w-auto p-0">
+            <Calendar
+              mode="single"
+              selected={selectedPaymentDate}
+              defaultMonth={selectedPaymentDate}
+              disabled={(date) => date.getDate() > 28}
+              onSelect={(date) => {
+                if (!date) return;
+                setValue("date", date.getDate(), {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              footer={
+                <p className="px-3 pb-3 pt-1 text-center text-xs text-slate-500">
+                  {paymentDay
+                    ? `${format(
+                        selectedPaymentDate,
+                        "MMMM d"
+                      )} saves as day ${paymentDay}.`
+                    : "Choose a day between 1 and 28."}
+                </p>
+              }
+            />
+          </PopoverContent>
+        </Popover>
         {errors.date && <InputError>{errors.date.message}</InputError>}
       </InputContainer>
       <Button

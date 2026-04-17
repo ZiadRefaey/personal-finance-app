@@ -79,6 +79,7 @@ export default function TransactionForm({
           data.category
         );
         const transaction = {
+          id: result[0].id,
           avatar: result[0].vendors.image,
           name: result[0].vendors.name,
           category: result[0].budgets.name,

@@ -242,6 +242,7 @@ export async function CreateTransaction(
     //updating the data displayed after successful operation
     revalidatePath("/transactions");
     revalidatePath("/budgets");
+    revalidatePath("/");
 
     //returning the transaction data
     return transactionData;
@@ -286,7 +287,7 @@ export async function UpdateTransaction(
 
 export async function DeleteTransaction(transactionId: number) {
   try {
-    deleteTransaction(transactionId);
+    await deleteTransaction(transactionId);
     revalidatePath("/transactions");
     revalidatePath("/budgets");
     revalidatePath("/");

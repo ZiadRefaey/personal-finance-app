@@ -60,6 +60,19 @@ export async function updateUser(id: number, updatedData: userEditableData) {
   if (error) throw new Error(error.message);
   return data;
 }
+async function updateUserBalance(userId: number, balance: number) {
+  await updateUser(userId, { balance });
+}
+async function getBalanceAfterTransaction(userId: number, amount: number) {
+  const userData = await getUserDetails(userId);
+  if (!userData) throw new Error("User details could not be found.");
+
+  const updatedBalance = Number(userData.balance) - Number(amount);
+  if (updatedBalance < 0)
+    throw new Error("This transaction would make your balance go below 0.");
+
+  return updatedBalance;
+}
 export async function getBudgets(userId: number | undefined) {
   const { data, error } = await supabase
     .from("budgets")
@@ -168,12 +181,12 @@ export async function deleteBudget(budgetId: number) {
     "You are not authorized to delete this budget"
   );
 
-  const { error: transactionsError } = await supabase
-    .from("transactions")
-    .delete()
-    .eq("budgetId", budgetId);
+  const budgetTransactions = await getTransactionsByBudgetId(budgetId);
+  for (const transaction of budgetTransactions) {
+    await deleteTransaction(transaction.id);
+  }
+
   const { error } = await supabase.from("budgets").delete().eq("id", budgetId);
-  if (transactionsError) throw new Error(transactionsError.message);
   if (error) throw new Error(error.message);
 }
 
@@ -359,11 +372,15 @@ export async function updateVendor(
   return data;
 }
 export async function deleteTransactionByVendorId(vendorId: number) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("transactions")
-    .delete()
+    .select("id")
     .eq("vendorId", vendorId);
   if (error) throw new Error(error.message);
+
+  for (const transaction of data) {
+    await deleteTransaction(transaction.id);
+  }
 }
 export async function deleteBillByVendorId(vendorId: number) {
   const { error } = await supabase
@@ -374,6 +391,14 @@ export async function deleteBillByVendorId(vendorId: number) {
 }
 export async function deleteVendor(vendorId: number) {
   try {
+    const userId = await authenticateAndGetUserId();
+    const userVendors = await getVendors(userId);
+    checkOwnership(
+      userVendors,
+      (vendor) => vendor.id === vendorId,
+      "You are not authorized to delete this vendor"
+    );
+
     await deleteTransactionByVendorId(vendorId);
     await deleteBillByVendorId(vendorId);
     const { error } = await supabase
@@ -452,12 +477,17 @@ export async function createTransaction(
   vendorId: number,
   userId: number
 ): Promise<any> {
+  if (amount <= 0) throw new Error("Transaction amount must be higher than 0.");
+
+  const updatedBalance = await getBalanceAfterTransaction(userId, amount);
+
   const { data, error } = await supabase
     .from("transactions")
     .insert([{ amount, budgetId, vendorId, userId }])
-    .select(`amount,created_at,budgets(name),vendors(name,image)`);
+    .select(`id,amount,created_at,budgets(name),vendors(name,image)`);
 
   if (error) throw new Error(error.message);
+  await updateUserBalance(userId, updatedBalance);
   return data;
 }
 
@@ -467,6 +497,21 @@ export async function updateTransaction(
   vendorId: number,
   budgetId: number
 ) {
+  if (amount <= 0) throw new Error("Transaction amount must be higher than 0.");
+
+  const userId = await authenticateAndGetUserId();
+  const currentTransaction = await getTransaction(transactionId);
+  if (currentTransaction.userId !== userId)
+    throw new Error("You are not authorized to edit this transaction");
+
+  const userData = await getUserDetails(userId);
+  if (!userData) throw new Error("User details could not be found.");
+
+  const updatedBalance =
+    Number(userData.balance) + Number(currentTransaction.amount) - amount;
+  if (updatedBalance < 0)
+    throw new Error("This transaction would make your balance go below 0.");
+
   const { data, error } = await supabase
     .from("transactions")
     .update({ amount, vendorId, budgetId })
@@ -475,15 +520,29 @@ export async function updateTransaction(
     .single();
 
   if (error) throw new Error(error.message);
+  await updateUserBalance(userId, updatedBalance);
   return data;
 }
 
 export async function deleteTransaction(transactionId: number) {
+  const userId = await authenticateAndGetUserId();
+  const currentTransaction = await getTransaction(transactionId);
+  if (currentTransaction.userId !== userId)
+    throw new Error("You are not authorized to delete this transaction");
+
+  const userData = await getUserDetails(userId);
+  if (!userData) throw new Error("User details could not be found.");
+
   const { error } = await supabase
     .from("transactions")
     .delete()
     .eq("id", transactionId);
   if (error) throw new Error(error.message);
+
+  await updateUserBalance(
+    userId,
+    Number(userData.balance) + Number(currentTransaction.amount)
+  );
 }
 
 export async function getBudgetTransactions(userId: number, budgetId: number) {
