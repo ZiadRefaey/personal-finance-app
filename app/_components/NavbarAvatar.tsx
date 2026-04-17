@@ -18,7 +18,11 @@ export default function NavbarAvatar({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="w-full flex items-center gap-4 py-4 rounded-r-lg cursor-default outline-none px-8 text-preset-3 text-icon  hover:bg-navhover transition-all duration-150">
+      <DropdownMenuTrigger
+        className={`w-full flex items-center gap-4 py-4 rounded-r-lg cursor-default outline-none text-preset-3 text-icon hover:bg-navhover transition-all duration-150 ${
+          isRetracted ? "justify-center px-0" : "px-8"
+        }`}
+      >
         <UserAvatar session={session} />
 
         {!isRetracted && (
